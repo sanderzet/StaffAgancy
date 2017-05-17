@@ -1,0 +1,471 @@
+package ua.pp.sanderzet.staffagancy.view;
+
+import javafx.beans.value.ChangeListener;
+import javafx.beans.value.ObservableValue;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
+import javafx.collections.transformation.FilteredList;
+import javafx.collections.transformation.SortedList;
+import javafx.event.Event;
+import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.control.*;
+import javafx.scene.control.cell.TextFieldTableCell;
+import javafx.scene.input.KeyCode;
+import javafx.scene.input.KeyEvent;
+import javafx.scene.paint.Color;
+import javafx.util.Callback;
+import ua.pp.sanderzet.staffagancy.MainApp;
+import ua.pp.sanderzet.staffagancy.model.Job;
+import ua.pp.sanderzet.staffagancy.model.Person;
+import ua.pp.sanderzet.staffagancy.util.DateUtil;
+
+import java.beans.EventHandler;
+import java.time.LocalDate;
+
+/**
+ * Created by sander on 24.04.17.
+ */
+public class PersonOverviewController {
+
+    @FXML
+    private TextField filterField;
+    @FXML
+    private TableView<Person> personTable;
+
+    @FXML
+    private TableColumn<Person,String> firstNameColumn;
+    @FXML
+    private TableColumn<Person,String> lastNameColumn;
+    @FXML
+    private TableColumn<Person,String> passportColumn;
+    @FXML
+    private TableColumn<Person,String> phoneColumn;
+    @FXML
+    private TableColumn<Person,LocalDate> dateOfContractColumn;
+    @FXML
+    private TableColumn<Person,String> sanBookColumn;
+    @FXML
+    private TableColumn<Person,LocalDate> endOfVisaColumn;
+    @FXML
+    private TableColumn<Person,String> fileNumberColumn;
+
+
+    @FXML
+    private TableView<Job> jobTable;
+
+    @FXML
+    private TableColumn<Job,String> placeColumn;
+    @FXML
+    private TableColumn<Job,String> firmColumn;
+    @FXML
+    private TableColumn<Job,String> positionColumn;
+    @FXML
+    private TableColumn<Job,LocalDate> startColumn;
+    @FXML
+    private TableColumn<Job,LocalDate> endColumn;
+
+
+    @FXML
+    private Label personLabel;
+    @FXML
+    private Label jobLabel;
+    @FXML
+    private Button personAddButton;
+    @FXML
+    private Button personEditButton;
+    @FXML
+    private Button personDelButton;
+    @FXML
+    private Button jobAddButton;
+    @FXML
+    private Button jobEditButton;
+    @FXML
+    private Button jobDelButton;
+
+
+private MainApp mainApp;
+private ObservableList<Person> persons = FXCollections.observableArrayList();
+private FilteredList<Person> filteredPersons;
+private SortedList<Person> sortedPersons;
+    /**
+     * The constructor.
+     * The constructor is called before the initialize() method.
+     */
+    public PersonOverviewController() {
+    }
+
+    /**
+     * Initializes the controller class. This method is automatically called
+     * after the fxml file has been loaded.
+     */
+
+@FXML
+private void initialize (){
+
+//    If pressed Enter - button must fire (not only Space pressed)
+javafx.event.EventHandler<KeyEvent> onEnterKeyEventHandler = (keyEvent -> {
+    if(keyEvent.getCode() == KeyCode.ENTER) {
+        if (keyEvent.getSource() instanceof Button) {
+            Button button = (Button) keyEvent.getSource();
+            button.fire();
+        }
+    }
+});
+
+
+// This the same as above only without lambda
+
+//    javafx.event.EventHandler<KeyEvent> onEnterKeyEventHandler = new javafx.event.EventHandler<KeyEvent>() {
+//        @Override
+//        public void handle(KeyEvent keyEvent) {
+//
+//            if(keyEvent.getCode() == KeyCode.ENTER) {
+//                Button button = (Button)  keyEvent.getSource();
+//                button.fire();
+//            }
+//        }
+//    };
+
+    personAddButton.setOnKeyPressed(onEnterKeyEventHandler);
+
+    personEditButton.setOnKeyPressed(onEnterKeyEventHandler);
+
+    personAddButton.setOnKeyPressed(onEnterKeyEventHandler);
+
+    jobAddButton.setOnKeyPressed(onEnterKeyEventHandler);
+
+    jobEditButton.setOnKeyPressed(onEnterKeyEventHandler);
+
+    jobDelButton.setOnKeyPressed(onEnterKeyEventHandler);
+
+
+
+
+    firstNameColumn.setCellValueFactory(cellData -> cellData.getValue().firstNameProperty());
+    lastNameColumn.setCellValueFactory(cellData -> cellData.getValue().lastNameProperty());
+    passportColumn.setCellValueFactory(cellData -> cellData.getValue().passportProperty());
+    phoneColumn.setCellValueFactory(cellData -> cellData.getValue().phoneProperty());
+dateOfContractColumn.setCellValueFactory(cellData -> cellData.getValue().dataOfContractProperty());
+
+    // For LocalData correct formatting need our CellFactory
+dateOfContractColumn.setCellFactory(new Callback<TableColumn<Person, LocalDate>, TableCell<Person, LocalDate>>() {
+    @Override
+    public TableCell<Person, LocalDate> call(TableColumn<Person, LocalDate> jobLocalDateTableColumn) {
+        TextFieldTableCell<Person,LocalDate> cell = new TextFieldTableCell<Person,LocalDate>(DateUtil.localDateStringConverter) {
+            @Override
+            public void updateItem(LocalDate item, boolean empty) {
+                super.updateItem(item, empty);
+                if (item == null || empty) {
+                    setText(null);
+                    setStyle("");
+                } else {
+//                Format cell
+//                    this.setTextFill(Color.RED);
+
+                }
+            }
+        };
+        return cell;
+    }
+});
+
+sanBookColumn.setCellValueFactory(cellData -> cellData.getValue().sanBookProperty());
+endOfVisaColumn.setCellValueFactory(cellData -> cellData.getValue().endOfVisaProperty());
+
+endOfVisaColumn.setCellFactory(new Callback<TableColumn<Person, LocalDate>, TableCell<Person, LocalDate>>() {
+    @Override
+    public TableCell<Person, LocalDate> call(TableColumn<Person, LocalDate> jobLocalDateTableColumn) {
+        TextFieldTableCell<Person,LocalDate> cell = new TextFieldTableCell<Person,LocalDate>(DateUtil.localDateStringConverter) {
+            @Override
+            public void updateItem(LocalDate item, boolean empty) {
+                super.updateItem(item, empty);
+                if (item == null || empty) {
+                    setText(null);
+                    setStyle("");
+                } else {
+//    Format cell
+//      If expiration date of visa less then after 45 days - text is marked by red color
+if(item.isBefore(LocalDate.now().plusDays(45)))
+    this.setTextFill(Color.RED);
+                }
+            }
+        };
+        return cell;
+    }
+});
+
+
+fileNumberColumn.setCellValueFactory(cellData -> cellData.getValue().fileNumberProperty());
+
+
+
+personTable.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> {
+    showJob(newValue);
+});
+
+// Set listener on focus of personTable. If it have focus we activate buttons for person
+personTable.focusedProperty().addListener(new ChangeListener<Boolean>() {
+    @Override
+    public void changed(ObservableValue<? extends Boolean> observableValue, Boolean aBoolean, Boolean t1) {
+//        Check if any item selected. If no, disable buttons that do something with selected item.
+        boolean isItemSelected = !personTable.getSelectionModel().isEmpty();
+
+
+        if (t1){
+
+//            If no item selected (if we navigate by TAB) - attempt to get first item selected
+            if(!isItemSelected && personTable.getItems().size() > 0) {
+
+                personTable.getSelectionModel().selectFirst();
+                isItemSelected = !personTable.getSelectionModel().isEmpty();
+            }
+
+
+                if(isItemSelected){
+                    personDelButton.setDisable(false);
+                    personEditButton.setDisable(false);
+                    jobAddButton.setDisable(false);
+            }
+                else {
+                    personDelButton.setDisable(true);
+                    personEditButton.setDisable(true);
+                    jobAddButton.setDisable(true);
+                }
+        }
+else {
+//IF person table loss focus - disable buttons for editing and deleting
+            personDelButton.setDisable(true);
+            personEditButton.setDisable(true);
+        }
+
+    }
+});
+
+//Job table
+
+    placeColumn.setCellFactory(TextFieldTableCell.forTableColumn());
+    firmColumn.setCellFactory(TextFieldTableCell.forTableColumn());
+    positionColumn.setCellFactory(TextFieldTableCell.forTableColumn());
+
+
+
+
+    startColumn.setCellFactory(new Callback<TableColumn<Job, LocalDate>, TableCell<Job, LocalDate>>() {
+        @Override
+        public TableCell<Job, LocalDate> call(TableColumn<Job, LocalDate> jobLocalDateTableColumn) {
+            TextFieldTableCell<Job,LocalDate> cell = new TextFieldTableCell<Job,LocalDate>(DateUtil.localDateStringConverter) {
+                @Override
+                public void updateItem(LocalDate item, boolean empty) {
+                    super.updateItem(item, empty);
+                    if (item == null || empty) {
+                        setText(null);
+                        setStyle("");
+                    } else {
+//                Format cell
+//                        this.setTextFill(Color.RED);
+
+                    }
+                }
+            };
+            return cell;
+        }
+    });
+
+
+
+    endColumn.setCellFactory(new Callback<TableColumn<Job, LocalDate>, TableCell<Job, LocalDate>>() {
+        @Override
+        public TableCell<Job, LocalDate> call(TableColumn<Job, LocalDate> jobLocalDateTableColumn) {
+            TextFieldTableCell<Job,LocalDate> cell = new TextFieldTableCell<Job,LocalDate>(DateUtil.localDateStringConverter) {
+                @Override
+                public void updateItem(LocalDate item, boolean empty) {
+                    super.updateItem(item, empty);
+                    if (item == null || empty) {
+                        setText(null);
+                        setStyle("");
+                    } else {
+//                Format cell
+//                            this.setTextFill(Color.RED);
+
+                    }
+                }
+            };
+            return cell;
+        }
+    });
+
+    placeColumn.setCellValueFactory(cellData -> cellData.getValue().placeProperty());
+    firmColumn.setCellValueFactory(cellData -> cellData.getValue().firmProperty());
+    positionColumn.setCellValueFactory(cellData -> cellData.getValue().positionProperty());
+    startColumn.setCellValueFactory(cellData -> cellData.getValue().startProperty());
+    endColumn.setCellValueFactory(cellData -> cellData.getValue().endProperty());
+
+    jobTable.focusedProperty().addListener(new ChangeListener<Boolean>() {
+        @Override
+        public void changed(ObservableValue<? extends Boolean> observableValue, Boolean aBoolean, Boolean t1) {
+//        Check if any item selected. If no, disable buttons that do something with selected item.
+            boolean isItemSelected = !jobTable.getSelectionModel().isEmpty();
+
+            if (t1){
+
+
+//            If no item selected (if we navigate by TAB) - attempt to get first item selected
+                if(!isItemSelected && jobTable.getItems().size() > 0) {
+
+                    jobTable.getSelectionModel().selectFirst();
+                    isItemSelected = !jobTable.getSelectionModel().isEmpty();
+                }
+
+
+                if(isItemSelected){
+                    jobDelButton.setDisable(false);
+                    jobEditButton.setDisable(false);
+                }
+                else {
+                    personDelButton.setDisable(true);
+                    personEditButton.setDisable(true);
+                }
+            }
+
+else {
+//IF job table loss focus - disable buttons for editing and deleting
+                jobEditButton.setDisable(true);
+                jobDelButton.setDisable(true);
+            }
+
+
+        }
+    });
+
+//    Set the filter Predicate whenever the filter change
+    filterField.textProperty().addListener((observableValue, oldValue, newValue) -> {
+        filteredPersons.setPredicate(person -> {
+            if (newValue == null || newValue.isEmpty())
+                return true;
+            String lowerCaseFilter = newValue.toLowerCase();
+//            Filter on lastName or on Passport
+            if (person.getLastName().toLowerCase().contains(lowerCaseFilter)) {
+                return true;
+            } else if (person.getPassport().toLowerCase().contains(lowerCaseFilter)) {
+                return true;
+            }
+            return false;
+        });
+    });
+
+//    personTable.requestFocus();
+
+}
+
+
+    /**
+     * Is called by the main application to give a reference back to itself.
+     *
+     * @param mainApp
+     *
+     *
+     *
+     *   */
+public void setMainApp(MainApp mainApp){
+    this.mainApp = mainApp;
+    persons = mainApp.getPersonData();
+    filteredPersons = new FilteredList<Person>(persons, person -> true);
+    sortedPersons = new SortedList<Person>(filteredPersons);
+    //    Bind the sorted list comparator to the TableView comparator
+    sortedPersons.comparatorProperty().bind(personTable.comparatorProperty());
+    personTable.setItems(sortedPersons);
+personTable.requestFocus();
+}
+
+
+
+
+@FXML
+private void onAddPerson(){
+
+
+    Person tempPerson = new Person();
+//    It is a editing of new person,
+//    so we need to INSERT in db
+
+    boolean okClicked = mainApp.showPersonEditDialog(tempPerson);
+if (okClicked) {
+    mainApp.getPersonData().add(tempPerson);
+    mainApp.insertPersonDb(tempPerson);
+}
+
+}
+
+@FXML
+private void onEditPerson() {
+    Person selectedPerson = personTable.getSelectionModel().getSelectedItem();
+    boolean okClicked =  mainApp.showPersonEditDialog(selectedPerson);
+if (okClicked)
+    mainApp.updatePersonDB(selectedPerson);
+}
+
+@FXML
+private void onDelPerson() {
+
+//Receive index in table
+    int selectedIndex = personTable.getSelectionModel().getSelectedIndex();
+// Receive   id in db
+    int id = (personTable.getSelectionModel().getSelectedItem()).getId();
+//    Remove from tableview and person list
+mainApp.getPersonData().remove(selectedIndex);
+//        Remove from db
+    mainApp.delPersonDb(id);
+}
+
+@FXML
+private void onAddJob(){
+Job jobTemp = new Job();
+Person selectedPerson = personTable.getSelectionModel().getSelectedItem();
+jobTemp.setIdPerson(selectedPerson.getId());
+boolean okClicked = mainApp.showJobEditDialog(jobTemp);
+
+if(okClicked){
+    mainApp.getJobData(selectedPerson).add(jobTemp);
+    mainApp.insertJobDb(jobTemp);
+}
+
+}
+
+@FXML
+private void onEditJob(){
+Job job = jobTable.getSelectionModel().getSelectedItem();
+boolean okClicked = mainApp.showJobEditDialog(job);
+    if (okClicked) {
+        mainApp.updateJobDb(job);
+    }
+}
+
+
+@FXML
+private void onDelJob(){
+//Receive index in table
+    int selectedIndex = jobTable.getSelectionModel().getSelectedIndex();
+// Receive   id in db
+    int id = (jobTable.getSelectionModel().getSelectedItem()).getRowid();
+//    Remove from tableview and person list
+    jobTable.getItems().remove(selectedIndex);
+//        Remove from db
+    mainApp.delJobDb(id);
+}
+
+
+private void showJob(Person person){
+    jobTable.setItems(mainApp.getJobData(person));
+}
+
+//
+//    Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
+//    alert.initOwner(mainApp.getPrimaryStage());
+//    alert.setTitle("OK");
+//    alert.setHeaderText(firstName);
+//    alert.setContentText(lastName);
+//    alert.show();
+
+
+}
