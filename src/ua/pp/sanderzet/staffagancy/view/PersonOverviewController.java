@@ -3,6 +3,7 @@ package ua.pp.sanderzet.staffagancy.view;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
+import javafx.collections.ListChangeListener;
 import javafx.collections.ObservableList;
 import javafx.collections.transformation.FilteredList;
 import javafx.collections.transformation.SortedList;
@@ -22,6 +23,7 @@ import ua.pp.sanderzet.staffagancy.util.DateUtil;
 
 import java.beans.EventHandler;
 import java.time.LocalDate;
+import java.util.Optional;
 
 /**
  * Created by sander on 24.04.17.
@@ -71,6 +73,8 @@ public class PersonOverviewController {
     @FXML
     private Label jobLabel;
     @FXML
+    private Label numberOfPersonsLabel;
+    @FXML
     private Button personAddButton;
     @FXML
     private Button personEditButton;
@@ -88,6 +92,7 @@ private MainApp mainApp;
 private ObservableList<Person> persons = FXCollections.observableArrayList();
 private FilteredList<Person> filteredPersons;
 private SortedList<Person> sortedPersons;
+private String numberOfPersons;
     /**
      * The constructor.
      * The constructor is called before the initialize() method.
@@ -200,6 +205,13 @@ fileNumberColumn.setCellValueFactory(cellData -> cellData.getValue().fileNumberP
 
 
 
+//persons.addListener((ListChangeListener<? super Person>) change -> {
+//    Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
+//    alert.initOwner(mainApp.getPrimaryStage());
+//    alert.setTitle("HOHOH");
+//    alert.showAndWait();
+//});
+
 personTable.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> {
     showJob(newValue);
 });
@@ -233,11 +245,11 @@ personTable.focusedProperty().addListener(new ChangeListener<Boolean>() {
                     jobAddButton.setDisable(true);
                 }
         }
-else {
-//IF person table loss focus - disable buttons for editing and deleting
-            personDelButton.setDisable(true);
-            personEditButton.setDisable(true);
-        }
+//else {
+////IF person table loss focus - disable buttons for editing and deleting
+//            personDelButton.setDisable(true);
+//            personEditButton.setDisable(true);
+//        }
 
     }
 });
@@ -328,11 +340,11 @@ else {
                 }
             }
 
-else {
-//IF job table loss focus - disable buttons for editing and deleting
-                jobEditButton.setDisable(true);
-                jobDelButton.setDisable(true);
-            }
+//else {
+////IF job table loss focus - disable buttons for editing and deleting
+//                jobEditButton.setDisable(true);
+//                jobDelButton.setDisable(true);
+//            }
 
 
         }
@@ -347,9 +359,13 @@ else {
 //            Filter on lastName or on Passport
             if (person.getLastName().toLowerCase().contains(lowerCaseFilter)) {
                 return true;
-            } else if (person.getPassport().toLowerCase().contains(lowerCaseFilter)) {
+            }
+            else if (person.getPassport().toLowerCase().contains(lowerCaseFilter)) {
                 return true;
             }
+//            else if (person.getDataOfContract().contains(lowerCaseFilter)) {
+//                return true;
+//            }
             return false;
         });
     });
@@ -375,6 +391,17 @@ public void setMainApp(MainApp mainApp){
     //    Bind the sorted list comparator to the TableView comparator
     sortedPersons.comparatorProperty().bind(personTable.comparatorProperty());
     personTable.setItems(sortedPersons);
+
+    numberOfPersonsLabel.setText("Persons " + Integer.toString(personTable.getItems().size()));
+
+// Listener - if changing number of persons.
+
+    persons.addListener((ListChangeListener<? super Person>) change -> {
+        numberOfPersonsLabel.setText("Persons " + Integer.toString(personTable.getItems().size()));
+    });
+
+
+
 personTable.requestFocus();
 }
 
@@ -407,15 +434,24 @@ if (okClicked)
 
 @FXML
 private void onDelPerson() {
+Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
+alert.initOwner(mainApp.getPrimaryStage());
+alert.setTitle("Are you sure ?");
+alert.setHeaderText("Next entry will be deleted: ");
+alert.setContentText(personTable.getSelectionModel().getSelectedItem().getLastName().toString() + " "
+        + personTable.getSelectionModel().getSelectedItem().getFirstName().toString());
+Optional<ButtonType> result = alert.showAndWait();
+if (result.get() == ButtonType.OK) {
 
 //Receive index in table
     int selectedIndex = personTable.getSelectionModel().getSelectedIndex();
 // Receive   id in db
     int id = (personTable.getSelectionModel().getSelectedItem()).getId();
 //    Remove from tableview and person list
-mainApp.getPersonData().remove(selectedIndex);
+    mainApp.getPersonData().remove(selectedIndex);
 //        Remove from db
     mainApp.delPersonDb(id);
+}
 }
 
 @FXML
@@ -444,14 +480,26 @@ boolean okClicked = mainApp.showJobEditDialog(job);
 
 @FXML
 private void onDelJob(){
+    Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
+    alert.initOwner(mainApp.getPrimaryStage());
+    alert.setTitle("Are you sure ?");
+    alert.setHeaderText("For " + personTable.getSelectionModel().getSelectedItem().getLastName().toString() + " " +
+            personTable.getSelectionModel().getSelectedItem().getFirstName().toString() +
+            "\nnext job entry will be deleted: ");
+    alert.setContentText(jobTable.getSelectionModel().getSelectedItem().getFirm().toString() + "\n"
+            + jobTable.getSelectionModel().getSelectedItem().getPosition().toString());
+
+    Optional<ButtonType> result = alert.showAndWait();
+    if (result.get() == ButtonType.OK) {
 //Receive index in table
-    int selectedIndex = jobTable.getSelectionModel().getSelectedIndex();
+        int selectedIndex = jobTable.getSelectionModel().getSelectedIndex();
 // Receive   id in db
-    int id = (jobTable.getSelectionModel().getSelectedItem()).getRowid();
+        int id = (jobTable.getSelectionModel().getSelectedItem()).getRowid();
 //    Remove from tableview and person list
-    jobTable.getItems().remove(selectedIndex);
+        jobTable.getItems().remove(selectedIndex);
 //        Remove from db
-    mainApp.delJobDb(id);
+        mainApp.delJobDb(id);
+    }
 }
 
 

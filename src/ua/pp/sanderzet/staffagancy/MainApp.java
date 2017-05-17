@@ -12,6 +12,7 @@ import javafx.stage.Stage;
 import ua.pp.sanderzet.staffagancy.model.Job;
 import ua.pp.sanderzet.staffagancy.model.Person;
 import ua.pp.sanderzet.staffagancy.util.DateUtil;
+import ua.pp.sanderzet.staffagancy.util.dbSqlite;
 import ua.pp.sanderzet.staffagancy.view.JobEditDialogController;
 import ua.pp.sanderzet.staffagancy.view.PersonEditDialogController;
 import ua.pp.sanderzet.staffagancy.view.PersonOverviewController;

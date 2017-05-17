@@ -1,4 +1,4 @@
-package ua.pp.sanderzet.staffagancy;
+package ua.pp.sanderzet.staffagancy.util;
 
 import org.jetbrains.annotations.Nullable;
 

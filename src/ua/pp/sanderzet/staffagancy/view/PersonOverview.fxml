@@ -13,13 +13,13 @@
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane prefHeight="623.0" prefWidth="634.0" xmlns="http://javafx.com/javafx/8.0.112" xmlns:fx="http://javafx.com/fxml/1" fx:controller="ua.pp.sanderzet.staffagancy.view.PersonOverviewController">
+<AnchorPane prefHeight="600.0" prefWidth="800.0" xmlns="http://javafx.com/javafx/8.0.111" xmlns:fx="http://javafx.com/fxml/1" fx:controller="ua.pp.sanderzet.staffagancy.view.PersonOverviewController">
    <children>
       <BorderPane AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
          <center>
             <SplitPane dividerPositions="0.7712854757929883" orientation="VERTICAL">
                <items>
-                  <TableView fx:id="personTable" prefHeight="554.0" prefWidth="632.0">
+                  <TableView fx:id="personTable">
                     <columns>
                         <TableColumn fx:id="lastNameColumn" prefWidth="75.0" text="Nazwisko" />
                       <TableColumn fx:id="firstNameColumn" prefWidth="75.0" text="Imie" />
@@ -34,12 +34,12 @@
                         <TableView fx:constant="CONSTRAINED_RESIZE_POLICY" />
                      </columnResizePolicy>
                   </TableView>
-                  <TableView fx:id="jobTable" prefHeight="133.0" prefWidth="653.0">
+                  <TableView fx:id="jobTable">
                      <columns>
                         <TableColumn fx:id="placeColumn" maxWidth="206.0" minWidth="0.0" prefWidth="0.0" text="MIASTO &#10;PRACY" />
-                        <TableColumn fx:id="firmColumn" maxWidth="355.0" minWidth="0.0" prefWidth="117.0" text="FIRMA" />
-                        <TableColumn fx:id="positionColumn" maxWidth="267.0" minWidth="120.0" prefWidth="212.0" text="STANOWISKO" />
-                        <TableColumn fx:id="startColumn" maxWidth="-1.0" minWidth="120.0" prefWidth="-1.0" text="DATA PRZENIESIENIA &#10;DO PRACY" />
+                        <TableColumn fx:id="firmColumn" maxWidth="355.0" minWidth="0.0" prefWidth="186.0" text="FIRMA" />
+                        <TableColumn fx:id="positionColumn" maxWidth="267.0" minWidth="97.0" prefWidth="148.0" text="STANOWISKO" />
+                        <TableColumn fx:id="startColumn" maxWidth="226.0" minWidth="115.0" prefWidth="175.0" text="DATA PRZENIESIENIA &#10;DO PRACY" />
                         <TableColumn fx:id="endColumn" maxWidth="204.0" minWidth="120.0" prefWidth="204.0" text="DATA UKOŃCZENIA &#10;PRACY" />
                      </columns>
                      <columnResizePolicy>
@@ -156,6 +156,13 @@
                         <Insets left="3.0" right="3.0" top="3.0" />
                      </HBox.margin>
                   </Button>
+                  <Separator layoutX="511.0" layoutY="10.0" orientation="VERTICAL" />
+                  <Separator layoutX="730.0" layoutY="10.0" orientation="VERTICAL" />
+                  <Label fx:id="numberOfPersonsLabel" text="Persons " textFill="#22d740">
+                     <HBox.margin>
+                        <Insets left="3.0" right="3.0" top="3.0" />
+                     </HBox.margin>
+                  </Label>
                </children>
                <padding>
                   <Insets left="3.0" right="3.0" />

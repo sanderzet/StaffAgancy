@@ -105,8 +105,8 @@ jobEditStage.close();
 
 public boolean isInputValid(){
     String errorMessage = "";
-    if (placeTextField.getText() == null || placeTextField.getLength() == 0)
-        errorMessage += "No valid place of work\n";
+//    if (placeTextField.getText() == null || placeTextField.getLength() == 0)
+//        errorMessage += "No valid place of work\n";
     if (firmTextField.getText() == null || firmTextField.getLength() == 0)
         errorMessage += "No valid firm\n";
     if (positionTextField.getText() == null || positionTextField.getLength() == 0)
@@ -119,7 +119,7 @@ public boolean isInputValid(){
     }
 
     if (endTextField.getText() == null || endTextField.getLength() == 0)
-endTextField.setText("00.00.0000");
+endTextField.setText("");
     else {
         if (!DateUtil.validDate(endTextField.getText()))
             errorMessage += "No valid end time of working. Use the format dd.mm.yyyy !\n";

@@ -115,8 +115,19 @@ String errorMessage = "";
 
 if (lastNameField.getText() == null || lastNameField.getLength() == 0)
     errorMessage += "No valid last name\n";
+if (firstNameField.getText() == null || firstNameField.getLength() == 0)
+        errorMessage += "No valid first name\n";
+if (passportField.getText() == null || passportField.getLength() == 0)
+        errorMessage += "No valid passport name\n";
+if (sanBookField.getText() == null || sanBookField.getLength() == 0)
+        sanBookField.setText("");
+if (phoneField.getText() == null || phoneField.getLength() == 0)
+phoneField.setText("");
+if (fileNumberField.getText() == null || fileNumberField.getLength() == 0)
+phoneField.setText("");
+
 if (dateOfContractField.getText() == null || dateOfContractField.getLength() == 0)
-    errorMessage += "No valid date of contract\n";
+    dateOfContractField.setText("");
 else {
     if (!DateUtil.validDate(dateOfContractField.getText()))
         errorMessage += "No valid date of contract. Use the format dd.mm.yyyy !\n";
