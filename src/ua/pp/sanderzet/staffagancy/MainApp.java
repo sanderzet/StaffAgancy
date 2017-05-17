@@ -262,7 +262,7 @@ public void updateJobDb (Job job){
     public void insertJobDb(Job job) {
         String sql = "insert into jobs (" +
                 "idPerson, place, firm, position, start, end) values ('" +
-                job.getIdPerson() + "', '" +
+                Integer.toString(job.getIdPerson()) + "', '" +
                 job.getPlace() + "', '" +
                 job.getFirm() + "', '" +
                job.getPosition() + "', '" +

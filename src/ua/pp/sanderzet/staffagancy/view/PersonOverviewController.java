@@ -418,7 +418,9 @@ private void onAddPerson(){
 
     boolean okClicked = mainApp.showPersonEditDialog(tempPerson);
 if (okClicked) {
-    mainApp.getPersonData().add(tempPerson);
+ mainApp.getPersonData().add(tempPerson);
+ int r = personTable.getSelectionModel().getSelectedIndex();
+ personTable.getFocusModel().focus(r);
     mainApp.insertPersonDb(tempPerson);
 }
 
@@ -458,6 +460,7 @@ if (result.get() == ButtonType.OK) {
 private void onAddJob(){
 Job jobTemp = new Job();
 Person selectedPerson = personTable.getSelectionModel().getSelectedItem();
+
 jobTemp.setIdPerson(selectedPerson.getId());
 boolean okClicked = mainApp.showJobEditDialog(jobTemp);
 

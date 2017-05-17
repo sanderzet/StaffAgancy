@@ -28,6 +28,7 @@
   <component name="DBNavigator.Project.DatabaseConsoleManager">
     <connection id="3a6bf80c-9602-45b9-8c62-707f2604b54d">
       <console name="Connection" type="STANDARD" />
+      <console name="Connection 1" type="STANDARD" />
     </connection>
   </component>
   <component name="DBNavigator.Project.DatasetFilterManager">
