@@ -20,6 +20,7 @@ import ua.pp.sanderzet.staffagancy.MainApp;
 import ua.pp.sanderzet.staffagancy.model.Job;
 import ua.pp.sanderzet.staffagancy.model.Person;
 import ua.pp.sanderzet.staffagancy.util.DateUtil;
+import ua.pp.sanderzet.staffagancy.util.dbSqlite;
 
 import java.beans.EventHandler;
 import java.time.LocalDate;
@@ -370,7 +371,8 @@ personTable.focusedProperty().addListener(new ChangeListener<Boolean>() {
         });
     });
 
-//    personTable.requestFocus();
+
+    personTable.requestFocus();
 
 }
 
@@ -390,19 +392,16 @@ public void setMainApp(MainApp mainApp){
     sortedPersons = new SortedList<Person>(filteredPersons);
     //    Bind the sorted list comparator to the TableView comparator
     sortedPersons.comparatorProperty().bind(personTable.comparatorProperty());
-    personTable.setItems(sortedPersons);
-
-    numberOfPersonsLabel.setText("Persons " + Integer.toString(personTable.getItems().size()));
-
-// Listener - if changing number of persons.
+    // Listener - if changing number of persons.
 
     persons.addListener((ListChangeListener<? super Person>) change -> {
         numberOfPersonsLabel.setText("Persons " + Integer.toString(personTable.getItems().size()));
     });
 
+    personTable.setItems(persons);
+    numberOfPersonsLabel.setText("Persons " + Integer.toString(personTable.getItems().size()));
 
 
-personTable.requestFocus();
 }
 
 
@@ -418,8 +417,20 @@ private void onAddPerson(){
 
     boolean okClicked = mainApp.showPersonEditDialog(tempPerson);
 if (okClicked) {
-    mainApp.getPersonData().add(tempPerson);
-    mainApp.insertPersonDb(tempPerson);
+//    Select added person
+    int resId = dbSqlite.insertPersonDb(tempPerson);
+    if ( resId > 0)
+    {
+        tempPerson.setId(resId);
+        mainApp.getPersonData().add(tempPerson);
+        personTable.getSelectionModel().select(tempPerson);
+    }
+    else {
+        Alert alert = new Alert(Alert.AlertType.ERROR);
+        alert.initOwner(mainApp.getPrimaryStage());
+        alert.setHeaderText("Error during adding entry to Persons db");
+        alert.showAndWait();
+    }
 }
 
 }
