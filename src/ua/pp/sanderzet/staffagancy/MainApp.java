@@ -113,6 +113,7 @@ private final String DIR_DB = "./db";
             personEditDialogController.setPerson(person);
 //            Give stage to the controller
             personEditDialogController.setPersonAddStage(PersonEditStage);
+            personEditDialogController.setPersons(personData);
 //            Show and wait until user close it
             PersonEditStage.showAndWait();
             return personEditDialogController.isOkClicked();
@@ -123,7 +124,7 @@ private final String DIR_DB = "./db";
     }
 
 // Adding and editing list of jobs
-    public boolean showJobEditDialog(Job job) {
+    public boolean showJobEditDialog(Job job, String personName) {
         try {
             FXMLLoader loader = new FXMLLoader();
             loader.setLocation(MainApp.class.getResource("view/JobEditDialog.fxml"));
@@ -138,6 +139,7 @@ private final String DIR_DB = "./db";
             JobEditDialogController controller = loader.getController();
             controller.setJobEditStage(jobEditStage);
             controller.setJob(job);
+            controller.setPersonNameLabel(personName);
             jobEditStage.showAndWait();
 
             return controller.isOkClicked();
@@ -245,18 +247,7 @@ public void updateJobDb (Job job){
     dbSqlite.upgradeDb(sql);
 }
 
-    public void insertJobDb(Job job) {
-        String sql = "insert into jobs (" +
-                "idPerson, place, firm, position, start, end) values ('" +
-                Integer.toString(job.getIdPerson()) + "', '" +
-                job.getPlace() + "', '" +
-                job.getFirm() + "', '" +
-               job.getPosition() + "', '" +
-                DateUtil.format(job.getStart()) + "', '" +
-                DateUtil.format(job.getStart()) + "')";
 
-        dbSqlite.upgradeDb(sql);
-    }
 
 public void delJobDb(int id){
     String sql = "delete from jobs WHERE ROWID = " + id;
@@ -317,7 +308,6 @@ public void closeDb() {
             person.setLastName(resultPersons.getString("lastName"));
             person.setPassport(resultPersons.getString("passport"));
             person.setPhone(resultPersons.getString("phone"));
-
             if (DateUtil.validDate(resultPersons.getString("dataOfContract")))
                 person.setDataOfContract(DateUtil.parse(resultPersons.getString("dataOfContract")));
 

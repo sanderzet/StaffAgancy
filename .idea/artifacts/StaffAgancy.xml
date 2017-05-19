@@ -27,8 +27,7 @@
       <element id="directory" name="META-INF">
         <element id="file-copy" path="$PROJECT_DIR$/META-INF/MANIFEST.MF" />
       </element>
-      <element id="extracted-dir" path="$USER_HOME$/DBNavigator/lib/ext/sqlite-jdbc-3.14.2.1.jar" path-in-jar="/" />
-      <element id="extracted-dir" path="$APPLICATION_HOME_DIR$/redist/annotations-java8.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="$APPLICATION_HOME_DIR$/lib/sqlite-jdbc-3.8.11.2.jar" path-in-jar="/" />
     </root>
   </artifact>
 </component>

@@ -1,5 +1,6 @@
 package ua.pp.sanderzet.staffagancy.view;
 
+import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import javafx.scene.input.KeyCode;
@@ -7,6 +8,8 @@ import javafx.scene.layout.Region;
 import javafx.stage.Stage;
 import ua.pp.sanderzet.staffagancy.model.Person;
 import ua.pp.sanderzet.staffagancy.util.DateUtil;
+
+import java.util.Iterator;
 
 /**
  * Created by alzet on 26.04.17.
@@ -35,6 +38,7 @@ public class PersonEditDialogController {
     @FXML
     private Button cancelButton;
 
+    private ObservableList<Person> persons;
 private Stage personAddStage;
 private Person person;
 private boolean okClicked = false;
@@ -60,7 +64,7 @@ private boolean okClicked = false;
     public void setPersonAddStage(Stage personAddStage) {
         this.personAddStage = personAddStage;
     }
-
+public void setPersons(ObservableList<Person> persons) {this.persons = persons;}
 
     public void setPerson(Person person){
         this.person = person;
@@ -109,6 +113,13 @@ public void handleCancel() {
         personAddStage.close();
 }
 
+public boolean isPassportExist (String passport){
+       boolean isExist = false;
+   for (Person person : persons) {
+       if (person.getPassport().equals(passport)) return true;
+   }
+   return false;
+}
 
 public boolean isInputValid () {
 String errorMessage = "";
@@ -119,6 +130,15 @@ if (firstNameField.getText() == null || firstNameField.getLength() == 0)
         errorMessage += "No valid first name\n";
 if (passportField.getText() == null || passportField.getLength() == 0)
         errorMessage += "No valid passport name\n";
+else{
+    
+    if (isPassportExist(passportField.getText())){
+        Alert alert = new Alert(Alert.AlertType.ERROR);
+        alert.initOwner(personAddStage);
+        alert.setContentText("Person with this passport already exist");
+        alert.showAndWait();
+    }
+}
 if (sanBookField.getText() == null || sanBookField.getLength() == 0)
         sanBookField.setText("");
 if (phoneField.getText() == null || phoneField.getLength() == 0)

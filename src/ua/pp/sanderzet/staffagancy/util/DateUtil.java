@@ -56,6 +56,9 @@ public class DateUtil {
     public static LocalDate parse(String dateString) {
 
         try {
+            if(dateString == null) {
+                return null;
+            }
             return DATE_FORMATTER.parse(dateString, LocalDate::from);
         } catch (DateTimeParseException e) {
             return null;

@@ -215,6 +215,11 @@ fileNumberColumn.setCellValueFactory(cellData -> cellData.getValue().fileNumberP
 
 personTable.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> {
     showJob(newValue);
+    if(newValue != null){
+        personDelButton.setDisable(false);
+        personEditButton.setDisable(false);
+        jobAddButton.setDisable(false);
+    }
 });
 
 // Set listener on focus of personTable. If it have focus we activate buttons for person
@@ -372,7 +377,6 @@ personTable.focusedProperty().addListener(new ChangeListener<Boolean>() {
     });
 
 
-    personTable.requestFocus();
 
 }
 
@@ -398,7 +402,7 @@ public void setMainApp(MainApp mainApp){
         numberOfPersonsLabel.setText("Persons " + Integer.toString(personTable.getItems().size()));
     });
 
-    personTable.setItems(persons);
+    personTable.setItems(sortedPersons);
     numberOfPersonsLabel.setText("Persons " + Integer.toString(personTable.getItems().size()));
 
 
@@ -469,20 +473,35 @@ if (result.get() == ButtonType.OK) {
 private void onAddJob(){
 Job jobTemp = new Job();
 Person selectedPerson = personTable.getSelectionModel().getSelectedItem();
-jobTemp.setIdPerson(selectedPerson.getId());
-boolean okClicked = mainApp.showJobEditDialog(jobTemp);
+int personId = selectedPerson.getId();
+String personName = selectedPerson.getLastName() + " " + selectedPerson.getFirstName();
+jobTemp.setIdPerson(personId);
+boolean okClicked = mainApp.showJobEditDialog(jobTemp, personName);
 
-if(okClicked){
-    mainApp.getJobData(selectedPerson).add(jobTemp);
-    mainApp.insertJobDb(jobTemp);
+if(okClicked){ int resId = dbSqlite.insertJobDb(jobTemp);
+    if ( resId > 0)
+    {
+        jobTemp.setRowid(resId);
+        mainApp.getJobData(selectedPerson);
+        jobTable.getSelectionModel().select(jobTemp);
+    }
+    else {
+        Alert alert = new Alert(Alert.AlertType.ERROR);
+        alert.initOwner(mainApp.getPrimaryStage());
+        alert.setHeaderText("Error during adding entry to Jobs db");
+        alert.showAndWait();
+    }
 }
 
 }
 
 @FXML
 private void onEditJob(){
-Job job = jobTable.getSelectionModel().getSelectedItem();
-boolean okClicked = mainApp.showJobEditDialog(job);
+    Person selectedPerson = personTable.getSelectionModel().getSelectedItem();
+    String personName = selectedPerson.getLastName() + " " + selectedPerson.getFirstName();
+
+    Job job = jobTable.getSelectionModel().getSelectedItem();
+boolean okClicked = mainApp.showJobEditDialog(job, personName);
     if (okClicked) {
         mainApp.updateJobDb(job);
     }
