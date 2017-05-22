@@ -28,6 +28,8 @@ public class JobEditDialogController {
     private Button okButton;
     @FXML
     private Button cancelButton;
+    @FXML
+    private Label personNameLabel;
 
     private Job job;
     private boolean okClicked = false;
@@ -64,7 +66,9 @@ public class JobEditDialogController {
         });
     }
 
-
+public void setPersonNameLabel (String personName) {
+        personNameLabel.setText(personName);
+}
 
     public void setJobEditStage(Stage stage) {
         jobEditStage = stage;

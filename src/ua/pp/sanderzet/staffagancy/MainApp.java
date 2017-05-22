@@ -97,7 +97,6 @@ private final String DIR_DB = "./db";
 //Adding and editing list of persons
     public boolean showPersonEditDialog(Person person) {
         try {
-            this.person = person;
             FXMLLoader fxmlLoader = new FXMLLoader();
             fxmlLoader.setLocation(MainApp.class.getResource("view/PersonEditDialog.fxml"));
             AnchorPane page = fxmlLoader.load();
@@ -114,6 +113,7 @@ private final String DIR_DB = "./db";
             personEditDialogController.setPerson(person);
 //            Give stage to the controller
             personEditDialogController.setPersonAddStage(PersonEditStage);
+            personEditDialogController.setPersons(personData);
 //            Show and wait until user close it
             PersonEditStage.showAndWait();
             return personEditDialogController.isOkClicked();
@@ -124,7 +124,7 @@ private final String DIR_DB = "./db";
     }
 
 // Adding and editing list of jobs
-    public boolean showJobEditDialog(Job job) {
+    public boolean showJobEditDialog(Job job, String personName) {
         try {
             FXMLLoader loader = new FXMLLoader();
             loader.setLocation(MainApp.class.getResource("view/JobEditDialog.fxml"));
@@ -139,6 +139,7 @@ private final String DIR_DB = "./db";
             JobEditDialogController controller = loader.getController();
             controller.setJobEditStage(jobEditStage);
             controller.setJob(job);
+            controller.setPersonNameLabel(personName);
             jobEditStage.showAndWait();
 
             return controller.isOkClicked();
@@ -219,26 +220,13 @@ public void updatePersonDB (Person person) {
                 "', fileNumber = '" + person.getFileNumber() +
                 "' WHERE  id = " +
                 person.getId();
-dbSqlite.writeDB(sql);
+dbSqlite.upgradeDb(sql);
 //dbSqlite.closeDB();
     }
 
-public void insertPersonDb (Person person) {
-    String sql = "insert into persons (" +
-          "dataOfContract, endOfVisa, fileNumber, firstName, lastName," +
-            " passport, phone, sanBook) values ('" +
-            DateUtil.format(person.getDataOfContract()) + "', '" +
-            DateUtil.format(person.getEndOfVisa()) + "', '" +
-    person.getFileNumber() + "', '" +
-    person.getFirstName() + "', '" +
-    person.getLastName() + "', '" +
-    person.getPassport() + "', '" +
-    person.getPhone() + "', '" +
-    person.getSanBook() + "')";
 
-dbSqlite.writeDB(sql);
 
-}
+
 
 public void delPersonDb (int id) {
 String sql = "delete from persons WHERE id = " +id;
@@ -256,21 +244,10 @@ public void updateJobDb (Job job){
             "', end = '" + DateUtil.format(job.getEnd()) +
             "' WHERE  ROWID = " +
             job.getRowid();
-    dbSqlite.writeDB(sql);
+    dbSqlite.upgradeDb(sql);
 }
 
-    public void insertJobDb(Job job) {
-        String sql = "insert into jobs (" +
-                "idPerson, place, firm, position, start, end) values ('" +
-                Integer.toString(job.getIdPerson()) + "', '" +
-                job.getPlace() + "', '" +
-                job.getFirm() + "', '" +
-               job.getPosition() + "', '" +
-                DateUtil.format(job.getStart()) + "', '" +
-                DateUtil.format(job.getStart()) + "')";
 
-        dbSqlite.writeDB(sql);
-    }
 
 public void delJobDb(int id){
     String sql = "delete from jobs WHERE ROWID = " + id;
@@ -331,7 +308,6 @@ public void closeDb() {
             person.setLastName(resultPersons.getString("lastName"));
             person.setPassport(resultPersons.getString("passport"));
             person.setPhone(resultPersons.getString("phone"));
-
             if (DateUtil.validDate(resultPersons.getString("dataOfContract")))
                 person.setDataOfContract(DateUtil.parse(resultPersons.getString("dataOfContract")));
 

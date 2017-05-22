@@ -20,6 +20,7 @@ import ua.pp.sanderzet.staffagancy.MainApp;
 import ua.pp.sanderzet.staffagancy.model.Job;
 import ua.pp.sanderzet.staffagancy.model.Person;
 import ua.pp.sanderzet.staffagancy.util.DateUtil;
+import ua.pp.sanderzet.staffagancy.util.dbSqlite;
 
 import java.beans.EventHandler;
 import java.time.LocalDate;
@@ -214,6 +215,11 @@ fileNumberColumn.setCellValueFactory(cellData -> cellData.getValue().fileNumberP
 
 personTable.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> {
     showJob(newValue);
+    if(newValue != null){
+        personDelButton.setDisable(false);
+        personEditButton.setDisable(false);
+        jobAddButton.setDisable(false);
+    }
 });
 
 // Set listener on focus of personTable. If it have focus we activate buttons for person
@@ -370,7 +376,7 @@ personTable.focusedProperty().addListener(new ChangeListener<Boolean>() {
         });
     });
 
-//    personTable.requestFocus();
+
 
 }
 
@@ -390,19 +396,16 @@ public void setMainApp(MainApp mainApp){
     sortedPersons = new SortedList<Person>(filteredPersons);
     //    Bind the sorted list comparator to the TableView comparator
     sortedPersons.comparatorProperty().bind(personTable.comparatorProperty());
-    personTable.setItems(sortedPersons);
-
-    numberOfPersonsLabel.setText("Persons " + Integer.toString(personTable.getItems().size()));
-
-// Listener - if changing number of persons.
+    // Listener - if changing number of persons.
 
     persons.addListener((ListChangeListener<? super Person>) change -> {
         numberOfPersonsLabel.setText("Persons " + Integer.toString(personTable.getItems().size()));
     });
 
+    personTable.setItems(sortedPersons);
+    numberOfPersonsLabel.setText("Persons " + Integer.toString(personTable.getItems().size()));
 
 
-personTable.requestFocus();
 }
 
 
@@ -418,10 +421,20 @@ private void onAddPerson(){
 
     boolean okClicked = mainApp.showPersonEditDialog(tempPerson);
 if (okClicked) {
- mainApp.getPersonData().add(tempPerson);
- int r = personTable.getSelectionModel().getSelectedIndex();
- personTable.getFocusModel().focus(r);
-    mainApp.insertPersonDb(tempPerson);
+//    Select added person
+    int resId = dbSqlite.insertPersonDb(tempPerson);
+    if ( resId > 0)
+    {
+        tempPerson.setId(resId);
+        mainApp.getPersonData().add(tempPerson);
+        personTable.getSelectionModel().select(tempPerson);
+    }
+    else {
+        Alert alert = new Alert(Alert.AlertType.ERROR);
+        alert.initOwner(mainApp.getPrimaryStage());
+        alert.setHeaderText("Error during adding entry to Persons db");
+        alert.showAndWait();
+    }
 }
 
 }
@@ -460,21 +473,35 @@ if (result.get() == ButtonType.OK) {
 private void onAddJob(){
 Job jobTemp = new Job();
 Person selectedPerson = personTable.getSelectionModel().getSelectedItem();
+int personId = selectedPerson.getId();
+String personName = selectedPerson.getLastName() + " " + selectedPerson.getFirstName();
+jobTemp.setIdPerson(personId);
+boolean okClicked = mainApp.showJobEditDialog(jobTemp, personName);
 
-jobTemp.setIdPerson(selectedPerson.getId());
-boolean okClicked = mainApp.showJobEditDialog(jobTemp);
-
-if(okClicked){
-    mainApp.getJobData(selectedPerson).add(jobTemp);
-    mainApp.insertJobDb(jobTemp);
+if(okClicked){ int resId = dbSqlite.insertJobDb(jobTemp);
+    if ( resId > 0)
+    {
+        jobTemp.setRowid(resId);
+        mainApp.getJobData(selectedPerson);
+        jobTable.getSelectionModel().select(jobTemp);
+    }
+    else {
+        Alert alert = new Alert(Alert.AlertType.ERROR);
+        alert.initOwner(mainApp.getPrimaryStage());
+        alert.setHeaderText("Error during adding entry to Jobs db");
+        alert.showAndWait();
+    }
 }
 
 }
 
 @FXML
 private void onEditJob(){
-Job job = jobTable.getSelectionModel().getSelectedItem();
-boolean okClicked = mainApp.showJobEditDialog(job);
+    Person selectedPerson = personTable.getSelectionModel().getSelectedItem();
+    String personName = selectedPerson.getLastName() + " " + selectedPerson.getFirstName();
+
+    Job job = jobTable.getSelectionModel().getSelectedItem();
+boolean okClicked = mainApp.showJobEditDialog(job, personName);
     if (okClicked) {
         mainApp.updateJobDb(job);
     }

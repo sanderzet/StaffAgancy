@@ -8,6 +8,7 @@
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.ColumnConstraints?>
 <?import javafx.scene.layout.GridPane?>
+<?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.RowConstraints?>
 
 <AnchorPane prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/8.0.111" xmlns:fx="http://javafx.com/fxml/1" fx:controller="ua.pp.sanderzet.staffagancy.view.PersonEditDialogController">
@@ -29,21 +30,54 @@
             <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
         </rowConstraints>
          <children>
-            <Label text="Nazwisko">
+            <HBox alignment="CENTER_LEFT">
                <GridPane.margin>
                   <Insets left="5.0" />
                </GridPane.margin>
-            </Label>
-            <Label layoutX="10.0" layoutY="52.0" text="Imie" GridPane.rowIndex="1">
+               <children>
+                  <Label text="Nazwisko" />
+                  <Label text="*" textFill="#ee065f">
+                     <padding>
+                        <Insets right="3.0" />
+                     </padding>
+                  </Label>
+               </children>
+               <opaqueInsets>
+                  <Insets left="5.0" />
+               </opaqueInsets>
+            </HBox>
+            <HBox alignment="CENTER_LEFT" GridPane.rowIndex="1">
                <GridPane.margin>
                   <Insets left="5.0" />
                </GridPane.margin>
-            </Label>
-            <Label layoutX="10.0" layoutY="152.0" text="DANE &#10;PASZPORTOWE" GridPane.rowIndex="2">
+               <children>
+                  <Label text="Imie" />
+                  <Label text="*" textFill="#ee065f">
+                     <padding>
+                        <Insets right="3.0" />
+                     </padding>
+                  </Label>
+               </children>
+               <opaqueInsets>
+                  <Insets left="5.0" />
+               </opaqueInsets>
+            </HBox>
+            <HBox alignment="CENTER_LEFT" GridPane.rowIndex="2">
                <GridPane.margin>
                   <Insets left="5.0" />
                </GridPane.margin>
-            </Label>
+               <children>
+                  <Label text="DANE &#10;PASZPORTOWE" />
+                  <Label text="*" textFill="#ee065f">
+                     <padding>
+                        <Insets right="3.0" />
+                     </padding>
+                  </Label>
+               </children>
+               <opaqueInsets>
+                  <Insets left="5.0" />
+               </opaqueInsets>
+            </HBox>
             <Label text="NUMER &#10;TELEFONU" GridPane.rowIndex="3">
                <GridPane.margin>
                   <Insets left="5.0" />
@@ -59,11 +93,22 @@
                   <Insets left="5.0" />
                </GridPane.margin>
             </Label>
-            <Label text="TERMIN &#10;VISA" GridPane.rowIndex="6">
+            <HBox alignment="CENTER_LEFT" GridPane.rowIndex="6">
                <GridPane.margin>
                   <Insets left="5.0" />
                </GridPane.margin>
-            </Label>
+               <children>
+                  <Label text="TERMIN VISA" />
+                  <Label text="*" textFill="#ee065f">
+                     <padding>
+                        <Insets right="3.0" />
+                     </padding>
+                  </Label>
+               </children>
+               <opaqueInsets>
+                  <Insets left="5.0" />
+               </opaqueInsets>
+            </HBox>
             <Label text="NUMER TECZKI" GridPane.rowIndex="7">
                <GridPane.margin>
                   <Insets left="5.0" />
