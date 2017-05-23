@@ -1,6 +1,7 @@
 package ua.pp.sanderzet.staffagancy.view;
 
 import javafx.fxml.FXML;
+import javafx.fxml.Initializable;
 import javafx.scene.input.KeyCode;
 import javafx.scene.layout.Region;
 import javafx.stage.Stage;
@@ -9,10 +10,15 @@ import ua.pp.sanderzet.staffagancy.util.DateUtil;
 
 import javafx.scene.control.*;
 
+import java.net.URL;
+import java.util.ResourceBundle;
+
 /**
  * Created by alzet on 13.05.17.
  */
-public class JobEditDialogController {
+public class JobEditDialogController implements Initializable {
+
+
 
     @FXML
     private TextField placeTextField;
@@ -41,6 +47,7 @@ public class JobEditDialogController {
      * The constructor.
      * The constructor is called before the initialize() method.
      */
+
     public JobEditDialogController(){
 
     }
@@ -51,7 +58,8 @@ public class JobEditDialogController {
      */
 
     @FXML
-    public void initialize (){
+    @Override
+    public void initialize (URL url, ResourceBundle resourceBundle){
 
 //        If pressed Enter - button must fire (not only Space pressed)
         okButton.setOnKeyPressed(keyEvent -> {
@@ -116,10 +124,10 @@ public boolean isInputValid(){
     if (positionTextField.getText() == null || positionTextField.getLength() == 0)
         errorMessage += "No valid position of work\n";
     if (startTextField.getText() == null || startTextField.getLength() == 0)
-        errorMessage += "No valid start time of working\n";
+startTextField.setText("");
     else {
         if (!DateUtil.validDate(startTextField.getText()))
-            errorMessage += "No valid start time of working. Use the format dd.mm.yyyy !\n";
+            errorMessage += "No valid time of changing work. Use the format dd.mm.yyyy !\n";
     }
 
     if (endTextField.getText() == null || endTextField.getLength() == 0)

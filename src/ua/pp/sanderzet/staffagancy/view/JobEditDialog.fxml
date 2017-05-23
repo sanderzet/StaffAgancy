@@ -56,11 +56,6 @@
                </GridPane.margin>
                <children>
                       <Label text="Data przeniesienia" />
-                  <Label text="*" textFill="#ee065f">
-                     <padding>
-                        <Insets right="3.0" />
-                     </padding>
-                  </Label>
                </children>
             </HBox>
                 <Label text="Data ukonczenia" GridPane.rowIndex="5">
