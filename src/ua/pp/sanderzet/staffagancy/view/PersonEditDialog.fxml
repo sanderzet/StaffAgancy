@@ -35,7 +35,7 @@
                   <Insets left="5.0" />
                </GridPane.margin>
                <children>
-                  <Label text="Nazwisko" />
+                  <Label text="%table.lastName" />
                   <Label text="*" textFill="#ee065f">
                      <padding>
                         <Insets right="3.0" />
@@ -51,7 +51,7 @@
                   <Insets left="5.0" />
                </GridPane.margin>
                <children>
-                  <Label text="Imie" />
+                  <Label text="%table.firstName" />
                   <Label text="*" textFill="#ee065f">
                      <padding>
                         <Insets right="3.0" />
@@ -67,7 +67,7 @@
                   <Insets left="5.0" />
                </GridPane.margin>
                <children>
-                  <Label text="DANE &#10;PASZPORTOWE" />
+                  <Label text="%table.passport" />
                   <Label text="*" textFill="#ee065f">
                      <padding>
                         <Insets right="3.0" />
@@ -78,17 +78,17 @@
                   <Insets left="5.0" />
                </opaqueInsets>
             </HBox>
-            <Label text="NUMER &#10;TELEFONU" GridPane.rowIndex="3">
+            <Label text="%table.phone" GridPane.rowIndex="3">
                <GridPane.margin>
                   <Insets left="5.0" />
                </GridPane.margin>
             </Label>
-            <Label text="TERMIN &#10;ZAWARCIA &#10;KONTRAKTU" GridPane.rowIndex="4">
+            <Label text="%table.dateOfContract" GridPane.rowIndex="4">
                <GridPane.margin>
                   <Insets left="5.0" />
                </GridPane.margin>
             </Label>
-            <Label text="KSIĄŻECZKA &#10;SANEPID" GridPane.rowIndex="5">
+            <Label text="%table.sanitaryBook" GridPane.rowIndex="5">
                <GridPane.margin>
                   <Insets left="5.0" />
                </GridPane.margin>
@@ -98,7 +98,7 @@
                   <Insets left="5.0" />
                </GridPane.margin>
                <children>
-                  <Label text="TERMIN VISA" />
+                  <Label text="%table.endOfVisa" />
                   <Label text="*" textFill="#ee065f">
                      <padding>
                         <Insets right="3.0" />
@@ -109,7 +109,7 @@
                   <Insets left="5.0" />
                </opaqueInsets>
             </HBox>
-            <Label text="NUMER TECZKI" GridPane.rowIndex="7">
+            <Label text="%table.numberOfFile" GridPane.rowIndex="7">
                <GridPane.margin>
                   <Insets left="5.0" />
                </GridPane.margin>

@@ -29,7 +29,7 @@
                 <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
             </rowConstraints>
             <children>
-                <Label text="Miasto pracy" GridPane.rowIndex="1">
+                <Label text="%table.placeOfJob" GridPane.rowIndex="1">
                     <GridPane.margin>
                   <Insets left="5.0" right="5.0" />
                     </GridPane.margin>
@@ -39,7 +39,7 @@
                   <Insets left="5.0" right="5.0" />
                </GridPane.margin>
                <children>
-                      <Label text="Firma" />
+                      <Label text="%table.firm" />
                   <Label text="*" textFill="#ee065f">
                      <padding>
                         <Insets right="3.0" />
@@ -55,10 +55,10 @@
                   <Insets left="5.0" right="5.0" />
                </GridPane.margin>
                <children>
-                      <Label text="Data przeniesienia" />
+                      <Label text="%table.changeOfJob" />
                </children>
             </HBox>
-                <Label text="Data ukonczenia" GridPane.rowIndex="5">
+                <Label text="%table.endOfJob" GridPane.rowIndex="5">
                     <GridPane.margin>
                   <Insets left="5.0" right="5.0" />
                     </GridPane.margin>
@@ -94,7 +94,7 @@
                         <Button fx:id="cancelButton" cancelButton="true" mnemonicParsing="false" onAction="#handleCancel" text="Cancel" />
                     </buttons>
                 </ButtonBar>
-            <Label text="Label">
+            <Label text="%customer">
                <GridPane.margin>
                   <Insets left="5.0" right="5.0" />
                </GridPane.margin>
@@ -115,7 +115,7 @@
             </Label>
             <HBox alignment="CENTER_LEFT" prefHeight="100.0" prefWidth="200.0" GridPane.rowIndex="3">
                <children>
-                      <Label text="Stanowisko" />
+                      <Label text="%table.position" />
                   <Label text="*" textFill="#ee065f">
                      <padding>
                         <Insets right="3.0" />

@@ -113,10 +113,10 @@ public void handleCancel() {
         personAddStage.close();
 }
 
-public boolean isPassportExist (String passport){
-       boolean isExist = false;
-   for (Person person : persons) {
-       if (person.getPassport().equals(passport)) return true;
+public boolean isPassportExist (){
+          String passport = person.getPassport();
+   for (Person person1 : persons) {
+       if (!person.equals(person1) && person1.getPassport().equals(passport)) return true;
    }
    return false;
 }
@@ -132,7 +132,7 @@ if (passportField.getText() == null || passportField.getLength() == 0)
         errorMessage += "No valid passport name\n";
 else{
     
-    if (isPassportExist(passportField.getText())){
+    if (isPassportExist()){
         Alert alert = new Alert(Alert.AlertType.ERROR);
         alert.initOwner(personAddStage);
         alert.setContentText("Person with this passport already exist");

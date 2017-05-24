@@ -22,6 +22,8 @@ import java.io.File;
 import java.io.IOException;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.Locale;
+import java.util.ResourceBundle;
 
 public class MainApp extends Application {
 
@@ -35,6 +37,9 @@ private final String DIR_DB = "./db";
     private Person person;
     private ObservableList<Person> personData = FXCollections.observableArrayList();
     private ObservableList<Job> jobData = FXCollections.observableArrayList();
+    private Locale locale = Locale.getDefault();
+//    Bundle with default local setting
+private ResourceBundle bundle = ResourceBundle.getBundle("bundles/bundle");
 
 
 
@@ -62,6 +67,8 @@ private final String DIR_DB = "./db";
 // Load root layout from fxml file
             FXMLLoader loader = new FXMLLoader();
              loader.setLocation(MainApp.class.getResource("view/RootLayout.fxml"));
+             //             Bundle for internationalizing
+             loader.setResources(bundle);
             rootLayout = (BorderPane) loader.load();
             //Show the scene containing root layout
             primaryStage.setScene(new Scene(rootLayout));
@@ -81,6 +88,8 @@ private final String DIR_DB = "./db";
             // Load person overview.
             FXMLLoader fxmlLoader = new FXMLLoader();
             fxmlLoader.setLocation(MainApp.class.getResource("view/PersonOverview.fxml"));
+           //             Bundle for internationalizing
+            fxmlLoader.setResources(bundle);
             AnchorPane anchorPane = (AnchorPane) fxmlLoader.load();
             rootLayout.setCenter(anchorPane);
             // Give the controller access to the main app.
@@ -99,6 +108,8 @@ private final String DIR_DB = "./db";
         try {
             FXMLLoader fxmlLoader = new FXMLLoader();
             fxmlLoader.setLocation(MainApp.class.getResource("view/PersonEditDialog.fxml"));
+            //             Bundle for internationalizing
+            fxmlLoader.setResources(bundle);
             AnchorPane page = fxmlLoader.load();
 
             Stage PersonEditStage = new Stage ();
@@ -128,6 +139,9 @@ private final String DIR_DB = "./db";
         try {
             FXMLLoader loader = new FXMLLoader();
             loader.setLocation(MainApp.class.getResource("view/JobEditDialog.fxml"));
+            //             Bundle for internationalizing
+            loader.setResources(bundle);
+
             AnchorPane pane = loader.load();
 
             Stage jobEditStage = new Stage();
