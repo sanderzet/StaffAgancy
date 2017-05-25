@@ -166,7 +166,7 @@ else {
 }
 
 if (endOfVisaField.getText() == null || endOfVisaField.getLength() == 0)
-    errorMessage += bundle.getString("message.noEnteredVisaExpDate")+ "\n";
+endOfVisaField.setText("");
 else {
     if (!DateUtil.validDate(endOfVisaField.getText()))
         errorMessage += bundle.getString("message.noValidVisaExpDate") + "\n";

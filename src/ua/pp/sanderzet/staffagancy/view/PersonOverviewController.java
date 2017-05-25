@@ -406,7 +406,7 @@ public void setMainApp(MainApp mainApp){
     });
 
     personTable.setItems(sortedPersons);
-    numberOfPersonsLabel.setText("Persons " + Integer.toString(personTable.getItems().size()));
+    numberOfPersonsLabel.setText(bundle.getString("customers")+ Integer.toString(personTable.getItems().size()));
 
 
 }
