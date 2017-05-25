@@ -2,6 +2,7 @@ package ua.pp.sanderzet.staffagancy.view;
 
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
+import javafx.fxml.Initializable;
 import javafx.scene.control.*;
 import javafx.scene.input.KeyCode;
 import javafx.scene.layout.Region;
@@ -9,12 +10,14 @@ import javafx.stage.Stage;
 import ua.pp.sanderzet.staffagancy.model.Person;
 import ua.pp.sanderzet.staffagancy.util.DateUtil;
 
-import java.util.Iterator;
+import java.net.URL;
+import java.text.MessageFormat;
+import java.util.ResourceBundle;
 
 /**
  * Created by alzet on 26.04.17.
  */
-public class PersonEditDialogController {
+public class PersonEditDialogController implements Initializable  {
 
     @FXML
     private TextField firstNameField;
@@ -41,11 +44,17 @@ public class PersonEditDialogController {
     private ObservableList<Person> persons;
 private Stage personAddStage;
 private Person person;
+
+//Person having passport with such number.
+//Using for checking passport number unique.
+private Person personWithSuchPassport;
+
 private boolean okClicked = false;
+private ResourceBundle bundle;
 
-    @FXML
-    private void initialize () {
-
+@Override
+    public void initialize (URL url, ResourceBundle bundle) {
+    this.bundle = bundle;
 //        If pressed Enter - button must fire (not only Space pressed)
         okButton.setOnKeyPressed(keyEvent -> {
             if (keyEvent.getCode() == KeyCode.ENTER) {
@@ -112,11 +121,14 @@ public void handleOk() {
 public void handleCancel() {
         personAddStage.close();
 }
-
+// Passport must be unique
 public boolean isPassportExist (){
-          String passport = person.getPassport();
+          String passport = passportField.getText();
    for (Person person1 : persons) {
-       if (!person.equals(person1) && person1.getPassport().equals(passport)) return true;
+       if (!person.equals(person1) && person1.getPassport().equals(passport)) {
+           personWithSuchPassport = person1;
+           return true;
+       }
    }
    return false;
 }
@@ -125,18 +137,18 @@ public boolean isInputValid () {
 String errorMessage = "";
 
 if (lastNameField.getText() == null || lastNameField.getLength() == 0)
-    errorMessage += "No valid last name\n";
+    errorMessage += bundle.getString("message.noValidLastName")+"\n";
 if (firstNameField.getText() == null || firstNameField.getLength() == 0)
-        errorMessage += "No valid first name\n";
+        errorMessage += bundle.getString("message.noValidFirstName") + "\n";
 if (passportField.getText() == null || passportField.getLength() == 0)
-        errorMessage += "No valid passport name\n";
+        errorMessage += bundle.getString("message.noValidPassport")+ "\n";
 else{
     
     if (isPassportExist()){
-        Alert alert = new Alert(Alert.AlertType.ERROR);
-        alert.initOwner(personAddStage);
-        alert.setContentText("Person with this passport already exist");
-        alert.showAndWait();
+        errorMessage += bundle.getString("message.passportNotUnique") + "\n" +
+                personWithSuchPassport.getLastName() + " " +
+                personWithSuchPassport.getFirstName() + " " +
+                personWithSuchPassport.getPassport() + "\n";
     }
 }
 if (sanBookField.getText() == null || sanBookField.getLength() == 0)
@@ -150,14 +162,14 @@ if (dateOfContractField.getText() == null || dateOfContractField.getLength() == 
     dateOfContractField.setText("");
 else {
     if (!DateUtil.validDate(dateOfContractField.getText()))
-        errorMessage += "No valid date of contract. Use the format dd.mm.yyyy !\n";
+        errorMessage += bundle.getString("message.noValidContractDate")+ "\n";
 }
 
 if (endOfVisaField.getText() == null || endOfVisaField.getLength() == 0)
-    errorMessage += "No valid data of Visa expiration\n";
+    errorMessage += bundle.getString("message.noEnteredVisaExpDate")+ "\n";
 else {
     if (!DateUtil.validDate(endOfVisaField.getText()))
-        errorMessage += "No valid date of Visa expiration. Use the format dd.mm.yyyy !\n";
+        errorMessage += bundle.getString("message.noValidVisaExpDate") + "\n";
 }
 
 if (errorMessage.length() == 0)

@@ -10,6 +10,7 @@ import javafx.collections.transformation.SortedList;
 import javafx.event.Event;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
+import javafx.fxml.Initializable;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.TextFieldTableCell;
 import javafx.scene.input.KeyCode;
@@ -25,11 +26,13 @@ import ua.pp.sanderzet.staffagancy.util.dbSqlite;
 import java.beans.EventHandler;
 import java.time.LocalDate;
 import java.util.Optional;
+import java.util.ResourceBundle;
+import java.net.URL;
 
 /**
  * Created by sander on 24.04.17.
  */
-public class PersonOverviewController {
+public class PersonOverviewController implements Initializable {
 
     @FXML
     private TextField filterField;
@@ -94,21 +97,21 @@ private ObservableList<Person> persons = FXCollections.observableArrayList();
 private FilteredList<Person> filteredPersons;
 private SortedList<Person> sortedPersons;
 private String numberOfPersons;
+private ResourceBundle bundle;
     /**
      * The constructor.
      * The constructor is called before the initialize() method.
      */
-    public PersonOverviewController() {
+    public PersonOverviewController()  {
     }
 
     /**
      * Initializes the controller class. This method is automatically called
      * after the fxml file has been loaded.
      */
-
-@FXML
-private void initialize (){
-
+@Override
+public void initialize (URL url, ResourceBundle bundle){
+this.bundle = bundle;
 //    If pressed Enter - button must fire (not only Space pressed)
 javafx.event.EventHandler<KeyEvent> onEnterKeyEventHandler = (keyEvent -> {
     if(keyEvent.getCode() == KeyCode.ENTER) {
@@ -399,7 +402,7 @@ public void setMainApp(MainApp mainApp){
     // Listener - if changing number of persons.
 
     persons.addListener((ListChangeListener<? super Person>) change -> {
-        numberOfPersonsLabel.setText("Persons " + Integer.toString(personTable.getItems().size()));
+        numberOfPersonsLabel.setText(bundle.getString("customers") + " : " + Integer.toString(personTable.getItems().size()));
     });
 
     personTable.setItems(sortedPersons);
