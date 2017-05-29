@@ -5,6 +5,7 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
+import javafx.scene.control.Alert;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.BorderPane;
 import javafx.stage.Modality;
@@ -32,7 +33,7 @@ public class MainApp extends Application {
 //    Directory for data
 private final String DIR_DB = "./db";
 // Result of querying to db
-    private ResultSet resultPersons;
+    private ResultSet resultSet;
 ////Current person for selecting job list for this person
     private Person person;
     private ObservableList<Person> personData = FXCollections.observableArrayList();
@@ -46,7 +47,7 @@ private ResourceBundle bundle = ResourceBundle.getBundle("bundles/bundle");
 
 //    Constructor
         public MainApp () {
-        restoreDataFromDb();
+
     }
 
 
@@ -57,6 +58,11 @@ private ResourceBundle bundle = ResourceBundle.getBundle("bundles/bundle");
         primaryStage.setTitle("Staff Agancy by SanderZet");
         primaryStage.setMaximized(true);
         initRootLayout();
+File fileDb = new File(DIR_DB + "/sa1_2.db");
+if (!fileDb.isFile()) {
+    Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
+    restoreDataFromDb();
+}
         showPersonOverview();
 
     }
@@ -177,7 +183,7 @@ private ResourceBundle bundle = ResourceBundle.getBundle("bundles/bundle");
 
 
 //Get jobs list for the person
-    public ObservableList<Job> getJobData (Person person) {
+    public ObservableList<Job> getJobData (Person person)  {
 // If it is not first call we must to clear list
         jobData.clear();
         ResultSet resultJob;
@@ -216,7 +222,13 @@ private ResourceBundle bundle = ResourceBundle.getBundle("bundles/bundle");
             e.printStackTrace();
         }
 
-
+finally {
+            if (resultJob != null) try {
+                resultJob.close();
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+        }
 
 
         return jobData;
@@ -282,8 +294,7 @@ public void closeDb() {
 
 
 // Restore Data from Db
-
-    private void restoreDataFromDb() {
+private void restoreDataFromDb() {
 
     boolean dirCreateOk = true;
     //        Preparing db in DIR_DB
@@ -300,7 +311,7 @@ public void closeDb() {
     }
 
 //        Connecting to db
-    dbSqlite.connect();
+    dbSqlite.connect("jdbc:sqlite:db/sa1_2.db");
 //If db not exist - create
     dbSqlite.createDB();
 
@@ -312,25 +323,25 @@ public void closeDb() {
 
 //        If it`s not first invocation of the method we must clear list personData
 //        personData.clear();
-    resultPersons = dbSqlite.readDB(query);
+    resultSet = dbSqlite.readDB(query);
 
     try {
-        while (resultPersons.next()) {
+        while (resultSet.next()) {
             Person person = new Person();
-            person.setId(resultPersons.getInt("id"));
-            person.setFirstName(resultPersons.getString("firstName"));
-            person.setLastName(resultPersons.getString("lastName"));
-            person.setPassport(resultPersons.getString("passport"));
-            person.setPhone(resultPersons.getString("phone"));
-            if (DateUtil.validDate(resultPersons.getString("dataOfContract")))
-                person.setDataOfContract(DateUtil.parse(resultPersons.getString("dataOfContract")));
+            person.setId(resultSet.getInt("id"));
+            person.setFirstName(resultSet.getString("firstName"));
+            person.setLastName(resultSet.getString("lastName"));
+            person.setPassport(resultSet.getString("passport"));
+            person.setPhone(resultSet.getString("phone"));
+            if (DateUtil.validDate(resultSet.getString("dataOfContract")))
+                person.setDataOfContract(DateUtil.parse(resultSet.getString("dataOfContract")));
 
-            person.setSanBook(resultPersons.getString("sanBook"));
+            person.setSanBook(resultSet.getString("sanBook"));
 
-            if (DateUtil.validDate(resultPersons.getString("endOfVisa")))
-                person.setEndOfVisa(DateUtil.parse(resultPersons.getString("endOfVisa")));
+            if (DateUtil.validDate(resultSet.getString("endOfVisa")))
+                person.setEndOfVisa(DateUtil.parse(resultSet.getString("endOfVisa")));
 
-            person.setFileNumber(resultPersons.getString("fileNumber"));
+            person.setFileNumber(resultSet.getString("fileNumber"));
 
             personData.add(person);
         }
@@ -340,6 +351,111 @@ public void closeDb() {
         e.printStackTrace();
     }
 }
+
+
+private void restoreDataFromOldDb() {
+ResultSet resultSet;
+        boolean dirCreateOk = true;
+        //        Preparing db in DIR_DB
+        File dirDB = new File(DIR_DB);
+        if (!dirDB.isDirectory()) {
+            dirCreateOk = dirDB.mkdirs();
+        }
+//        If dir not exist but haven`t been created successfully - end
+        if (!dirCreateOk) {
+
+            //
+            // TODO  -- create AlertWindow "dir cann`t be created"
+
+        }
+
+//        Connecting to db
+        dbSqlite.connect("jdbc:sqlite:db/sa.db");
+//If db not exist - create
+        dbSqlite.createDB();
+
+//        Make query to db
+     String query = "SELECT id, firstName, lastName, passport, phone, dataOfContract, sanBook, endOfVisa, fileNumber FROM persons";
+//        String query = "SELECT id, firstName, lastName, passport, phone, dataOfContract, sanBook, endOfVisa, fileNumber," +
+//                "place, firm, position, start, end FROM persons as p LEFT OUTER JOIN job as j ON id = idPerson";
+
+
+//        If it`s not first invocation of the method we must clear list personData
+//        personData.clear();
+        this.resultSet = dbSqlite.readDB(query);
+
+        try {
+            while (this.resultSet.next()) {
+                Person person = new Person();
+                person.setId(this.resultSet.getInt("id"));
+                person.setFirstName(this.resultSet.getString("firstName"));
+                person.setLastName(this.resultSet.getString("lastName"));
+                person.setPassport(this.resultSet.getString("passport"));
+                person.setPhone(this.resultSet.getString("phone"));
+                if (DateUtil.validDate(this.resultSet.getString("dataOfContract")))
+                    person.setDataOfContract(DateUtil.parse(this.resultSet.getString("dataOfContract")));
+
+                person.setSanBook(this.resultSet.getString("sanBook"));
+
+                if (DateUtil.validDate(this.resultSet.getString("endOfVisa")))
+                    person.setEndOfVisa(DateUtil.parse(this.resultSet.getString("endOfVisa")));
+
+                person.setFileNumber(this.resultSet.getString("fileNumber"));
+
+                personData.add(person);
+            }
+
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+//     Getting job data
+//        jobData.clear();
+////        Connecting to db
+//        dbSqlite.connect();
+////If db not exist - create
+//        dbSqlite.createDB();
+
+//        Make query to db
+         query = "SELECT ROWID, place, firm, position, start, end FROM jobs" +
+                person.getId() ;
+        resultSet = dbSqlite.readDB(query);
+
+        try {
+            while (resultSet.next()) {
+                Job job = new Job();
+                job.setRowid(resultSet.getInt("ROWID"));
+                job.setIdPerson(person.getId());
+                job.setPlace(resultSet.getString("place"));
+                job.setFirm(resultSet.getString("firm"));
+                job.setPosition(resultSet.getString("position"));
+
+                if (resultSet.getString("start") != null){
+                    if(DateUtil.validDate(resultSet.getString("start")))
+                        job.setStart(DateUtil.parse(resultSet.getString("start")));
+                }
+                if (resultSet.getString("end") != null) {
+                    if (DateUtil.validDate(resultSet.getString("end")))
+                        job.setEnd(DateUtil.parse(resultSet.getString("end")));
+                }
+                jobData.add(job);
+            }
+
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        finally {
+            if (resultSet != null) try {
+                resultSet.close();
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+        }
+
+    }
 
 
     public static void main(String[] args) {

@@ -15,10 +15,10 @@ public class dbSqlite {
     public static Statement stat = null;
     public static ResultSet res = null;
 
-    public static Connection connect(){
+    public static Connection connect(String nameDb){
         try {
             Class.forName("org.sqlite.JDBC");
-            conn = DriverManager.getConnection("jdbc:sqlite:db/sa.db");
+            conn = DriverManager.getConnection(nameDb);
 
 return conn;
         }
