@@ -61,7 +61,7 @@ private ResourceBundle bundle = ResourceBundle.getBundle("bundles/bundle");
 File fileDb = new File(DIR_DB + "/sa1_2.db");
 if (!fileDb.isFile()) {
     Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
-    restoreDataFromDb();
+    restoreDataFromOldDb();
 }
         showPersonOverview();
 
