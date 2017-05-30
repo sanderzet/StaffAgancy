@@ -13,30 +13,39 @@ private  final IntegerProperty id;
     private final StringProperty lastName;
     private final StringProperty passport;
     private final StringProperty phone;
-    private final ObjectProperty<LocalDate> dataOfContract;
+    private final ObjectProperty<LocalDate> dateOfContract;
     private final StringProperty sanBook;
     private final ObjectProperty<LocalDate> endOfVisa;
     private final StringProperty fileNumber;
-
-
+    private final ObjectProperty<LocalDate> dateQuit;
+private final StringProperty baseOfWorking;
+private final StringProperty usualNote;
+private final StringProperty criticalNote;
+//
 //   Empty Constructor
     public Person () {
-this(0,null, null, null, null, null, null, null, null);
+this(0,null, null, null, null, null,
+        null, null, null, null, null, null, null);
     }
 
 //    Full constructor
 
-    public Person(int id, String firstName, String lastName, String passport, String phone, LocalDate dataOfContract, String sanBook,
-                  LocalDate endOfVisa, String fileNumber) {
+    public Person(int id, String firstName, String lastName, String passport, String phone, LocalDate dataOfContract,
+                  String sanBook, LocalDate endOfVisa, String fileNumber, LocalDate dateQuit, String baseOfWorking,
+                  String usualNote, String criticalNote) {
         this.id = new SimpleIntegerProperty(id);
         this.firstName = new SimpleStringProperty(firstName);
         this.lastName = new SimpleStringProperty(lastName);
         this.passport = new SimpleStringProperty(passport);
         this.phone = new SimpleStringProperty(phone);
-        this.dataOfContract = new SimpleObjectProperty<LocalDate>(dataOfContract);
+        this.dateOfContract = new SimpleObjectProperty<>(dataOfContract);
         this.sanBook = new SimpleStringProperty(sanBook);
-        this.endOfVisa = new SimpleObjectProperty<LocalDate>(endOfVisa);
+        this.endOfVisa = new SimpleObjectProperty<>(endOfVisa);
         this.fileNumber = new SimpleStringProperty(fileNumber);
+        this.dateQuit = new SimpleObjectProperty<>(dateQuit);
+        this.baseOfWorking = new SimpleStringProperty(baseOfWorking);
+        this.usualNote = new SimpleStringProperty(usualNote);
+        this.criticalNote = new SimpleStringProperty(criticalNote);
     }
 
 
@@ -90,16 +99,16 @@ public IntegerProperty idProperty() {return id;}
         return phone;
     }
 
-    public void setDataOfContract(LocalDate dataOfContract) {
-        this.dataOfContract.set(dataOfContract);
+    public void setDateOfContract(LocalDate dateOfContract) {
+        this.dateOfContract.set(dateOfContract);
     }
 
-    public LocalDate getDataOfContract() {
-        return dataOfContract.get();
+    public LocalDate getDateOfContract() {
+        return dateOfContract.get();
     }
 
-    public ObjectProperty<LocalDate> dataOfContractProperty() {
-        return dataOfContract;
+    public ObjectProperty<LocalDate> dateOfContractProperty() {
+        return dateOfContract;
     }
 
     public void setSanBook(String sanBook) {
@@ -137,6 +146,32 @@ public IntegerProperty idProperty() {return id;}
     public StringProperty fileNumberProperty() {
         return fileNumber;
     }
+
+    public void setDateQuit(LocalDate dateQuit) {this.dateQuit.set(dateQuit);}
+
+    public LocalDate getDateQuit () {return dateQuit.get();}
+
+    public ObjectProperty<LocalDate> getDateQuitProperty (){return dateQuit; }
+
+    public void setBaseOfWorking(String baseOfWorking) {this.baseOfWorking.set(baseOfWorking);}
+
+    public String getBaseOfWorking() {return baseOfWorking.get();}
+
+    public StringProperty baseOfWorkingProperty() {return baseOfWorking;}
+
+    public void setUsualNote(String usualNote) {this.usualNote.set(usualNote);}
+
+    public String getUsualNote() {return usualNote.get();}
+
+    public StringProperty usualNoteProperty () {return usualNote;}
+
+
+    public void setCriticalNote (String criticalNote) {this.criticalNote.set(criticalNote);}
+
+    public String getCriticalNote () {return criticalNote.get();}
+
+    public StringProperty criticalNoteProperty () {return criticalNote;}
+
 
 
 

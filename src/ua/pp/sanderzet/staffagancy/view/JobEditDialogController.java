@@ -91,8 +91,8 @@ public void setPersonNameLabel (String personName) {
         placeTextField.setText(job.getPlace());
         firmTextField.setText(job.getPlace());
         positionTextField.setText(job.getPosition());
-        startTextField.setText(DateUtil.format(job.getStart()));
-        endTextField.setText(DateUtil.format(job.getEnd()));
+        startTextField.setText(DateUtil.format(job.getStartJob()));
+        endTextField.setText(DateUtil.format(job.getEndJob()));
         startTextField.setPromptText("dd.mm.yyyy");
     endTextField.setPromptText("dd.mm.yyyy");
     }
@@ -103,8 +103,8 @@ public void handleOk () {
             job.setPlace(placeTextField.getText());
             job.setFirm(firmTextField.getText());
             job.setPosition(positionTextField.getText());
-            job.setStart(DateUtil.parse(startTextField.getText()));
-            job.setEnd(DateUtil.parse(endTextField.getText()));
+            job.setStartJob(DateUtil.parse(startTextField.getText()));
+            job.setEndJob(DateUtil.parse(endTextField.getText()));
             okClicked = true;
             jobEditStage.close();
         }

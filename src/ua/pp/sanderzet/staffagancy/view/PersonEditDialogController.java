@@ -81,7 +81,7 @@ public void setPersons(ObservableList<Person> persons) {this.persons = persons;}
         lastNameField.setText(person.getLastName());
         passportField.setText(person.getPassport());
         phoneField.setText(person.getPhone());
-dateOfContractField.setText(DateUtil.format(person.getDataOfContract()));
+dateOfContractField.setText(DateUtil.format(person.getDateOfContract()));
 dateOfContractField.setPromptText("dd.mm.yyyy");
 sanBookField.setText(person.getSanBook());
 endOfVisaField.setText(DateUtil.format(person.getEndOfVisa()));
@@ -107,7 +107,7 @@ public void handleOk() {
             person.setFirstName(firstNameField.getText());
             person.setPassport(passportField.getText());
             person.setPhone(phoneField.getText());
-            person.setDataOfContract(DateUtil.parse(dateOfContractField.getText()));
+            person.setDateOfContract(DateUtil.parse(dateOfContractField.getText()));
             person.setSanBook(sanBookField.getText());
             person.setEndOfVisa(DateUtil.parse(endOfVisaField.getText()));
             person.setFileNumber(fileNumberField.getText());

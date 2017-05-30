@@ -7,9 +7,7 @@ import javafx.collections.ListChangeListener;
 import javafx.collections.ObservableList;
 import javafx.collections.transformation.FilteredList;
 import javafx.collections.transformation.SortedList;
-import javafx.event.Event;
 import javafx.fxml.FXML;
-import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.TextFieldTableCell;
@@ -23,7 +21,6 @@ import ua.pp.sanderzet.staffagancy.model.Person;
 import ua.pp.sanderzet.staffagancy.util.DateUtil;
 import ua.pp.sanderzet.staffagancy.util.dbSqlite;
 
-import java.beans.EventHandler;
 import java.time.LocalDate;
 import java.util.Optional;
 import java.util.ResourceBundle;
@@ -67,9 +64,7 @@ public class PersonOverviewController implements Initializable {
     @FXML
     private TableColumn<Job,String> positionColumn;
     @FXML
-    private TableColumn<Job,LocalDate> startColumn;
-    @FXML
-    private TableColumn<Job,LocalDate> endColumn;
+    private TableColumn<Job,LocalDate> transitionColumn;
 
 
     @FXML
@@ -155,7 +150,7 @@ javafx.event.EventHandler<KeyEvent> onEnterKeyEventHandler = (keyEvent -> {
     lastNameColumn.setCellValueFactory(cellData -> cellData.getValue().lastNameProperty());
     passportColumn.setCellValueFactory(cellData -> cellData.getValue().passportProperty());
     phoneColumn.setCellValueFactory(cellData -> cellData.getValue().phoneProperty());
-dateOfContractColumn.setCellValueFactory(cellData -> cellData.getValue().dataOfContractProperty());
+dateOfContractColumn.setCellValueFactory(cellData -> cellData.getValue().dateOfContractProperty());
 
     // For LocalData correct formatting need our CellFactory
 dateOfContractColumn.setCellFactory(new Callback<TableColumn<Person, LocalDate>, TableCell<Person, LocalDate>>() {
@@ -272,7 +267,7 @@ personTable.focusedProperty().addListener(new ChangeListener<Boolean>() {
 
 
 
-    startColumn.setCellFactory(new Callback<TableColumn<Job, LocalDate>, TableCell<Job, LocalDate>>() {
+    transitionColumn.setCellFactory(new Callback<TableColumn<Job, LocalDate>, TableCell<Job, LocalDate>>() {
         @Override
         public TableCell<Job, LocalDate> call(TableColumn<Job, LocalDate> jobLocalDateTableColumn) {
             TextFieldTableCell<Job,LocalDate> cell = new TextFieldTableCell<Job,LocalDate>(DateUtil.localDateStringConverter) {
@@ -295,32 +290,11 @@ personTable.focusedProperty().addListener(new ChangeListener<Boolean>() {
 
 
 
-    endColumn.setCellFactory(new Callback<TableColumn<Job, LocalDate>, TableCell<Job, LocalDate>>() {
-        @Override
-        public TableCell<Job, LocalDate> call(TableColumn<Job, LocalDate> jobLocalDateTableColumn) {
-            TextFieldTableCell<Job,LocalDate> cell = new TextFieldTableCell<Job,LocalDate>(DateUtil.localDateStringConverter) {
-                @Override
-                public void updateItem(LocalDate item, boolean empty) {
-                    super.updateItem(item, empty);
-                    if (item == null || empty) {
-                        setText(null);
-                        setStyle("");
-                    } else {
-//                Format cell
-//                            this.setTextFill(Color.RED);
-
-                    }
-                }
-            };
-            return cell;
-        }
-    });
 
     placeColumn.setCellValueFactory(cellData -> cellData.getValue().placeProperty());
     firmColumn.setCellValueFactory(cellData -> cellData.getValue().firmProperty());
     positionColumn.setCellValueFactory(cellData -> cellData.getValue().positionProperty());
-    startColumn.setCellValueFactory(cellData -> cellData.getValue().startProperty());
-    endColumn.setCellValueFactory(cellData -> cellData.getValue().endProperty());
+    transitionColumn.setCellValueFactory(cellData -> cellData.getValue().transitionJobProperty());
 
     jobTable.focusedProperty().addListener(new ChangeListener<Boolean>() {
         @Override

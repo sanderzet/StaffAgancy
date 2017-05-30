@@ -8,6 +8,7 @@ import javafx.scene.Scene;
 import javafx.scene.control.Alert;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.BorderPane;
+import javafx.stage.FileChooser;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 import ua.pp.sanderzet.staffagancy.model.Job;
@@ -193,7 +194,7 @@ if (!fileDb.isFile()) {
 //        dbSqlite.createDB();
 
 //        Make query to db
-        String query = "SELECT ROWID, place, firm, position, start, end FROM jobs WHERE idPerson = " +
+        String query = "SELECT ROWID, place, firm, position, transitionJob FROM jobs WHERE idPerson = " +
                 person.getId() ;
         resultJob = dbSqlite.readDB(query);
 
@@ -206,14 +207,11 @@ if (!fileDb.isFile()) {
                 job.setFirm(resultJob.getString("firm"));
                 job.setPosition(resultJob.getString("position"));
 
-                if (resultJob.getString("start") != null){
-                if(DateUtil.validDate(resultJob.getString("start")))
-                    job.setStart(DateUtil.parse(resultJob.getString("start")));
+                if (resultJob.getString("transitionJob") != null){
+                if(DateUtil.validDate(resultJob.getString("transitionJob")))
+                    job.setStartJob(DateUtil.parse(resultJob.getString("transitionJob")));
                 }
-                if (resultJob.getString("end") != null) {
-                    if (DateUtil.validDate(resultJob.getString("end")))
-                        job.setEnd(DateUtil.parse(resultJob.getString("end")));
-                }
+
                 jobData.add(job);
             }
 
@@ -240,7 +238,7 @@ public void updatePersonDB (Person person) {
                 "', firstName = '" + person.getFirstName() +
                 "', passport = '" + person.getPassport() +
                 "', phone  = '" + person.getPhone() +
-                "', dataOfContract = '" + DateUtil.format(person.getDataOfContract()) +
+                "', dataOfContract = '" + DateUtil.format(person.getDateOfContract()) +
                 "', sanBook = '" + person.getSanBook() +
                 "', endOfVisa = '" + DateUtil.format(person.getEndOfVisa()) +
                 "', fileNumber = '" + person.getFileNumber() +
@@ -266,8 +264,8 @@ public void updateJobDb (Job job){
             "place = '" + job.getPlace() +
             "', firm = '" + job.getFirm() +
             "', position = '" + job.getPosition() +
-            "', start = '" + DateUtil.format(job.getStart()) +
-            "', end = '" + DateUtil.format(job.getEnd()) +
+            "', start = '" + DateUtil.format(job.getStartJob()) +
+            "', end = '" + DateUtil.format(job.getEndJob()) +
             "' WHERE  ROWID = " +
             job.getRowid();
     dbSqlite.upgradeDb(sql);
@@ -334,7 +332,7 @@ private void restoreDataFromDb() {
             person.setPassport(resultSet.getString("passport"));
             person.setPhone(resultSet.getString("phone"));
             if (DateUtil.validDate(resultSet.getString("dataOfContract")))
-                person.setDataOfContract(DateUtil.parse(resultSet.getString("dataOfContract")));
+                person.setDateOfContract(DateUtil.parse(resultSet.getString("dataOfContract")));
 
             person.setSanBook(resultSet.getString("sanBook"));
 
@@ -368,11 +366,10 @@ ResultSet resultSet;
             // TODO  -- create AlertWindow "dir cann`t be created"
 
         }
+    File newFile = new File("db/sa.db");
 
 //        Connecting to db
         dbSqlite.connect("jdbc:sqlite:db/sa.db");
-//If db not exist - create
-        dbSqlite.createDB();
 
 //        Make query to db
      String query = "SELECT id, firstName, lastName, passport, phone, dataOfContract, sanBook, endOfVisa, fileNumber FROM persons";
@@ -393,7 +390,7 @@ ResultSet resultSet;
                 person.setPassport(this.resultSet.getString("passport"));
                 person.setPhone(this.resultSet.getString("phone"));
                 if (DateUtil.validDate(this.resultSet.getString("dataOfContract")))
-                    person.setDataOfContract(DateUtil.parse(this.resultSet.getString("dataOfContract")));
+                    person.setDateOfContract(DateUtil.parse(this.resultSet.getString("dataOfContract")));
 
                 person.setSanBook(this.resultSet.getString("sanBook"));
 
@@ -418,26 +415,25 @@ ResultSet resultSet;
 //        dbSqlite.createDB();
 
 //        Make query to db
-         query = "SELECT ROWID, place, firm, position, start, end FROM jobs" +
-                person.getId() ;
+         query = "SELECT ROWID, place, firm, position, start, end, idPerson FROM jobs";
         resultSet = dbSqlite.readDB(query);
 
         try {
             while (resultSet.next()) {
                 Job job = new Job();
                 job.setRowid(resultSet.getInt("ROWID"));
-                job.setIdPerson(person.getId());
+                job.setIdPerson(resultSet.getInt("idPerson"));
                 job.setPlace(resultSet.getString("place"));
                 job.setFirm(resultSet.getString("firm"));
                 job.setPosition(resultSet.getString("position"));
 
                 if (resultSet.getString("start") != null){
                     if(DateUtil.validDate(resultSet.getString("start")))
-                        job.setStart(DateUtil.parse(resultSet.getString("start")));
+                        job.setStartJob(DateUtil.parse(resultSet.getString("start")));
                 }
                 if (resultSet.getString("end") != null) {
                     if (DateUtil.validDate(resultSet.getString("end")))
-                        job.setEnd(DateUtil.parse(resultSet.getString("end")));
+                        job.setEndJob(DateUtil.parse(resultSet.getString("end")));
                 }
                 jobData.add(job);
             }
@@ -453,10 +449,25 @@ ResultSet resultSet;
             } catch (SQLException e) {
                 e.printStackTrace();
             }
+
         }
 
-    }
+        dbSqlite.closeDB();
 
+//        Insert in new db
+    dbSqlite.connect("jdbc:sqlite:db/sa1_2.db");
+    dbSqlite.createDB();
+for (Person person : personData){
+    dbSqlite.insertPersonDb(person);
+}
+
+for (Job job : jobData) {
+    job.setTransitionJob(job.getStartJob());
+    job.setStartJob(null);
+    dbSqlite.insertJobDb(job);
+}
+
+}
 
     public static void main(String[] args) {
         launch(args);

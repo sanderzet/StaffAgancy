@@ -13,24 +13,28 @@ public class Job {
     private final StringProperty place;
     private final StringProperty firm;
     private final StringProperty position;
-    private final ObjectProperty<LocalDate> start;
-    private final ObjectProperty<LocalDate> end;
+    private final ObjectProperty<LocalDate> startJob;
+    private final ObjectProperty<LocalDate> endJob;
+    private final ObjectProperty<LocalDate> transitionJob;
 
 //    Default constructor
 
     public Job()
     {
-        this(0,0, null,null,null,null,null);
+        this(0,0, null,null,null,
+                null,null, null);
     }
 
-    public Job(Integer rowid, Integer idPerson, String place, String firm, String position, LocalDate start, LocalDate end) {
+    public Job(Integer rowid, Integer idPerson, String place, String firm, String position,
+               LocalDate startJob, LocalDate end, LocalDate transitionJob) {
         this.rowid = new SimpleIntegerProperty(rowid);
         this.idPerson = new SimpleIntegerProperty(idPerson);
         this.place = new SimpleStringProperty(place);
         this.firm = new SimpleStringProperty(firm);
         this.position = new SimpleStringProperty(position);
-        this.start = new SimpleObjectProperty<>(start);
-        this.end = new SimpleObjectProperty<>(end);
+        this.startJob = new SimpleObjectProperty<>(startJob);
+        this.endJob = new SimpleObjectProperty<>(end);
+        this.transitionJob = new SimpleObjectProperty<> (transitionJob);
     }
 
     public void setRowid(int rowid) {
@@ -84,27 +88,33 @@ public IntegerProperty idPersonProperty() {return idPerson;}
         return position;
     }
 
-    public void setStart(LocalDate start) {
-        this.start.set(start);
+    public void setStartJob(LocalDate startJob) {
+        this.startJob.set(startJob);
     }
 
-    public LocalDate getStart() {
-        return start.get();
+    public LocalDate getStartJob() {
+        return startJob.get();
     }
 
-    public ObjectProperty<LocalDate> startProperty() {
-        return start;
+    public ObjectProperty<LocalDate> startJobProperty() {
+        return startJob;
     }
 
-    public void setEnd(LocalDate end) {
-        this.end.set(end);
+    public void setEndJob(LocalDate endJob) {
+        this.endJob.set(endJob);
     }
 
-    public LocalDate getEnd() {
-        return end.get();
+    public LocalDate getEndJob() {
+        return endJob.get();
     }
 
-    public ObjectProperty<LocalDate> endProperty() {
-        return end;
+    public ObjectProperty<LocalDate> endJobProperty() {
+        return endJob;
     }
+
+    public void setTransitionJob(LocalDate transitionJob) {this.transitionJob.set(transitionJob);}
+
+    public LocalDate getTransitionJob() {return transitionJob.get();}
+
+    public ObjectProperty<LocalDate> transitionJobProperty() {return transitionJob; }
 }

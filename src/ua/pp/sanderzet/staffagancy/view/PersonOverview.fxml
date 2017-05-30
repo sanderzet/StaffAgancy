@@ -39,7 +39,7 @@
                         <TableColumn fx:id="placeColumn" maxWidth="206.0" minWidth="0.0" prefWidth="0.0" text="%table.placeOfJob" />
                         <TableColumn fx:id="firmColumn" maxWidth="355.0" minWidth="0.0" prefWidth="186.0" text="%table.firm" />
                         <TableColumn fx:id="positionColumn" maxWidth="267.0" minWidth="97.0" prefWidth="148.0" text="%table.position" />
-                        <TableColumn fx:id="startColumn" maxWidth="226.0" minWidth="115.0" prefWidth="175.0" text="%table.changeOfJob" />
+                        <TableColumn fx:id="transitionColumn" maxWidth="226.0" minWidth="115.0" prefWidth="175.0" text="%table.changeOfJob" />
                         <TableColumn fx:id="endColumn" maxWidth="204.0" minWidth="120.0" prefWidth="204.0" text="%table.endOfJob" />
                      </columns>
                      <columnResizePolicy>

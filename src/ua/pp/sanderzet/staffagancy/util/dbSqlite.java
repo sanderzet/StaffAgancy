@@ -19,8 +19,10 @@ public class dbSqlite {
         try {
             Class.forName("org.sqlite.JDBC");
             conn = DriverManager.getConnection(nameDb);
+            stat = conn.createStatement();
 
-return conn;
+
+            return conn;
         }
         catch (Exception e) {
             e.printStackTrace();
@@ -30,13 +32,12 @@ return conn;
 
         public static void createDB () {
             try {
-                stat = conn.createStatement();
 //Creating table 'persons' if not exist
                 String sql = "CREATE TABLE if not exists persons (id INTEGER PRIMARY KEY ," +
                         "lastName text, firstName text, passport text , phone  text, " +
-                        "dataOfContract text, sanBook text, " +
+                        "dateOfContract text, sanBook text, " +
                         "endOfVisa text, fileNumber text, " +
-                        "dataQuit text, baseOfWorking text, usualNote text, " +
+                        "dateQuit text, baseOfWorking text, usualNote text, " +
                         "criticalNote text)";
                 stat.execute(sql);
 //                Creating table 'job' if it`s not exist without primary key
@@ -65,8 +66,9 @@ public static int upgradeDb(String str) {
 public static int insertPersonDb(Person person) {
         ResultSet res = null;
     PreparedStatement preparedStatement1 = null;
-    String sql = "INSERT INTO persons (lastName,firstName,passport,phone,dataOfContract,sanBook,endOfVisa,fileNumber,dataQuit,baseOfWorking,usualNote,criticalNote) "  +
-            "values(?,?,?,?,?,?,?,?)" ;
+    String sql = "INSERT INTO persons (lastName,firstName,passport,phone,dateOfContract,sanBook,endOfVisa,fileNumber," +
+            "dateQuit,baseOfWorking,usualNote,criticalNote) "  +
+            "values(?,?,?,?,?,?,?,?,?,?,?,?)" ;
     try {
 
         preparedStatement1 = conn.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
@@ -74,10 +76,14 @@ public static int insertPersonDb(Person person) {
         preparedStatement1.setString(2,person.getFirstName());
         preparedStatement1.setString(3,person.getPassport());
         preparedStatement1.setString(4,person.getPhone());
-        preparedStatement1.setString(5,DateUtil.format(person.getDataOfContract()));
+        preparedStatement1.setString(5,DateUtil.format(person.getDateOfContract()));
         preparedStatement1.setString(6,person.getSanBook());
         preparedStatement1.setString(7,DateUtil.format(person.getEndOfVisa()));
         preparedStatement1.setString(8,person.getFileNumber());
+        preparedStatement1.setString(9,DateUtil.format(person.getDateQuit()));
+        preparedStatement1.setString(10,person.getBaseOfWorking());
+        preparedStatement1.setString(11,person.getUsualNote());
+        preparedStatement1.setString(12,person.getCriticalNote());
 
 
         preparedStatement1.executeUpdate();
@@ -106,7 +112,8 @@ finally {
 public static int insertJobDb(Job job) {
         ResultSet res = null;
     PreparedStatement preparedStatement1 = null;
-    String sql = "INSERT INTO jobs (idPerson, place, firm, position, start, end) values(?,?,?,?,?,?)" ;
+    String sql = "INSERT INTO jobs (idPerson, place, firm, position, startJob, endJob," +
+            "transitionJob) values(?,?,?,?,?,?,?)" ;
     try {
 
         preparedStatement1 = conn.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
@@ -114,8 +121,10 @@ public static int insertJobDb(Job job) {
         preparedStatement1.setString(2,job.getPlace());
         preparedStatement1.setString(3,job.getFirm());
         preparedStatement1.setString(4,job.getPosition());
-        preparedStatement1.setString(5,DateUtil.format(job.getStart()));
-        preparedStatement1.setString(6,DateUtil.format(job.getEnd()));
+        preparedStatement1.setString(5,DateUtil.format(job.getStartJob()));
+        preparedStatement1.setString(6,DateUtil.format(job.getEndJob()));
+        preparedStatement1.setString(7,DateUtil.format(job.getTransitionJob()));
+
 
 
         preparedStatement1.executeUpdate();
@@ -171,9 +180,9 @@ return res;
 
     public static void closeDB() {
         try {
-            res.close();
-            stat.close();
-            conn.close();
+            if (res != null) res.close();
+            if (stat != null)stat.close();
+            if (conn != null) conn.close();
         } catch (SQLException e) {
             e.printStackTrace();
         }
