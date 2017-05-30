@@ -32,14 +32,16 @@ return conn;
             try {
                 stat = conn.createStatement();
 //Creating table 'persons' if not exist
-                String sql = "CREATE TABLE if not exists 'persons' ('id' INTEGER PRIMARY KEY AUTOINCREMENT, " +
-                        "'lastName' text, 'firstName' text, 'passport' text UNIQUE, 'phone'  text, " +
-                        "'dataOfContract' text, 'sanBook' text, " +
-                        "'endOfVisa' text, 'fileNumber' text);";
+                String sql = "CREATE TABLE if not exists persons (id INTEGER PRIMARY KEY ," +
+                        "lastName text, firstName text, passport text , phone  text, " +
+                        "dataOfContract text, sanBook text, " +
+                        "endOfVisa text, fileNumber text, " +
+                        "dataQuit text, baseOfWorking text, usualNote text, " +
+                        "criticalNote text)";
                 stat.execute(sql);
 //                Creating table 'job' if it`s not exist without primary key
-                sql = "CREATE TABLE if not exists 'jobs' ('idPerson' INTEGER, 'place' text, 'firm' text, 'position' text," +
-                        "'start' text, 'end' text);";
+                sql = "CREATE TABLE if not exists jobs (idPerson INTEGER, place TEXT, firm TEXT, position TEXT," +
+                        "startJob TEXT, endJob TEXT, transitionJob TEXT);";
                 stat.execute(sql);
 
             }
@@ -63,7 +65,7 @@ public static int upgradeDb(String str) {
 public static int insertPersonDb(Person person) {
         ResultSet res = null;
     PreparedStatement preparedStatement1 = null;
-    String sql = "INSERT INTO persons (lastName,firstName,passport,phone,dataOfContract,sanBook,endOfVisa, fileNumber) "  +
+    String sql = "INSERT INTO persons (lastName,firstName,passport,phone,dataOfContract,sanBook,endOfVisa,fileNumber,dataQuit,baseOfWorking,usualNote,criticalNote) "  +
             "values(?,?,?,?,?,?,?,?)" ;
     try {
 
@@ -104,8 +106,7 @@ finally {
 public static int insertJobDb(Job job) {
         ResultSet res = null;
     PreparedStatement preparedStatement1 = null;
-    String sql = "INSERT INTO jobs (idPerson,place,firm,position,start,end) "  +
-            "values(?,?,?,?,?,?)" ;
+    String sql = "INSERT INTO jobs (idPerson, place, firm, position, start, end) values(?,?,?,?,?,?)" ;
     try {
 
         preparedStatement1 = conn.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
