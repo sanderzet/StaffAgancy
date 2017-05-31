@@ -52,6 +52,16 @@ public class PersonOverviewController implements Initializable {
     private TableColumn<Person,LocalDate> endOfVisaColumn;
     @FXML
     private TableColumn<Person,String> fileNumberColumn;
+    @FXML
+    private TableColumn<Person,String> baseOfWorkingColumn;
+@FXML
+private TableColumn<Person,String> criticalNoteColumn;
+@FXML
+private TableColumn<Person,LocalDate> dateQuitColumn;
+
+@FXML
+private TextArea usualNoteTextArea ;
+
 
 
     @FXML
@@ -107,6 +117,7 @@ private ResourceBundle bundle;
 @Override
 public void initialize (URL url, ResourceBundle bundle){
 this.bundle = bundle;
+usualNoteTextArea.setWrapText(true);
 //    If pressed Enter - button must fire (not only Space pressed)
 javafx.event.EventHandler<KeyEvent> onEnterKeyEventHandler = (keyEvent -> {
     if(keyEvent.getCode() == KeyCode.ENTER) {
@@ -151,7 +162,6 @@ javafx.event.EventHandler<KeyEvent> onEnterKeyEventHandler = (keyEvent -> {
     passportColumn.setCellValueFactory(cellData -> cellData.getValue().passportProperty());
     phoneColumn.setCellValueFactory(cellData -> cellData.getValue().phoneProperty());
 dateOfContractColumn.setCellValueFactory(cellData -> cellData.getValue().dateOfContractProperty());
-
     // For LocalData correct formatting need our CellFactory
 dateOfContractColumn.setCellFactory(new Callback<TableColumn<Person, LocalDate>, TableCell<Person, LocalDate>>() {
     @Override
@@ -168,6 +178,26 @@ dateOfContractColumn.setCellFactory(new Callback<TableColumn<Person, LocalDate>,
 //                    this.setTextFill(Color.RED);
 
                 }
+            }
+        };
+        return cell;
+    }
+});
+
+dateQuitColumn.setCellValueFactory(cellData -> cellData.getValue().dateQuitProperty());
+
+dateQuitColumn.setCellFactory(new Callback<TableColumn<Person, LocalDate>, TableCell<Person, LocalDate>>() {
+    @Override
+    public TableCell<Person, LocalDate> call(TableColumn<Person, LocalDate> personLocalDateTableColumn) {
+        TextFieldTableCell<Person,LocalDate> cell = new TextFieldTableCell<Person, LocalDate>(DateUtil.localDateStringConverter) {
+            @Override
+            public void updateItem(LocalDate item, boolean empty) {
+                super.updateItem(item, empty);
+                if (item == null || empty) {
+                    setText(null);
+                    setStyle("");
+                }
+                else this.setTextFill(Color.RED);
             }
         };
         return cell;
@@ -201,7 +231,8 @@ if(item.isBefore(LocalDate.now().plusDays(45)))
 
 
 fileNumberColumn.setCellValueFactory(cellData -> cellData.getValue().fileNumberProperty());
-
+baseOfWorkingColumn.setCellValueFactory(cellDate -> cellDate.getValue().baseOfWorkingProperty());
+criticalNoteColumn.setCellValueFactory(cellDate -> cellDate.getValue().criticalNoteProperty());
 
 
 //persons.addListener((ListChangeListener<? super Person>) change -> {
@@ -217,6 +248,8 @@ personTable.getSelectionModel().selectedItemProperty().addListener((observable, 
         personDelButton.setDisable(false);
         personEditButton.setDisable(false);
         jobAddButton.setDisable(false);
+        usualNoteTextArea.setText(newValue.getUsualNote());
+
     }
 });
 

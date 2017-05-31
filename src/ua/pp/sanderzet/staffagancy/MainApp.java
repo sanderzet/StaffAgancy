@@ -33,6 +33,7 @@ public class MainApp extends Application {
     private BorderPane rootLayout;
 //    Directory for data
 private final String DIR_DB = "./db";
+private final String NAME_DB = "sa1_2.db";
 // Result of querying to db
     private ResultSet resultSet;
 ////Current person for selecting job list for this person
@@ -59,11 +60,14 @@ private ResourceBundle bundle = ResourceBundle.getBundle("bundles/bundle");
         primaryStage.setTitle("Staff Agancy by SanderZet");
         primaryStage.setMaximized(true);
         initRootLayout();
-File fileDb = new File(DIR_DB + "/sa1_2.db");
+File fileDb = new File(DIR_DB + "/" +NAME_DB);
 if (!fileDb.isFile()) {
     Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
     restoreDataFromOldDb();
+    personData.clear();
+    jobData.clear();
 }
+restoreDataFromDb();
         showPersonOverview();
 
     }
@@ -238,10 +242,14 @@ public void updatePersonDB (Person person) {
                 "', firstName = '" + person.getFirstName() +
                 "', passport = '" + person.getPassport() +
                 "', phone  = '" + person.getPhone() +
-                "', dataOfContract = '" + DateUtil.format(person.getDateOfContract()) +
+                "', dateOfContract = '" + DateUtil.format(person.getDateOfContract()) +
                 "', sanBook = '" + person.getSanBook() +
                 "', endOfVisa = '" + DateUtil.format(person.getEndOfVisa()) +
                 "', fileNumber = '" + person.getFileNumber() +
+                "', dateQuit = '" + DateUtil.format(person.getDateQuit()) +
+                "', baseOfWorking = '" + person.getBaseOfWorking() +
+                "', usualNote = '" + person.getUsualNote() +
+                "', criticalNote = '" + person.getCriticalNote() +
                 "' WHERE  id = " +
                 person.getId();
 dbSqlite.upgradeDb(sql);
@@ -264,8 +272,7 @@ public void updateJobDb (Job job){
             "place = '" + job.getPlace() +
             "', firm = '" + job.getFirm() +
             "', position = '" + job.getPosition() +
-            "', start = '" + DateUtil.format(job.getStartJob()) +
-            "', end = '" + DateUtil.format(job.getEndJob()) +
+            "', transitionJob = '" + DateUtil.format(job.getTransitionJob()) +
             "' WHERE  ROWID = " +
             job.getRowid();
     dbSqlite.upgradeDb(sql);
@@ -314,7 +321,8 @@ private void restoreDataFromDb() {
     dbSqlite.createDB();
 
 //        Make query to db
-    String query = "SELECT id, firstName, lastName, passport, phone, dataOfContract, sanBook, endOfVisa, fileNumber FROM persons";
+    String query = "SELECT id, firstName, lastName, passport, phone, dateOfContract, sanBook, endOfVisa, fileNumber," +
+            " baseOfWorking, dateQuit, usualNote, criticalNote FROM persons";
 //        String query = "SELECT id, firstName, lastName, passport, phone, dataOfContract, sanBook, endOfVisa, fileNumber," +
 //                "place, firm, position, start, end FROM persons as p LEFT OUTER JOIN job as j ON id = idPerson";
 
@@ -331,16 +339,20 @@ private void restoreDataFromDb() {
             person.setLastName(resultSet.getString("lastName"));
             person.setPassport(resultSet.getString("passport"));
             person.setPhone(resultSet.getString("phone"));
-            if (DateUtil.validDate(resultSet.getString("dataOfContract")))
-                person.setDateOfContract(DateUtil.parse(resultSet.getString("dataOfContract")));
+            if (DateUtil.validDate(resultSet.getString("dateOfContract")))
+                person.setDateOfContract(DateUtil.parse(resultSet.getString("dateOfContract")));
 
             person.setSanBook(resultSet.getString("sanBook"));
 
             if (DateUtil.validDate(resultSet.getString("endOfVisa")))
                 person.setEndOfVisa(DateUtil.parse(resultSet.getString("endOfVisa")));
-
+            if (DateUtil.validDate(resultSet.getString("dateQuit")))
+                person.setDateQuit(DateUtil.parse(resultSet.getString("dateQuit")));
+            else person.setDateQuit(null);
             person.setFileNumber(resultSet.getString("fileNumber"));
-
+person.setBaseOfWorking(resultSet.getString("baseOfWorking" ));
+person.setUsualNote(resultSet.getString("usualNote"));
+person.setCriticalNote(resultSet.getString("criticalNote"));
             personData.add(person);
         }
 

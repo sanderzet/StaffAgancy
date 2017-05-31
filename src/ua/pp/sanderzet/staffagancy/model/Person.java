@@ -151,7 +151,7 @@ public IntegerProperty idProperty() {return id;}
 
     public LocalDate getDateQuit () {return dateQuit.get();}
 
-    public ObjectProperty<LocalDate> getDateQuitProperty (){return dateQuit; }
+    public ObjectProperty<LocalDate> dateQuitProperty (){return dateQuit; }
 
     public void setBaseOfWorking(String baseOfWorking) {this.baseOfWorking.set(baseOfWorking);}
 
