@@ -4,6 +4,7 @@ import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.*;
+import javafx.scene.control.cell.TextFieldTableCell;
 import javafx.scene.input.KeyCode;
 import javafx.scene.layout.Region;
 import javafx.stage.Stage;
@@ -35,6 +36,13 @@ public class PersonEditDialogController implements Initializable  {
     private TextField endOfVisaField;
     @FXML
     private TextField fileNumberField;
+    @FXML
+    private TextArea usualNoteTextArea;
+    @FXML
+    private TextField dateQuitField;
+    @FXML
+    private TextField criticalNote;
+
 
     @FXML
     private Button okButton;
