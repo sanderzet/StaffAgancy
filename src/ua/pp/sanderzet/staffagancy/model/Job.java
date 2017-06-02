@@ -13,8 +13,10 @@ public class Job {
     private final StringProperty place;
     private final StringProperty firm;
     private final StringProperty position;
+//    Next two now don`t use, for future purpose
     private final ObjectProperty<LocalDate> startJob;
     private final ObjectProperty<LocalDate> endJob;
+
     private final ObjectProperty<LocalDate> transitionJob;
 
 //    Default constructor

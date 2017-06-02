@@ -26,10 +26,14 @@ public class JobEditDialogController implements Initializable {
     private TextField firmTextField;
     @FXML
     private TextField positionTextField;
+
+//  Next two now don`t use. For future purpose.
+//    @FXML
+//    private TextField startTextField;
+//    @FXML
+//    private TextField endTextField;
     @FXML
-    private TextField startTextField;
-    @FXML
-    private TextField endTextField;
+    private TextField transitionTextField;
     @FXML
     private Button okButton;
     @FXML
@@ -91,10 +95,8 @@ public void setPersonNameLabel (String personName) {
         placeTextField.setText(job.getPlace());
         firmTextField.setText(job.getPlace());
         positionTextField.setText(job.getPosition());
-        startTextField.setText(DateUtil.format(job.getStartJob()));
-        endTextField.setText(DateUtil.format(job.getEndJob()));
-        startTextField.setPromptText("dd.mm.yyyy");
-    endTextField.setPromptText("dd.mm.yyyy");
+        transitionTextField.setText(DateUtil.format(job.getTransitionJob()));
+    transitionTextField.setPromptText("dd.mm.yyyy");
     }
 
 @FXML
@@ -103,8 +105,7 @@ public void handleOk () {
             job.setPlace(placeTextField.getText());
             job.setFirm(firmTextField.getText());
             job.setPosition(positionTextField.getText());
-            job.setStartJob(DateUtil.parse(startTextField.getText()));
-            job.setEndJob(DateUtil.parse(endTextField.getText()));
+            job.setTransitionJob(DateUtil.parse(transitionTextField.getText()));
             okClicked = true;
             jobEditStage.close();
         }
@@ -123,17 +124,12 @@ public boolean isInputValid(){
         errorMessage += "No valid firm\n";
     if (positionTextField.getText() == null || positionTextField.getLength() == 0)
         errorMessage += "No valid position of work\n";
-    if (startTextField.getText() == null || startTextField.getLength() == 0)
-startTextField.setText("");
-    else {
-        if (!DateUtil.validDate(startTextField.getText()))
-            errorMessage += "No valid time of changing work. Use the format dd.mm.yyyy !\n";
-    }
 
-    if (endTextField.getText() == null || endTextField.getLength() == 0)
-endTextField.setText("");
+
+    if (transitionTextField.getText() == null || transitionTextField.getLength() == 0)
+transitionTextField.setText("");
     else {
-        if (!DateUtil.validDate(endTextField.getText()))
+        if (!DateUtil.validDate(transitionTextField.getText()))
             errorMessage += "No valid end time of working. Use the format dd.mm.yyyy !\n";
     }
 

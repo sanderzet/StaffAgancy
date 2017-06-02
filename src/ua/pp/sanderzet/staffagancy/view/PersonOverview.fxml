@@ -23,23 +23,23 @@
                <items>
                   <TableView fx:id="personTable">
                     <columns>
-                        <TableColumn fx:id="lastNameColumn" maxWidth="-1.0" minWidth="100.0" prefWidth="-1.0" text="%table.lastName" />
-                      <TableColumn fx:id="firstNameColumn" maxWidth="-1.0" minWidth="100.0" prefWidth="-1.0" text="%table.firstName" />
+                        <TableColumn fx:id="lastNameColumn" maxWidth="-1.0" minWidth="150.0" prefWidth="-1.0" text="%table.lastName" />
+                      <TableColumn fx:id="firstNameColumn" maxWidth="-1.0" minWidth="150.0" prefWidth="-1.0" text="%table.firstName" />
                       <TableColumn fx:id="passportColumn" maxWidth="-1.0" minWidth="100.0" prefWidth="-1.0" text="%table.passport" />
                         <TableColumn fx:id="phoneColumn" maxWidth="-1.0" minWidth="100.0" prefWidth="-1.0" text="%table.phone" />
-                        <TableColumn fx:id="dateOfContractColumn" maxWidth="-1.0" minWidth="120.0" prefWidth="-1.0" text="%table.dateOfContract" />
+                        <TableColumn fx:id="dateOfContractColumn" maxWidth="-1.0" minWidth="70.0" prefWidth="-1.0" text="%table.dateOfContract" />
                         <TableColumn fx:id="sanBookColumn" maxWidth="131.0" minWidth="85.0" prefWidth="105.0" text="%table.sanitaryBook" />
                         <TableColumn fx:id="baseOfWorkingColumn" maxWidth="135.0" minWidth="89.0" prefWidth="115.0" text="%table.baseOfWorking" />
-                        <TableColumn fx:id="endOfVisaColumn" maxWidth="-1.0" minWidth="130.0" prefWidth="-1.0" text="%table.endOfVisa" />
+                        <TableColumn fx:id="endOfVisaColumn" maxWidth="-1.0" minWidth="70.0" prefWidth="-1.0" text="%table.endOfVisa" />
                         <TableColumn fx:id="fileNumberColumn" maxWidth="-1.0" minWidth="120.0" prefWidth="-1.0" text="%table.numberOfFile" />
                         <TableColumn fx:id="criticalNoteColumn" maxWidth="-1.0" minWidth="120.0" prefWidth="-1.0" text="%table.criticalNote" />
-                        <TableColumn fx:id="dateQuitColumn" maxWidth="-1.0" minWidth="120.0" prefWidth="-1.0" text="%table.endOfJob" />
+                        <TableColumn fx:id="dateQuitColumn" maxWidth="-1.0" minWidth="70.0" prefWidth="-1.0" text="%table.endOfJob" />
                     </columns>
                      <columnResizePolicy>
                         <TableView fx:constant="CONSTRAINED_RESIZE_POLICY" />
                      </columnResizePolicy>
                   </TableView>
-                  <SplitPane dividerPositions="0.31552587646076796">
+                  <SplitPane dividerPositions="0.17863105175292154">
                      <items>
                         <VBox>
                            <children>
@@ -51,15 +51,15 @@
                                     <Font name="System Bold" size="13.0" />
                                  </font>
                               </Label>
-                              <TextArea fx:id="usualNoteTextArea" prefHeight="173.0" prefWidth="534.0" />
+                              <TextArea fx:id="usualNoteTextArea" editable="false" prefHeight="151.0" prefWidth="247.0" />
                            </children>
                         </VBox>
                         <TableView fx:id="jobTable">
                            <columns>
-                              <TableColumn fx:id="placeColumn" maxWidth="206.0" minWidth="0.0" prefWidth="0.0" text="%table.placeOfJob" />
-                              <TableColumn fx:id="firmColumn" maxWidth="355.0" minWidth="0.0" prefWidth="186.0" text="%table.firm" />
+                              <TableColumn fx:id="placeColumn" maxWidth="206.0" minWidth="120.0" prefWidth="-1.0" text="%table.placeOfJob" />
+                              <TableColumn fx:id="firmColumn" maxWidth="355.0" minWidth="120.0" prefWidth="186.0" text="%table.firm" />
                               <TableColumn fx:id="positionColumn" maxWidth="267.0" minWidth="97.0" prefWidth="148.0" text="%table.position" />
-                              <TableColumn fx:id="transitionColumn" maxWidth="226.0" minWidth="115.0" prefWidth="175.0" text="%table.changeOfJob" />
+                              <TableColumn fx:id="transitionColumn" maxWidth="226.0" minWidth="70.0" prefWidth="175.0" text="%table.changeOfJob" />
                            </columns>
                            <columnResizePolicy>
                               <TableView fx:constant="CONSTRAINED_RESIZE_POLICY" />

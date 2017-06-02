@@ -12,7 +12,7 @@
 <?import javafx.scene.layout.RowConstraints?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/8.0.111" xmlns:fx="http://javafx.com/fxml/1" fx:controller="ua.pp.sanderzet.staffagancy.view.JobEditDialogController">
+<AnchorPane prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/8.0.112" xmlns:fx="http://javafx.com/fxml/1" fx:controller="ua.pp.sanderzet.staffagancy.view.JobEditDialogController">
     <children>
         <GridPane prefHeight="400.0" prefWidth="600.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
             <columnConstraints>
@@ -21,7 +21,6 @@
             </columnConstraints>
             <rowConstraints>
             <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
-                <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
                 <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
                 <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
                 <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
@@ -58,11 +57,6 @@
                       <Label text="%table.changeOfJob" />
                </children>
             </HBox>
-                <Label text="%table.endOfJob" GridPane.rowIndex="5">
-                    <GridPane.margin>
-                  <Insets left="5.0" right="5.0" />
-                    </GridPane.margin>
-                </Label>
                 <TextField fx:id="placeTextField" GridPane.columnIndex="1" GridPane.rowIndex="1">
                     <GridPane.margin>
                         <Insets left="5.0" right="10.0" />
@@ -78,17 +72,12 @@
                         <Insets left="5.0" right="10.0" />
                     </GridPane.margin>
                 </TextField>
-                <TextField fx:id="startTextField" GridPane.columnIndex="1" GridPane.rowIndex="4">
+                <TextField fx:id="transitionTextField" GridPane.columnIndex="1" GridPane.rowIndex="4">
                     <GridPane.margin>
                         <Insets left="5.0" right="10.0" />
                     </GridPane.margin>
                 </TextField>
-                <TextField fx:id="endTextField" GridPane.columnIndex="1" GridPane.rowIndex="5">
-                    <GridPane.margin>
-                        <Insets left="5.0" right="10.0" />
-                    </GridPane.margin>
-                </TextField>
-                <ButtonBar prefHeight="40.0" prefWidth="200.0" GridPane.columnIndex="1" GridPane.rowIndex="6">
+                <ButtonBar prefHeight="40.0" prefWidth="200.0" GridPane.columnIndex="1" GridPane.rowIndex="5">
                     <buttons>
                         <Button fx:id="okButton" mnemonicParsing="false" onAction="#handleOk" text="OK" />
                         <Button fx:id="cancelButton" cancelButton="true" mnemonicParsing="false" onAction="#handleCancel" text="Cancel" />

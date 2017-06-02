@@ -22,6 +22,7 @@ import ua.pp.sanderzet.staffagancy.util.DateUtil;
 import ua.pp.sanderzet.staffagancy.util.dbSqlite;
 
 import java.time.LocalDate;
+import java.util.HashMap;
 import java.util.Optional;
 import java.util.ResourceBundle;
 import java.net.URL;
@@ -103,6 +104,7 @@ private FilteredList<Person> filteredPersons;
 private SortedList<Person> sortedPersons;
 private String numberOfPersons;
 private ResourceBundle bundle;
+private HashMap<String,String> docHashMap;
     /**
      * The constructor.
      * The constructor is called before the initialize() method.
@@ -118,6 +120,7 @@ private ResourceBundle bundle;
 public void initialize (URL url, ResourceBundle bundle){
 this.bundle = bundle;
 usualNoteTextArea.setWrapText(true);
+this.docHashMap=mainApp.getDocHashMap()
 //    If pressed Enter - button must fire (not only Space pressed)
 javafx.event.EventHandler<KeyEvent> onEnterKeyEventHandler = (keyEvent -> {
     if(keyEvent.getCode() == KeyCode.ENTER) {

@@ -14,6 +14,7 @@ import javafx.stage.Stage;
 import ua.pp.sanderzet.staffagancy.model.Job;
 import ua.pp.sanderzet.staffagancy.model.Person;
 import ua.pp.sanderzet.staffagancy.util.DateUtil;
+import ua.pp.sanderzet.staffagancy.util.ResourceBundleUtil;
 import ua.pp.sanderzet.staffagancy.util.dbSqlite;
 import ua.pp.sanderzet.staffagancy.view.JobEditDialogController;
 import ua.pp.sanderzet.staffagancy.view.PersonEditDialogController;
@@ -24,6 +25,7 @@ import java.io.File;
 import java.io.IOException;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.HashMap;
 import java.util.Locale;
 import java.util.ResourceBundle;
 
@@ -43,7 +45,8 @@ private final String NAME_DB = "sa1_2.db";
     private Locale locale = Locale.getDefault();
 //    Bundle with default local setting
 private ResourceBundle bundle = ResourceBundle.getBundle("bundles/bundle");
-
+    private final String DOC_CHOICE_BOX_KEY = "choiceBoxDoc";
+private HashMap<String,String> docHashMap;
 
 
 
@@ -56,6 +59,7 @@ private ResourceBundle bundle = ResourceBundle.getBundle("bundles/bundle");
 
     @Override
     public void start(Stage primaryStage) throws Exception{
+        docHashMap = ResourceBundleUtil.getHashMapDoc(bundle, DOC_CHOICE_BOX_KEY);
         this.primaryStage=primaryStage;
         primaryStage.setTitle("Staff Agancy by SanderZet");
         primaryStage.setMaximized(true);
@@ -481,6 +485,9 @@ for (Job job : jobData) {
 
 }
 
+    public HashMap<String, String> getDocHashMap () {
+        return docHashMap;
+    }
     public static void main(String[] args) {
         launch(args);
     }

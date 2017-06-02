@@ -1,19 +1,19 @@
 package ua.pp.sanderzet.staffagancy.view;
 
+import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.*;
-import javafx.scene.control.cell.TextFieldTableCell;
 import javafx.scene.input.KeyCode;
 import javafx.scene.layout.Region;
 import javafx.stage.Stage;
 import ua.pp.sanderzet.staffagancy.model.Person;
 import ua.pp.sanderzet.staffagancy.util.DateUtil;
+import ua.pp.sanderzet.staffagancy.util.ResourceBundleUtil;
 
 import java.net.URL;
-import java.text.MessageFormat;
-import java.util.ResourceBundle;
+import java.util.*;
 
 /**
  * Created by alzet on 26.04.17.
@@ -41,7 +41,10 @@ public class PersonEditDialogController implements Initializable  {
     @FXML
     private TextField dateQuitField;
     @FXML
-    private TextField criticalNote;
+    private TextField criticalNoteField;
+
+    @FXML
+    private ChoiceBox docChoiceBox;
 
 
     @FXML
@@ -59,10 +62,22 @@ private Person personWithSuchPassport;
 
 private boolean okClicked = false;
 private ResourceBundle bundle;
+//    list of item for docChoisBox
+  private   ObservableList<String> docChoiceBoxItemsList;
+    private final String DOC_CHOICE_BOX_KEY = "choiceBoxDoc";
+    private HashMap<String,String> docHashMap;
 
 @Override
     public void initialize (URL url, ResourceBundle bundle) {
     this.bundle = bundle;
+
+    //Items for docChoiceBox - all from bundle which begin "choiceBoxDoc"
+    ArrayList<String> docItems = ResourceBundleUtil.getValuesFromResourceBandle(bundle, DOC_CHOICE_BOX_KEY);
+    docChoiceBoxItemsList = FXCollections.observableList(docItems);
+
+    docChoiceBox.setItems(docChoiceBoxItemsList);
+
+
 //        If pressed Enter - button must fire (not only Space pressed)
         okButton.setOnKeyPressed(keyEvent -> {
             if (keyEvent.getCode() == KeyCode.ENTER) {
@@ -92,9 +107,23 @@ public void setPersons(ObservableList<Person> persons) {this.persons = persons;}
 dateOfContractField.setText(DateUtil.format(person.getDateOfContract()));
 dateOfContractField.setPromptText("dd.mm.yyyy");
 sanBookField.setText(person.getSanBook());
+
 endOfVisaField.setText(DateUtil.format(person.getEndOfVisa()));
 endOfVisaField.setPromptText("dd.mm.yyyy");
+
+if(person.getBaseOfWorking() != null && person.getBaseOfWorking().length() != 0 ) {
+    docChoiceBox.getSelectionModel().select(docChoiceBoxItemsList.filtered(s -> {
+        if (s.equals(bundle.getString(person.getBaseOfWorking()))) return true;
+        return false;
+    }));
+}
+
         fileNumberField.setText(person.getFileNumber());
+        usualNoteTextArea.setText(person.getUsualNote());
+        usualNoteTextArea.setWrapText(true);
+criticalNoteField.setText(person.getCriticalNote());
+dateQuitField.setText(DateUtil.format(person.getDateQuit()));
+dateQuitField.setPromptText("dd.mm.yyyy");
     }
 
 
@@ -119,6 +148,10 @@ public void handleOk() {
             person.setSanBook(sanBookField.getText());
             person.setEndOfVisa(DateUtil.parse(endOfVisaField.getText()));
             person.setFileNumber(fileNumberField.getText());
+            person.setDateQuit(DateUtil.parse(dateQuitField.getText()));
+            person.setBaseOfWorking(ResourceBundleUtil.getKeyForValue(bundle, DOC_CHOICE_BOX_KEY, docChoiceBox.getValue().toString()));
+            person.setUsualNote(usualNoteTextArea.getText());
+            person.setCriticalNote(criticalNoteField.getText());
             okClicked = true;
             personAddStage.close();
         }
@@ -196,6 +229,7 @@ else {
 }
 
     }
+
 
 }
 
