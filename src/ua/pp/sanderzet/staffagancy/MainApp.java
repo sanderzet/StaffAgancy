@@ -59,6 +59,9 @@ private HashMap<String,String> docHashMap;
 
     @Override
     public void start(Stage primaryStage) throws Exception{
+//            All items in bundle with keys starting with DOC_CHOICE_BOX_KEY
+//        will be list of items for documents (base of work) combobox,
+// and for Document column in persons table
         docHashMap = ResourceBundleUtil.getHashMapDoc(bundle, DOC_CHOICE_BOX_KEY);
         this.primaryStage=primaryStage;
         primaryStage.setTitle("Staff Agancy by SanderZet");
@@ -136,7 +139,7 @@ restoreDataFromDb();
             // Give the controller access to the main app.
             PersonEditDialogController personEditDialogController = fxmlLoader.getController();
 //            Give person to the controller
-            personEditDialogController.setPerson(person);
+            personEditDialogController.setPerson(person, docHashMap);
 //            Give stage to the controller
             personEditDialogController.setPersonAddStage(PersonEditStage);
             personEditDialogController.setPersons(personData);
@@ -251,7 +254,7 @@ public void updatePersonDB (Person person) {
                 "', endOfVisa = '" + DateUtil.format(person.getEndOfVisa()) +
                 "', fileNumber = '" + person.getFileNumber() +
                 "', dateQuit = '" + DateUtil.format(person.getDateQuit()) +
-                "', baseOfWorking = '" + person.getBaseOfWorking() +
+                "', Document = '" + person.getDocument() +
                 "', usualNote = '" + person.getUsualNote() +
                 "', criticalNote = '" + person.getCriticalNote() +
                 "' WHERE  id = " +
@@ -326,7 +329,7 @@ private void restoreDataFromDb() {
 
 //        Make query to db
     String query = "SELECT id, firstName, lastName, passport, phone, dateOfContract, sanBook, endOfVisa, fileNumber," +
-            " baseOfWorking, dateQuit, usualNote, criticalNote FROM persons";
+            " document, dateQuit, usualNote, criticalNote FROM persons";
 //        String query = "SELECT id, firstName, lastName, passport, phone, dataOfContract, sanBook, endOfVisa, fileNumber," +
 //                "place, firm, position, start, end FROM persons as p LEFT OUTER JOIN job as j ON id = idPerson";
 
@@ -354,7 +357,7 @@ private void restoreDataFromDb() {
                 person.setDateQuit(DateUtil.parse(resultSet.getString("dateQuit")));
             else person.setDateQuit(null);
             person.setFileNumber(resultSet.getString("fileNumber"));
-person.setBaseOfWorking(resultSet.getString("baseOfWorking" ));
+person.setDocument(resultSet.getString("Document" ));
 person.setUsualNote(resultSet.getString("usualNote"));
 person.setCriticalNote(resultSet.getString("criticalNote"));
             personData.add(person);

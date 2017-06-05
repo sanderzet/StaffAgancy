@@ -8,10 +8,12 @@ import javafx.scene.control.*;
 import javafx.scene.input.KeyCode;
 import javafx.scene.layout.Region;
 import javafx.stage.Stage;
+import jdk.nashorn.internal.codegen.CompilerConstants;
 import ua.pp.sanderzet.staffagancy.model.Person;
 import ua.pp.sanderzet.staffagancy.util.DateUtil;
 import ua.pp.sanderzet.staffagancy.util.ResourceBundleUtil;
 
+import javax.security.auth.callback.Callback;
 import java.net.URL;
 import java.util.*;
 
@@ -44,7 +46,7 @@ public class PersonEditDialogController implements Initializable  {
     private TextField criticalNoteField;
 
     @FXML
-    private ChoiceBox docChoiceBox;
+    private ComboBox<String> docComboBox;
 
 
     @FXML
@@ -70,20 +72,43 @@ private ResourceBundle bundle;
 @Override
     public void initialize (URL url, ResourceBundle bundle) {
     this.bundle = bundle;
+    docComboBox.setCellFactory(new javafx.util.Callback<ListView<String>, ListCell<String>>() {
+                                   @Override
+                                   public ListCell<String> call(ListView<String> param) {
+                                       return new ListCell<String>(){
+                                           @Override
+                                           protected void updateItem(String item, boolean empty) {
+                                               super.updateItem(item, empty);
+                                               if (item == null || empty) {
+                                                   setGraphic(null);
+                                               } else {
+                                                   setText(docHashMap.get(item));
+                                               }
+                                           }
+                                       };
+                                   }
+                               });
 
-    //Items for docChoiceBox - all from bundle which begin "choiceBoxDoc"
-    ArrayList<String> docItems = ResourceBundleUtil.getValuesFromResourceBandle(bundle, DOC_CHOICE_BOX_KEY);
-    docChoiceBoxItemsList = FXCollections.observableList(docItems);
+docComboBox.setButtonCell(new ListCell<String>(){
+    @Override
+    protected void updateItem(String item, boolean empty) {
+        super.updateItem(item, empty);
+        if (item == null || empty) {
+            setGraphic(null);
+        } else {
+            setText(docHashMap.get(item));
+        };
+    }
+});
 
-    docChoiceBox.setItems(docChoiceBoxItemsList);
 
 
 //        If pressed Enter - button must fire (not only Space pressed)
-        okButton.setOnKeyPressed(keyEvent -> {
-            if (keyEvent.getCode() == KeyCode.ENTER) {
-                okButton.fire();
-            }
-        });
+            okButton.setOnKeyPressed(keyEvent -> {
+                if (keyEvent.getCode() == KeyCode.ENTER) {
+                    okButton.fire();
+                }
+            });
         cancelButton.setOnKeyPressed(keyEvent -> {
             if (keyEvent.getCode() == KeyCode.ENTER) {
                 cancelButton.fire();
@@ -98,7 +123,11 @@ private ResourceBundle bundle;
     }
 public void setPersons(ObservableList<Person> persons) {this.persons = persons;}
 
-    public void setPerson(Person person){
+    public void setPerson(Person person, HashMap<String, String> docHashMap){
+    this.docHashMap = docHashMap;
+        ObservableList docItems  = FXCollections.observableArrayList(docHashMap.keySet());
+        docComboBox.setItems(docItems);
+
         this.person = person;
         firstNameField.setText(person.getFirstName());
         lastNameField.setText(person.getLastName());
@@ -111,11 +140,8 @@ sanBookField.setText(person.getSanBook());
 endOfVisaField.setText(DateUtil.format(person.getEndOfVisa()));
 endOfVisaField.setPromptText("dd.mm.yyyy");
 
-if(person.getBaseOfWorking() != null && person.getBaseOfWorking().length() != 0 ) {
-    docChoiceBox.getSelectionModel().select(docChoiceBoxItemsList.filtered(s -> {
-        if (s.equals(bundle.getString(person.getBaseOfWorking()))) return true;
-        return false;
-    }));
+if(person.getDocument() != null && person.getDocument().length() != 0 ) {
+    docComboBox.setValue(person.getDocument());
 }
 
         fileNumberField.setText(person.getFileNumber());
@@ -149,7 +175,7 @@ public void handleOk() {
             person.setEndOfVisa(DateUtil.parse(endOfVisaField.getText()));
             person.setFileNumber(fileNumberField.getText());
             person.setDateQuit(DateUtil.parse(dateQuitField.getText()));
-            person.setBaseOfWorking(ResourceBundleUtil.getKeyForValue(bundle, DOC_CHOICE_BOX_KEY, docChoiceBox.getValue().toString()));
+            if(docComboBox.getValue() != null) person.setDocument(docComboBox.getValue());
             person.setUsualNote(usualNoteTextArea.getText());
             person.setCriticalNote(criticalNoteField.getText());
             okClicked = true;
@@ -173,6 +199,15 @@ public boolean isPassportExist (){
    }
    return false;
 }
+
+//public Map.Entry<String,String> getEntryFromMap (HashMap<String,String> hashMap) {
+//    Map.Entry<String,String> entry;
+//    Set<Map.Entry<String,String>> set = hashMap.entrySet();
+//    for (entry = set.i) {
+//
+//    }
+//}
+
 
 public boolean isInputValid () {
 String errorMessage = "";
@@ -212,6 +247,12 @@ else {
     if (!DateUtil.validDate(endOfVisaField.getText()))
         errorMessage += bundle.getString("message.noValidVisaExpDate") + "\n";
 }
+if (dateQuitField.getText() == null || dateQuitField.getLength() == 0)
+        dateQuitField.setText("");
+    else {
+        if (!DateUtil.validDate(dateQuitField.getText()))
+            errorMessage += bundle.getString("message.noValidQuitDate") + "\n";
+    }
 
 if (errorMessage.length() == 0)
     return true;

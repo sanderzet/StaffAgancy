@@ -18,7 +18,7 @@ private  final IntegerProperty id;
     private final ObjectProperty<LocalDate> endOfVisa;
     private final StringProperty fileNumber;
     private final ObjectProperty<LocalDate> dateQuit;
-private final StringProperty baseOfWorking;
+private final StringProperty document;
 private final StringProperty usualNote;
 private final StringProperty criticalNote;
 //
@@ -31,7 +31,7 @@ this(0,null, null, null, null, null,
 //    Full constructor
 
     public Person(int id, String firstName, String lastName, String passport, String phone, LocalDate dataOfContract,
-                  String sanBook, LocalDate endOfVisa, String fileNumber, LocalDate dateQuit, String baseOfWorking,
+                  String sanBook, LocalDate endOfVisa, String fileNumber, LocalDate dateQuit, String document,
                   String usualNote, String criticalNote) {
         this.id = new SimpleIntegerProperty(id);
         this.firstName = new SimpleStringProperty(firstName);
@@ -43,7 +43,7 @@ this(0,null, null, null, null, null,
         this.endOfVisa = new SimpleObjectProperty<>(endOfVisa);
         this.fileNumber = new SimpleStringProperty(fileNumber);
         this.dateQuit = new SimpleObjectProperty<>(dateQuit);
-        this.baseOfWorking = new SimpleStringProperty(baseOfWorking);
+        this.document = new SimpleStringProperty(document);
         this.usualNote = new SimpleStringProperty(usualNote);
         this.criticalNote = new SimpleStringProperty(criticalNote);
     }
@@ -153,11 +153,11 @@ public IntegerProperty idProperty() {return id;}
 
     public ObjectProperty<LocalDate> dateQuitProperty (){return dateQuit; }
 
-    public void setBaseOfWorking(String baseOfWorking) {this.baseOfWorking.set(baseOfWorking);}
+    public void setDocument(String document) {this.document.set(document);}
 
-    public String getBaseOfWorking() {return baseOfWorking.get();}
+    public String getDocument() {return document.get();}
 
-    public StringProperty baseOfWorkingProperty() {return baseOfWorking;}
+    public StringProperty documentProperty() {return document;}
 
     public void setUsualNote(String usualNote) {this.usualNote.set(usualNote);}
 

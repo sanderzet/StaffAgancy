@@ -13,6 +13,7 @@
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.RowConstraints?>
 
+<?import javafx.scene.control.ComboBox?>
 <AnchorPane prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/8.0.112" xmlns:fx="http://javafx.com/fxml/1" fx:controller="ua.pp.sanderzet.staffagancy.view.PersonEditDialogController">
    <children>
       <GridPane prefHeight="400.0" prefWidth="600.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
@@ -161,7 +162,7 @@
                   <Button fx:id="cancelButton" mnemonicParsing="false" onAction="#handleCancel" text="Cancel" />
               </buttons>
             </ButtonBar>
-            <Label text="%table.baseOfWorking" GridPane.rowIndex="6">
+            <Label text="%table.document" GridPane.rowIndex="6">
                <GridPane.margin>
                   <Insets left="5.0" />
                </GridPane.margin>
@@ -181,14 +182,14 @@
                   <Insets left="5.0" />
                </GridPane.margin>
             </Label>
-            <ChoiceBox fx:id="docChoiceBox" prefWidth="150.0" GridPane.columnIndex="1" GridPane.rowIndex="6">
+            <ComboBox fx:id="docComboBox" prefWidth="150.0" GridPane.columnIndex="1" GridPane.rowIndex="6">
                <opaqueInsets>
                   <Insets />
                </opaqueInsets>
                <GridPane.margin>
                   <Insets left="5.0" />
                </GridPane.margin>
-            </ChoiceBox>
+            </ComboBox>
             <TextArea fx:id="usualNoteTextArea" prefHeight="200.0" prefWidth="200.0" wrapText="true" GridPane.columnIndex="1" GridPane.rowIndex="9">
                <GridPane.margin>
                   <Insets left="5.0" right="5.0" />

@@ -37,7 +37,7 @@ public class dbSqlite {
                         "lastName text, firstName text, passport text , phone  text, " +
                         "dateOfContract text, sanBook text, " +
                         "endOfVisa text, fileNumber text, " +
-                        "dateQuit text, baseOfWorking text, usualNote text, " +
+                        "dateQuit text, document text, usualNote text, " +
                         "criticalNote text)";
                 stat.execute(sql);
 //                Creating table 'job' if it`s not exist without primary key
@@ -67,7 +67,7 @@ public static int insertPersonDb(Person person) {
         ResultSet res = null;
     PreparedStatement preparedStatement1 = null;
     String sql = "INSERT INTO persons (lastName,firstName,passport,phone,dateOfContract,sanBook,endOfVisa,fileNumber," +
-            "dateQuit,baseOfWorking,usualNote,criticalNote) "  +
+            "dateQuit,document,usualNote,criticalNote) "  +
             "values(?,?,?,?,?,?,?,?,?,?,?,?)" ;
     try {
 
@@ -81,7 +81,7 @@ public static int insertPersonDb(Person person) {
         preparedStatement1.setString(7,DateUtil.format(person.getEndOfVisa()));
         preparedStatement1.setString(8,person.getFileNumber());
         preparedStatement1.setString(9,DateUtil.format(person.getDateQuit()));
-        preparedStatement1.setString(10,person.getBaseOfWorking());
+        preparedStatement1.setString(10,person.getDocument());
         preparedStatement1.setString(11,person.getUsualNote());
         preparedStatement1.setString(12,person.getCriticalNote());
 

@@ -54,7 +54,7 @@ public class PersonOverviewController implements Initializable {
     @FXML
     private TableColumn<Person,String> fileNumberColumn;
     @FXML
-    private TableColumn<Person,String> baseOfWorkingColumn;
+    private TableColumn<Person,String> documentColumn;
 @FXML
 private TableColumn<Person,String> criticalNoteColumn;
 @FXML
@@ -104,7 +104,7 @@ private FilteredList<Person> filteredPersons;
 private SortedList<Person> sortedPersons;
 private String numberOfPersons;
 private ResourceBundle bundle;
-private HashMap<String,String> docHashMap;
+private HashMap<String,String> docHashMap = new HashMap<>();
     /**
      * The constructor.
      * The constructor is called before the initialize() method.
@@ -120,7 +120,6 @@ private HashMap<String,String> docHashMap;
 public void initialize (URL url, ResourceBundle bundle){
 this.bundle = bundle;
 usualNoteTextArea.setWrapText(true);
-this.docHashMap=mainApp.getDocHashMap()
 //    If pressed Enter - button must fire (not only Space pressed)
 javafx.event.EventHandler<KeyEvent> onEnterKeyEventHandler = (keyEvent -> {
     if(keyEvent.getCode() == KeyCode.ENTER) {
@@ -200,7 +199,7 @@ dateQuitColumn.setCellFactory(new Callback<TableColumn<Person, LocalDate>, Table
                     setText(null);
                     setStyle("");
                 }
-                else this.setTextFill(Color.RED);
+                else this.setTextFill(Color.BLUEVIOLET);
             }
         };
         return cell;
@@ -234,9 +233,37 @@ if(item.isBefore(LocalDate.now().plusDays(45)))
 
 
 fileNumberColumn.setCellValueFactory(cellData -> cellData.getValue().fileNumberProperty());
-baseOfWorkingColumn.setCellValueFactory(cellDate -> cellDate.getValue().baseOfWorkingProperty());
+documentColumn.setCellValueFactory(cellDate -> cellDate.getValue().documentProperty());
+documentColumn.setCellFactory(new Callback<TableColumn<Person, String>, TableCell<Person, String>>() {
+    @Override
+    public TableCell<Person, String> call(TableColumn<Person, String> param) {
+        return new TextFieldTableCell<Person, String>(){
+            @Override
+            public void updateItem(String item, boolean empty) {
+                super.updateItem(item, empty);
+                if (item == null || empty)
+                    setText(null);
+                else this.setText(docHashMap.get(item));
+            }
+        };
+    }
+});
 criticalNoteColumn.setCellValueFactory(cellDate -> cellDate.getValue().criticalNoteProperty());
 
+criticalNoteColumn.setCellFactory(new Callback<TableColumn<Person, String>, TableCell<Person, String>>() {
+    @Override
+    public TableCell<Person, String> call(TableColumn<Person, String> param) {
+        return new TextFieldTableCell<Person, String>(){
+            @Override
+            public void updateItem(String item, boolean empty) {
+                super.updateItem(item, empty);
+                if(item == null || empty) setText(null);
+                else setTextFill(Color.RED);
+
+            }
+        };
+    }
+});
 
 //persons.addListener((ListChangeListener<? super Person>) change -> {
 //    Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
@@ -244,7 +271,6 @@ criticalNoteColumn.setCellValueFactory(cellDate -> cellDate.getValue().criticalN
 //    alert.setTitle("HOHOH");
 //    alert.showAndWait();
 //});
-
 personTable.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> {
     showJob(newValue);
     if(newValue != null){
@@ -255,7 +281,6 @@ personTable.getSelectionModel().selectedItemProperty().addListener((observable, 
 
     }
 });
-
 // Set listener on focus of personTable. If it have focus we activate buttons for person
 personTable.focusedProperty().addListener(new ChangeListener<Boolean>() {
     @Override
@@ -405,6 +430,7 @@ personTable.focusedProperty().addListener(new ChangeListener<Boolean>() {
 public void setMainApp(MainApp mainApp){
     this.mainApp = mainApp;
     persons = mainApp.getPersonData();
+    docHashMap = mainApp.getDocHashMap();
     filteredPersons = new FilteredList<Person>(persons, person -> true);
     sortedPersons = new SortedList<Person>(filteredPersons);
     //    Bind the sorted list comparator to the TableView comparator
@@ -412,6 +438,7 @@ public void setMainApp(MainApp mainApp){
     // Listener - if changing number of persons.
 
     persons.addListener((ListChangeListener<? super Person>) change -> {
+
         numberOfPersonsLabel.setText(bundle.getString("customers") + " : " + Integer.toString(personTable.getItems().size()));
     });
 
@@ -458,6 +485,7 @@ private void onEditPerson() {
     boolean okClicked =  mainApp.showPersonEditDialog(selectedPerson);
 if (okClicked)
     mainApp.updatePersonDB(selectedPerson);
+usualNoteTextArea.setText(selectedPerson.getUsualNote());
 }
 
 @FXML
