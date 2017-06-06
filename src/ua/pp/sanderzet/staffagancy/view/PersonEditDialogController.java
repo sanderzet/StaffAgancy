@@ -176,6 +176,7 @@ public void handleOk() {
             person.setFileNumber(fileNumberField.getText());
             person.setDateQuit(DateUtil.parse(dateQuitField.getText()));
             if(docComboBox.getValue() != null) person.setDocument(docComboBox.getValue());
+                    else person.setDocument("");
             person.setUsualNote(usualNoteTextArea.getText());
             person.setCriticalNote(criticalNoteField.getText());
             okClicked = true;
@@ -227,13 +228,16 @@ else{
                 personWithSuchPassport.getPassport() + "\n";
     }
 }
+
+//If test == null - write "", or in db will be record "null".
 if (sanBookField.getText() == null || sanBookField.getLength() == 0)
         sanBookField.setText("");
 if (phoneField.getText() == null || phoneField.getLength() == 0)
 phoneField.setText("");
 if (fileNumberField.getText() == null || fileNumberField.getLength() == 0)
 phoneField.setText("");
-
+if (usualNoteTextArea.getText() == null) usualNoteTextArea.setText("");
+if (criticalNoteField.getText() == null) criticalNoteField.setText("");
 if (dateOfContractField.getText() == null || dateOfContractField.getLength() == 0)
     dateOfContractField.setText("");
 else {

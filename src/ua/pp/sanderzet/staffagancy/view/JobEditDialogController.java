@@ -120,6 +120,7 @@ public boolean isInputValid(){
     String errorMessage = "";
 //    if (placeTextField.getText() == null || placeTextField.getLength() == 0)
 //        errorMessage += "No valid place of work\n";
+    if (placeTextField.getText() == null ) placeTextField.setPromptText("");
     if (firmTextField.getText() == null || firmTextField.getLength() == 0)
         errorMessage += "No valid firm\n";
     if (positionTextField.getText() == null || positionTextField.getLength() == 0)

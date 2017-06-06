@@ -2,6 +2,7 @@
 
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.control.Button?>
+<?import javafx.scene.control.CheckBox?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.Separator?>
 <?import javafx.scene.control.SplitPane?>
@@ -15,7 +16,7 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane prefHeight="800.0" prefWidth="1200.0" xmlns="http://javafx.com/javafx/8.0.111" xmlns:fx="http://javafx.com/fxml/1" fx:controller="ua.pp.sanderzet.staffagancy.view.PersonOverviewController">
+<AnchorPane prefHeight="800.0" prefWidth="1200.0" xmlns="http://javafx.com/javafx/8.0.112" xmlns:fx="http://javafx.com/fxml/1" fx:controller="ua.pp.sanderzet.staffagancy.view.PersonOverviewController">
    <children>
       <BorderPane AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
          <center>
@@ -91,7 +92,7 @@
                   </Label>
                 <Button fx:id="personAddButton" disable="false" mnemonicParsing="false" onAction="#onAddPerson" text="%add">
                      <font>
-                        <Font size="10.0" />
+                        <Font size="11.0" />
                      </font>
                      <padding>
                         <Insets left="3.0" right="3.0" />
@@ -102,7 +103,7 @@
                   </Button>
                   <Button fx:id="personEditButton" disable="true" mnemonicParsing="false" onAction="#onEditPerson" text="%edit">
                      <font>
-                        <Font size="10.0" />
+                        <Font size="11.0" />
                      </font>
                      <HBox.margin>
                         <Insets left="3.0" right="3.0" top="3.0" />
@@ -112,7 +113,7 @@
                      </padding></Button>
                   <Button fx:id="personDelButton" disable="true" mnemonicParsing="false" onAction="#onDelPerson" text="%delete">
                      <font>
-                        <Font size="10.0" />
+                        <Font size="11.0" />
                      </font>
                      <HBox.margin>
                         <Insets left="3.0" right="3.0" top="3.0" />
@@ -143,7 +144,7 @@
                   </Label>
                   <Button fx:id="jobAddButton" disable="true" layoutX="82.0" layoutY="10.0" mnemonicParsing="false" onAction="#onAddJob" text="%add">
                      <font>
-                        <Font size="10.0" />
+                        <Font size="11.0" />
                      </font>
                      <padding>
                         <Insets left="3.0" right="3.0" />
@@ -154,7 +155,7 @@
                   </Button>
                   <Button fx:id="jobEditButton" disable="true" layoutX="135.0" layoutY="10.0" mnemonicParsing="false" onAction="#onEditJob" text="%edit">
                      <font>
-                        <Font size="10.0" />
+                        <Font size="11.0" />
                      </font>
                      <padding>
                         <Insets left="3.0" right="3.0" />
@@ -165,7 +166,7 @@
                   </Button>
                   <Button fx:id="jobDelButton" disable="true" layoutX="193.0" layoutY="10.0" mnemonicParsing="false" onAction="#onDelJob" text="%delete">
                      <font>
-                        <Font size="10.0" />
+                        <Font size="11.0" />
                      </font>
                      <padding>
                         <Insets left="3.0" right="3.0" />
@@ -176,6 +177,22 @@
                   </Button>
                   <Separator layoutX="511.0" layoutY="10.0" orientation="VERTICAL" />
                   <Separator layoutX="730.0" layoutY="10.0" orientation="VERTICAL" />
+                  <Label text="%showCustomers">
+                     <HBox.margin>
+                        <Insets left="3.0" right="3.0" top="3.0" />
+                     </HBox.margin>
+                     <font>
+                        <Font size="11.0" />
+                     </font>
+                  </Label>
+                  <CheckBox fx:id="allPersonCheckBox"  mnemonicParsing="false" text="%all">
+                     <font>
+                        <Font size="11.0" />
+                     </font>
+                     <HBox.margin>
+                        <Insets left="3.0" right="3.0" top="3.0" />
+                     </HBox.margin>
+                  </CheckBox>
                </children>
                <padding>
                   <Insets left="3.0" right="3.0" />

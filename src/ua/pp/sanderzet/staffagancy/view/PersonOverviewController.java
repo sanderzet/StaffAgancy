@@ -96,6 +96,8 @@ private TextArea usualNoteTextArea ;
     private Button jobEditButton;
     @FXML
     private Button jobDelButton;
+    @FXML
+    private CheckBox allPersonCheckBox;
 
 
 private MainApp mainApp;
@@ -117,18 +119,20 @@ private HashMap<String,String> docHashMap = new HashMap<>();
      * after the fxml file has been loaded.
      */
 @Override
-public void initialize (URL url, ResourceBundle bundle){
-this.bundle = bundle;
-usualNoteTextArea.setWrapText(true);
+public void initialize (URL url, ResourceBundle bundle) {
+    this.bundle = bundle;
+    usualNoteTextArea.setWrapText(true);
+    allPersonCheckBox.setSelected(false);
+
 //    If pressed Enter - button must fire (not only Space pressed)
-javafx.event.EventHandler<KeyEvent> onEnterKeyEventHandler = (keyEvent -> {
-    if(keyEvent.getCode() == KeyCode.ENTER) {
-        if (keyEvent.getSource() instanceof Button) {
-            Button button = (Button) keyEvent.getSource();
-            button.fire();
+    javafx.event.EventHandler<KeyEvent> onEnterKeyEventHandler = (keyEvent -> {
+        if (keyEvent.getCode() == KeyCode.ENTER) {
+            if (keyEvent.getSource() instanceof Button) {
+                Button button = (Button) keyEvent.getSource();
+                button.fire();
+            }
         }
-    }
-});
+    });
 
 
 // This the same as above only without lambda
@@ -157,113 +161,110 @@ javafx.event.EventHandler<KeyEvent> onEnterKeyEventHandler = (keyEvent -> {
     jobDelButton.setOnKeyPressed(onEnterKeyEventHandler);
 
 
-
-
     firstNameColumn.setCellValueFactory(cellData -> cellData.getValue().firstNameProperty());
     lastNameColumn.setCellValueFactory(cellData -> cellData.getValue().lastNameProperty());
     passportColumn.setCellValueFactory(cellData -> cellData.getValue().passportProperty());
     phoneColumn.setCellValueFactory(cellData -> cellData.getValue().phoneProperty());
-dateOfContractColumn.setCellValueFactory(cellData -> cellData.getValue().dateOfContractProperty());
+    dateOfContractColumn.setCellValueFactory(cellData -> cellData.getValue().dateOfContractProperty());
     // For LocalData correct formatting need our CellFactory
-dateOfContractColumn.setCellFactory(new Callback<TableColumn<Person, LocalDate>, TableCell<Person, LocalDate>>() {
-    @Override
-    public TableCell<Person, LocalDate> call(TableColumn<Person, LocalDate> jobLocalDateTableColumn) {
-        TextFieldTableCell<Person,LocalDate> cell = new TextFieldTableCell<Person,LocalDate>(DateUtil.localDateStringConverter) {
-            @Override
-            public void updateItem(LocalDate item, boolean empty) {
-                super.updateItem(item, empty);
-                if (item == null || empty) {
-                    setText(null);
-                    setStyle("");
-                } else {
+    dateOfContractColumn.setCellFactory(new Callback<TableColumn<Person, LocalDate>, TableCell<Person, LocalDate>>() {
+        @Override
+        public TableCell<Person, LocalDate> call(TableColumn<Person, LocalDate> jobLocalDateTableColumn) {
+            TextFieldTableCell<Person, LocalDate> cell = new TextFieldTableCell<Person, LocalDate>(DateUtil.localDateStringConverter) {
+                @Override
+                public void updateItem(LocalDate item, boolean empty) {
+                    super.updateItem(item, empty);
+                    if (item == null || empty) {
+                        setText(null);
+                        setStyle("");
+                    } else {
 //                Format cell
 //                    this.setTextFill(Color.RED);
 
+                    }
                 }
-            }
-        };
-        return cell;
-    }
-});
+            };
+            return cell;
+        }
+    });
 
-dateQuitColumn.setCellValueFactory(cellData -> cellData.getValue().dateQuitProperty());
+    dateQuitColumn.setCellValueFactory(cellData -> cellData.getValue().dateQuitProperty());
 
-dateQuitColumn.setCellFactory(new Callback<TableColumn<Person, LocalDate>, TableCell<Person, LocalDate>>() {
-    @Override
-    public TableCell<Person, LocalDate> call(TableColumn<Person, LocalDate> personLocalDateTableColumn) {
-        TextFieldTableCell<Person,LocalDate> cell = new TextFieldTableCell<Person, LocalDate>(DateUtil.localDateStringConverter) {
-            @Override
-            public void updateItem(LocalDate item, boolean empty) {
-                super.updateItem(item, empty);
-                if (item == null || empty) {
-                    setText(null);
-                    setStyle("");
+    dateQuitColumn.setCellFactory(new Callback<TableColumn<Person, LocalDate>, TableCell<Person, LocalDate>>() {
+        @Override
+        public TableCell<Person, LocalDate> call(TableColumn<Person, LocalDate> personLocalDateTableColumn) {
+            TextFieldTableCell<Person, LocalDate> cell = new TextFieldTableCell<Person, LocalDate>(DateUtil.localDateStringConverter) {
+                @Override
+                public void updateItem(LocalDate item, boolean empty) {
+                    super.updateItem(item, empty);
+                    if (item == null || empty) {
+                        setText(null);
+                        setStyle("");
+                    } else this.setTextFill(Color.BLUEVIOLET);
                 }
-                else this.setTextFill(Color.BLUEVIOLET);
-            }
-        };
-        return cell;
-    }
-});
+            };
+            return cell;
+        }
+    });
 
-sanBookColumn.setCellValueFactory(cellData -> cellData.getValue().sanBookProperty());
-endOfVisaColumn.setCellValueFactory(cellData -> cellData.getValue().endOfVisaProperty());
+    sanBookColumn.setCellValueFactory(cellData -> cellData.getValue().sanBookProperty());
+    endOfVisaColumn.setCellValueFactory(cellData -> cellData.getValue().endOfVisaProperty());
 
-endOfVisaColumn.setCellFactory(new Callback<TableColumn<Person, LocalDate>, TableCell<Person, LocalDate>>() {
-    @Override
-    public TableCell<Person, LocalDate> call(TableColumn<Person, LocalDate> jobLocalDateTableColumn) {
-        TextFieldTableCell<Person,LocalDate> cell = new TextFieldTableCell<Person,LocalDate>(DateUtil.localDateStringConverter) {
-            @Override
-            public void updateItem(LocalDate item, boolean empty) {
-                super.updateItem(item, empty);
-                if (item == null || empty) {
-                    setText(null);
-                    setStyle("");
-                } else {
+    endOfVisaColumn.setCellFactory(new Callback<TableColumn<Person, LocalDate>, TableCell<Person, LocalDate>>() {
+        @Override
+        public TableCell<Person, LocalDate> call(TableColumn<Person, LocalDate> jobLocalDateTableColumn) {
+            TextFieldTableCell<Person, LocalDate> cell = new TextFieldTableCell<Person, LocalDate>(DateUtil.localDateStringConverter) {
+                @Override
+                public void updateItem(LocalDate item, boolean empty) {
+                    super.updateItem(item, empty);
+                    if (item == null || empty) {
+                        setText("");
+                        setStyle("");
+                    } else {
 //    Format cell
 //      If expiration date of visa less then after 45 days - text is marked by red color
-if(item.isBefore(LocalDate.now().plusDays(45)))
-    this.setTextFill(Color.RED);
+                        if (item.isBefore(LocalDate.now().plusDays(45)))
+                            this.setTextFill(Color.RED);
+                    }
                 }
-            }
-        };
-        return cell;
-    }
-});
+            };
+            return cell;
+        }
+    });
 
 
-fileNumberColumn.setCellValueFactory(cellData -> cellData.getValue().fileNumberProperty());
-documentColumn.setCellValueFactory(cellDate -> cellDate.getValue().documentProperty());
-documentColumn.setCellFactory(new Callback<TableColumn<Person, String>, TableCell<Person, String>>() {
-    @Override
-    public TableCell<Person, String> call(TableColumn<Person, String> param) {
-        return new TextFieldTableCell<Person, String>(){
-            @Override
-            public void updateItem(String item, boolean empty) {
-                super.updateItem(item, empty);
-                if (item == null || empty)
-                    setText(null);
-                else this.setText(docHashMap.get(item));
-            }
-        };
-    }
-});
-criticalNoteColumn.setCellValueFactory(cellDate -> cellDate.getValue().criticalNoteProperty());
+    fileNumberColumn.setCellValueFactory(cellData -> cellData.getValue().fileNumberProperty());
+    documentColumn.setCellValueFactory(cellDate -> cellDate.getValue().documentProperty());
+    documentColumn.setCellFactory(new Callback<TableColumn<Person, String>, TableCell<Person, String>>() {
+        @Override
+        public TableCell<Person, String> call(TableColumn<Person, String> param) {
+            return new TextFieldTableCell<Person, String>() {
+                @Override
+                public void updateItem(String item, boolean empty) {
+                    super.updateItem(item, empty);
+                    if (item == null || empty)
+                        setText("");
+                    else this.setText(docHashMap.get(item));
+                }
+            };
+        }
+    });
+    criticalNoteColumn.setCellValueFactory(cellDate -> cellDate.getValue().criticalNoteProperty());
 
-criticalNoteColumn.setCellFactory(new Callback<TableColumn<Person, String>, TableCell<Person, String>>() {
-    @Override
-    public TableCell<Person, String> call(TableColumn<Person, String> param) {
-        return new TextFieldTableCell<Person, String>(){
-            @Override
-            public void updateItem(String item, boolean empty) {
-                super.updateItem(item, empty);
-                if(item == null || empty) setText(null);
-                else setTextFill(Color.RED);
+    criticalNoteColumn.setCellFactory(new Callback<TableColumn<Person, String>, TableCell<Person, String>>() {
+        @Override
+        public TableCell<Person, String> call(TableColumn<Person, String> param) {
+            return new TextFieldTableCell<Person, String>() {
+                @Override
+                public void updateItem(String item, boolean empty) {
+                    super.updateItem(item, empty);
+                    if (item == null || empty) setText("");
+                    else setTextFill(Color.RED);
 
-            }
-        };
-    }
-});
+                }
+            };
+        }
+    });
 
 //persons.addListener((ListChangeListener<? super Person>) change -> {
 //    Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
@@ -271,53 +272,52 @@ criticalNoteColumn.setCellFactory(new Callback<TableColumn<Person, String>, Tabl
 //    alert.setTitle("HOHOH");
 //    alert.showAndWait();
 //});
-personTable.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> {
-    showJob(newValue);
-    if(newValue != null){
-        personDelButton.setDisable(false);
-        personEditButton.setDisable(false);
-        jobAddButton.setDisable(false);
-        usualNoteTextArea.setText(newValue.getUsualNote());
+    personTable.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> {
+        showJob(newValue);
+        if (newValue != null) {
+            personDelButton.setDisable(false);
+            personEditButton.setDisable(false);
+            jobAddButton.setDisable(false);
+            usualNoteTextArea.setText(newValue.getUsualNote());
 
-    }
-});
+        }
+    });
 // Set listener on focus of personTable. If it have focus we activate buttons for person
-personTable.focusedProperty().addListener(new ChangeListener<Boolean>() {
-    @Override
-    public void changed(ObservableValue<? extends Boolean> observableValue, Boolean aBoolean, Boolean t1) {
+    personTable.focusedProperty().addListener(new ChangeListener<Boolean>() {
+        @Override
+        public void changed(ObservableValue<? extends Boolean> observableValue, Boolean aBoolean, Boolean t1) {
 //        Check if any item selected. If no, disable buttons that do something with selected item.
-        boolean isItemSelected = !personTable.getSelectionModel().isEmpty();
+            boolean isItemSelected = !personTable.getSelectionModel().isEmpty();
 
 
-        if (t1){
+            if (t1) {
 
 //            If no item selected (if we navigate by TAB) - attempt to get first item selected
-            if(!isItemSelected && personTable.getItems().size() > 0) {
+                if (!isItemSelected && personTable.getItems().size() > 0) {
 
-                personTable.getSelectionModel().selectFirst();
-                isItemSelected = !personTable.getSelectionModel().isEmpty();
-            }
+                    personTable.getSelectionModel().selectFirst();
+                    isItemSelected = !personTable.getSelectionModel().isEmpty();
+                }
 
 
-                if(isItemSelected){
+                if (isItemSelected) {
                     personDelButton.setDisable(false);
                     personEditButton.setDisable(false);
                     jobAddButton.setDisable(false);
-            }
-                else {
+                } else {
                     personDelButton.setDisable(true);
                     personEditButton.setDisable(true);
                     jobAddButton.setDisable(true);
                 }
-        }
+            }
 //else {
 ////IF person table loss focus - disable buttons for editing and deleting
 //            personDelButton.setDisable(true);
 //            personEditButton.setDisable(true);
 //        }
 
-    }
-});
+        }
+    });
 
 //Job table
 
@@ -326,17 +326,15 @@ personTable.focusedProperty().addListener(new ChangeListener<Boolean>() {
     positionColumn.setCellFactory(TextFieldTableCell.forTableColumn());
 
 
-
-
     transitionColumn.setCellFactory(new Callback<TableColumn<Job, LocalDate>, TableCell<Job, LocalDate>>() {
         @Override
         public TableCell<Job, LocalDate> call(TableColumn<Job, LocalDate> jobLocalDateTableColumn) {
-            TextFieldTableCell<Job,LocalDate> cell = new TextFieldTableCell<Job,LocalDate>(DateUtil.localDateStringConverter) {
+            TextFieldTableCell<Job, LocalDate> cell = new TextFieldTableCell<Job, LocalDate>(DateUtil.localDateStringConverter) {
                 @Override
                 public void updateItem(LocalDate item, boolean empty) {
                     super.updateItem(item, empty);
                     if (item == null || empty) {
-                        setText(null);
+                        setText("");
                         setStyle("");
                     } else {
 //                Format cell
@@ -350,8 +348,6 @@ personTable.focusedProperty().addListener(new ChangeListener<Boolean>() {
     });
 
 
-
-
     placeColumn.setCellValueFactory(cellData -> cellData.getValue().placeProperty());
     firmColumn.setCellValueFactory(cellData -> cellData.getValue().firmProperty());
     positionColumn.setCellValueFactory(cellData -> cellData.getValue().positionProperty());
@@ -363,22 +359,21 @@ personTable.focusedProperty().addListener(new ChangeListener<Boolean>() {
 //        Check if any item selected. If no, disable buttons that do something with selected item.
             boolean isItemSelected = !jobTable.getSelectionModel().isEmpty();
 
-            if (t1){
+            if (t1) {
 
 
 //            If no item selected (if we navigate by TAB) - attempt to get first item selected
-                if(!isItemSelected && jobTable.getItems().size() > 0) {
+                if (!isItemSelected && jobTable.getItems().size() > 0) {
 
                     jobTable.getSelectionModel().selectFirst();
                     isItemSelected = !jobTable.getSelectionModel().isEmpty();
                 }
 
 
-                if(isItemSelected){
+                if (isItemSelected) {
                     jobDelButton.setDisable(false);
                     jobEditButton.setDisable(false);
-                }
-                else {
+                } else {
                     personDelButton.setDisable(true);
                     personEditButton.setDisable(true);
                 }
@@ -403,8 +398,7 @@ personTable.focusedProperty().addListener(new ChangeListener<Boolean>() {
 //            Filter on lastName or on Passport
             if (person.getLastName().toLowerCase().contains(lowerCaseFilter)) {
                 return true;
-            }
-            else if (person.getPassport().toLowerCase().contains(lowerCaseFilter)) {
+            } else if (person.getPassport().toLowerCase().contains(lowerCaseFilter)) {
                 return true;
             }
 //            else if (person.getDataOfContract().contains(lowerCaseFilter)) {
@@ -416,7 +410,21 @@ personTable.focusedProperty().addListener(new ChangeListener<Boolean>() {
 
 
 
+    allPersonCheckBox.selectedProperty().addListener(new ChangeListener<Boolean>() {
+        @Override
+        public void changed(ObservableValue<? extends Boolean> observableValue, Boolean aBoolean, Boolean t1) {
+            filteredPersons.setPredicate(person -> {
+                if (t1 != null && !t1)
+                    if (person.getDateQuit() != null && person.getDateQuit().isBefore(LocalDate.now())) {
+                        return false;
+                    }
+                return true;
+            });
+        }
+    });
+
 }
+
 
 
     /**
