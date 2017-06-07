@@ -36,6 +36,7 @@ public class MainApp extends Application {
 //    Directory for data
 private final String DIR_DB = "./db";
 private final String NAME_DB = "sa1_2.db";
+private final String PREF_ALL_PERSON_CHECK_BOX = "allPersonCheckBox";
 // Result of querying to db
     private ResultSet resultSet;
 ////Current person for selecting job list for this person
@@ -108,6 +109,8 @@ restoreDataFromDb();
             fxmlLoader.setLocation(MainApp.class.getResource("view/PersonOverview.fxml"));
            //             Bundle for internationalizing
             fxmlLoader.setResources(bundle);
+
+
             AnchorPane anchorPane = (AnchorPane) fxmlLoader.load();
             rootLayout.setCenter(anchorPane);
             // Give the controller access to the main app.
@@ -477,7 +480,7 @@ ResultSet resultSet;
     dbSqlite.connect("jdbc:sqlite:db/sa1_2.db");
     dbSqlite.createDB();
 for (Person person : personData){
-    dbSqlite.insertPersonDb(person);
+    dbSqlite.insertPersonInNewDb(person);
 }
 
 for (Job job : jobData) {
@@ -487,6 +490,10 @@ for (Job job : jobData) {
 }
 
 }
+
+public String getPREF_ALL_PERSON_CHECK_BOX() {
+        return PREF_ALL_PERSON_CHECK_BOX;
+    }
 
     public HashMap<String, String> getDocHashMap () {
         return docHashMap;

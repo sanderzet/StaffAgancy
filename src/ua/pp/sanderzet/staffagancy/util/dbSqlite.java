@@ -109,6 +109,54 @@ finally {
     }
 }
 
+
+//For transition from odl db to new we need the same personId
+
+    public static int insertPersonInNewDb(Person person) {
+        PreparedStatement preparedStatement1 = null;
+        String sql = "INSERT INTO persons (lastName,firstName,passport,phone,dateOfContract,sanBook,endOfVisa,fileNumber," +
+                "dateQuit,document,usualNote,criticalNote,id) "  +
+                "values(?,?,?,?,?,?,?,?,?,?,?,?,?)" ;
+        try {
+
+            preparedStatement1 = conn.prepareStatement(sql);
+            preparedStatement1.setString(1,person.getLastName());
+            preparedStatement1.setString(2,person.getFirstName());
+            preparedStatement1.setString(3,person.getPassport());
+            preparedStatement1.setString(4,person.getPhone());
+            preparedStatement1.setString(5,DateUtil.format(person.getDateOfContract()));
+            preparedStatement1.setString(6,person.getSanBook());
+            preparedStatement1.setString(7,DateUtil.format(person.getEndOfVisa()));
+            preparedStatement1.setString(8,person.getFileNumber());
+            preparedStatement1.setString(9,DateUtil.format(person.getDateQuit()));
+            preparedStatement1.setString(10,person.getDocument());
+            preparedStatement1.setString(11,person.getUsualNote());
+            preparedStatement1.setString(12,person.getCriticalNote());
+            preparedStatement1.setInt(13,person.getId());
+
+
+            preparedStatement1.executeUpdate();
+            int id = 0;
+
+            return id;
+
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return 0;
+        }
+        finally {
+            try {
+                preparedStatement1.close();
+
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+        }
+    }
+
+
+
 public static int insertJobDb(Job job) {
         ResultSet res = null;
     PreparedStatement preparedStatement1 = null;

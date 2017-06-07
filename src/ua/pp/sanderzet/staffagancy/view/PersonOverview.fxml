@@ -22,19 +22,19 @@
          <center>
             <SplitPane dividerPositions="0.7712854757929883" orientation="VERTICAL">
                <items>
-                  <TableView fx:id="personTable">
+                  <TableView fx:id="personTable" maxWidth="1.7976931348623157E308">
                     <columns>
-                        <TableColumn fx:id="lastNameColumn" maxWidth="1.7976931348623157E308" minWidth="150.0" prefWidth="-1.0" text="%table.lastName" />
-                      <TableColumn fx:id="firstNameColumn" maxWidth="1.7976931348623157E308" minWidth="150.0" prefWidth="-1.0" text="%table.firstName" />
-                      <TableColumn fx:id="passportColumn" maxWidth="-1.0" minWidth="100.0" prefWidth="-1.0" text="%table.passport" />
-                        <TableColumn fx:id="phoneColumn" maxWidth="-1.0" minWidth="100.0" prefWidth="-1.0" text="%table.phone" />
-                        <TableColumn fx:id="dateOfContractColumn" maxWidth="-1.0" minWidth="85.0" prefWidth="-1.0" text="%table.dateOfContract" />
+                        <TableColumn fx:id="lastNameColumn" maxWidth="200" minWidth="150.0" prefWidth="-1.0" text="%table.lastName" />
+                      <TableColumn fx:id="firstNameColumn" maxWidth="200" minWidth="150.0" prefWidth="-1.0" text="%table.firstName" />
+                      <TableColumn fx:id="passportColumn" maxWidth="150" minWidth="100.0" prefWidth="-1.0" text="%table.passport" />
+                        <TableColumn fx:id="phoneColumn" maxWidth="150" minWidth="100.0" prefWidth="-1.0" text="%table.phone" />
+                        <TableColumn fx:id="dateOfContractColumn" maxWidth="100" minWidth="85.0" prefWidth="-1.0" text="%table.dateOfContract" />
                         <TableColumn fx:id="sanBookColumn" maxWidth="131.0" minWidth="85.0" prefWidth="105.0" text="%table.sanitaryBook" />
-                        <TableColumn fx:id="documentColumn" maxWidth="1.7976931348623157E308" minWidth="89.0" prefWidth="-1.0" text="%table.document" />
-                        <TableColumn fx:id="endOfVisaColumn" maxWidth="-1.0" minWidth="85.0" prefWidth="-1.0" text="%table.endOfVisa" />
+                        <TableColumn fx:id="documentColumn" maxWidth="170" minWidth="150" prefWidth="-1.0" text="%table.document" />
+                        <TableColumn fx:id="endOfVisaColumn" maxWidth="100" minWidth="85.0" prefWidth="-1.0" text="%table.endOfVisa" />
                         <TableColumn fx:id="fileNumberColumn" maxWidth="-1.0" minWidth="120.0" prefWidth="-1.0" text="%table.numberOfFile" />
-                        <TableColumn fx:id="criticalNoteColumn" maxWidth="-1.0" minWidth="120.0" prefWidth="-1.0" text="%table.criticalNote" />
-                        <TableColumn fx:id="dateQuitColumn" maxWidth="-1.0" minWidth="85.0" prefWidth="-1.0" text="%table.endOfJob" />
+                        <TableColumn fx:id="criticalNoteColumn" maxWidth="150" minWidth="120.0" prefWidth="-1.0" text="%table.criticalNote" />
+                        <TableColumn fx:id="dateQuitColumn" maxWidth="100" minWidth="85.0" prefWidth="-1.0" text="%table.endOfJob" />
                     </columns>
                   </TableView>
                   <SplitPane dividerPositions="0.17863105175292154">
@@ -185,7 +185,7 @@
                         <Font size="11.0" />
                      </font>
                   </Label>
-                  <CheckBox fx:id="allPersonCheckBox"  mnemonicParsing="false" text="%all">
+                  <CheckBox fx:id="allPersonCheckBox" mnemonicParsing="false" text="%all">
                      <font>
                         <Font size="11.0" />
                      </font>

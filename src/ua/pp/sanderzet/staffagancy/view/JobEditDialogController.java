@@ -93,7 +93,7 @@ public void setPersonNameLabel (String personName) {
     public void setJob (Job job) {
         this.job = job;
         placeTextField.setText(job.getPlace());
-        firmTextField.setText(job.getPlace());
+        firmTextField.setText(job.getFirm());
         positionTextField.setText(job.getPosition());
         transitionTextField.setText(DateUtil.format(job.getTransitionJob()));
     transitionTextField.setPromptText("dd.mm.yyyy");
@@ -120,7 +120,7 @@ public boolean isInputValid(){
     String errorMessage = "";
 //    if (placeTextField.getText() == null || placeTextField.getLength() == 0)
 //        errorMessage += "No valid place of work\n";
-    if (placeTextField.getText() == null ) placeTextField.setPromptText("");
+    if (placeTextField.getText() == null || placeTextField.getLength() == 0) placeTextField.setText("");
     if (firmTextField.getText() == null || firmTextField.getLength() == 0)
         errorMessage += "No valid firm\n";
     if (positionTextField.getText() == null || positionTextField.getLength() == 0)

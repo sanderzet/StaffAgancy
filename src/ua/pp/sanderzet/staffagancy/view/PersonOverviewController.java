@@ -26,6 +26,8 @@ import java.util.HashMap;
 import java.util.Optional;
 import java.util.ResourceBundle;
 import java.net.URL;
+import java.util.function.Predicate;
+import java.util.prefs.Preferences;
 
 /**
  * Created by sander on 24.04.17.
@@ -107,6 +109,9 @@ private SortedList<Person> sortedPersons;
 private String numberOfPersons;
 private ResourceBundle bundle;
 private HashMap<String,String> docHashMap = new HashMap<>();
+
+private Predicate<Person> personPredicate;
+
     /**
      * The constructor.
      * The constructor is called before the initialize() method.
@@ -122,7 +127,9 @@ private HashMap<String,String> docHashMap = new HashMap<>();
 public void initialize (URL url, ResourceBundle bundle) {
     this.bundle = bundle;
     usualNoteTextArea.setWrapText(true);
-    allPersonCheckBox.setSelected(false);
+//    Initialize personPredicate
+    personPredicate = person -> true;
+
 
 //    If pressed Enter - button must fire (not only Space pressed)
     javafx.event.EventHandler<KeyEvent> onEnterKeyEventHandler = (keyEvent -> {
@@ -273,12 +280,12 @@ public void initialize (URL url, ResourceBundle bundle) {
 //    alert.showAndWait();
 //});
     personTable.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> {
-        showJob(newValue);
         if (newValue != null) {
             personDelButton.setDisable(false);
             personEditButton.setDisable(false);
             jobAddButton.setDisable(false);
             usualNoteTextArea.setText(newValue.getUsualNote());
+            showJob(newValue);
 
         }
     });
@@ -391,39 +398,69 @@ public void initialize (URL url, ResourceBundle bundle) {
 
 //    Set the filter Predicate whenever the filter change
     filterField.textProperty().addListener((observableValue, oldValue, newValue) -> {
-        filteredPersons.setPredicate(person -> {
-            if (newValue == null || newValue.isEmpty())
-                return true;
-            String lowerCaseFilter = newValue.toLowerCase();
+                Predicate<Person> filterFieldPredicate = person -> {
+                    if (newValue == null || newValue.isEmpty())
+                        return true;
+                    String lowerCaseFilter = newValue.toLowerCase();
 //            Filter on lastName or on Passport
-            if (person.getLastName().toLowerCase().contains(lowerCaseFilter)) {
-                return true;
-            } else if (person.getPassport().toLowerCase().contains(lowerCaseFilter)) {
-                return true;
-            }
+                    if (person.getLastName().toLowerCase().contains(lowerCaseFilter)) {
+                        return true;
+                    } else if (person.getPassport().toLowerCase().contains(lowerCaseFilter)) {
+                        return true;
+                    }
 //            else if (person.getDataOfContract().contains(lowerCaseFilter)) {
 //                return true;
 //            }
-            return false;
-        });
-    });
+                    return false;
+                };
+                filteredPersons.setPredicate(personPredicate.and(filterFieldPredicate));
+            }
+        );
 
 
 
     allPersonCheckBox.selectedProperty().addListener(new ChangeListener<Boolean>() {
+
         @Override
         public void changed(ObservableValue<? extends Boolean> observableValue, Boolean aBoolean, Boolean t1) {
-            filteredPersons.setPredicate(person -> {
-                if (t1 != null && !t1)
+    filterField.setText("");
+            personPredicate = person -> {
+                if ( !t1) {
                     if (person.getDateQuit() != null && person.getDateQuit().isBefore(LocalDate.now())) {
+
                         return false;
                     }
+                }
                 return true;
-            });
-        }
-    });
+            };
+//Remember in preferences selected value of allPersonCheckBox
+            Preferences preferences = Preferences.userNodeForPackage(MainApp.class);
 
+            preferences.putBoolean(mainApp.getPREF_ALL_PERSON_CHECK_BOX(),t1);
+
+            filteredPersons.setPredicate(personPredicate);
+            }
+
+    });
 }
+
+
+
+//    allPersonCheckBox.selectedProperty().addListener(new ChangeListener<Boolean>() {
+//        @Override
+//        public void changed(ObservableValue<? extends Boolean> observableValue, Boolean aBoolean, Boolean t1) {
+//            filteredPersons.setPredicate(person -> {
+//                if (t1 != null && !t1)
+//                    if (person.getDateQuit() != null && person.getDateQuit().isBefore(LocalDate.now())) {
+//
+//                        return false;
+//                    }
+//                return true;
+//            });
+//        }
+//    });
+//
+//}
 
 
 
@@ -436,23 +473,37 @@ public void initialize (URL url, ResourceBundle bundle) {
      *
      *   */
 public void setMainApp(MainApp mainApp){
+
     this.mainApp = mainApp;
     persons = mainApp.getPersonData();
     docHashMap = mainApp.getDocHashMap();
+    Preferences preferences = Preferences.userNodeForPackage(MainApp.class);
+
+
+
     filteredPersons = new FilteredList<Person>(persons, person -> true);
     sortedPersons = new SortedList<Person>(filteredPersons);
     //    Bind the sorted list comparator to the TableView comparator
     sortedPersons.comparatorProperty().bind(personTable.comparatorProperty());
+
+    //    Set opposite value and then switch so we can initialize listener
+//    allPersonCheckBox.fire();
+    allPersonCheckBox.setSelected(!preferences.getBoolean(mainApp.getPREF_ALL_PERSON_CHECK_BOX(),false));
+    allPersonCheckBox.fire();
+
     // Listener - if changing number of persons.
+    sortedPersons.addListener((ListChangeListener<? super Person>) change -> {
 
-    persons.addListener((ListChangeListener<? super Person>) change -> {
-
-        numberOfPersonsLabel.setText(bundle.getString("customers") + " : " + Integer.toString(personTable.getItems().size()));
+        numberOfPersonsLabel.setText(bundle.getString("customers") + " : " + Integer.toString(sortedPersons.size()) +
+        " / " + bundle.getString("all")+ " : " + persons.size());
     });
 
-    personTable.setItems(sortedPersons);
-    numberOfPersonsLabel.setText(bundle.getString("customers")+ " : " + Integer.toString(personTable.getItems().size()));
+//    Initial value
+    numberOfPersonsLabel.setText(bundle.getString("customers")+ " : " + Integer.toString(sortedPersons.size()) +
+            " / " + bundle.getString("all")+ " : " + persons.size());
 
+
+    personTable.setItems(sortedPersons);
 
 }
 

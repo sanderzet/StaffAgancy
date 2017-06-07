@@ -235,7 +235,7 @@ if (sanBookField.getText() == null || sanBookField.getLength() == 0)
 if (phoneField.getText() == null || phoneField.getLength() == 0)
 phoneField.setText("");
 if (fileNumberField.getText() == null || fileNumberField.getLength() == 0)
-phoneField.setText("");
+fileNumberField.setText("");
 if (usualNoteTextArea.getText() == null) usualNoteTextArea.setText("");
 if (criticalNoteField.getText() == null) criticalNoteField.setText("");
 if (dateOfContractField.getText() == null || dateOfContractField.getLength() == 0)
