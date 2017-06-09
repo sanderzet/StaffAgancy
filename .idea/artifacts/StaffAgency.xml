@@ -1,26 +1,31 @@
 <component name="ArtifactManager">
-  <artifact type="javafx" build-on-make="true" name="StaffAgancy">
+  <artifact type="javafx" build-on-make="true" name="StaffAgency">
     <output-path>$PROJECT_DIR$/../../IdeaProjectsOut</output-path>
     <properties id="javafx-properties">
       <options>
-        <option name="appClass" value="ua.pp.sanderzet.staffagancy.MainApp" />
-        <option name="description" value="" />
+        <option name="alias" value="" />
+        <option name="appClass" value="ua.pp.sanderzet.staffagency.MainApp" />
+        <option name="description" value="Program specially for staff agency" />
+        <option name="enabledSigning" value="true" />
+        <option name="height" value="600" />
         <option name="htmlPlaceholderId" value="" />
         <option name="icons">
           <JavaFxApplicationIcons>
-            <option name="linuxIcon" value="$PROJECT_DIR$/ico/StaffAgancy.png" />
-            <option name="windowsIcon" value="$PROJECT_DIR$/ico/StaffAgancy.ico" />
+            <option name="linuxIcon" value="$PROJECT_DIR$/ico/StaffAgency.png" />
+            <option name="windowsIcon" value="$PROJECT_DIR$/ico/StaffAgency.ico" />
           </JavaFxApplicationIcons>
         </option>
+        <option name="keystore" value="" />
         <option name="nativeBundle" value="all" />
-        <option name="title" value="StaffAgancy" />
+        <option name="title" value="StaffAgency" />
         <option name="vendor" value="SanderZet" />
         <option name="version" value="1.2" />
+        <option name="width" value="800" />
       </options>
     </properties>
     <root id="root">
-      <element id="archive" name="StaffAgancy.jar">
-        <element id="module-output" name="StaffAgancy" />
+      <element id="archive" name="StaffAgency.jar">
+        <element id="module-output" name="StaffAgency" />
         <element id="directory" name="META-INF">
           <element id="file-copy" path="$PROJECT_DIR$/META-INF/MANIFEST.MF" />
         </element>
