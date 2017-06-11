@@ -11,8 +11,8 @@
         <option name="htmlPlaceholderId" value="" />
         <option name="icons">
           <JavaFxApplicationIcons>
-            <option name="linuxIcon" value="$PROJECT_DIR$/ico/StaffAgency.png" />
-            <option name="windowsIcon" value="$PROJECT_DIR$/ico/StaffAgency.ico" />
+            <option name="linuxIcon" value="$PROJECT_DIR$/ico/StaffAgancy.png" />
+            <option name="windowsIcon" value="$PROJECT_DIR$/ico/StaffAgancy.ico" />
           </JavaFxApplicationIcons>
         </option>
         <option name="keystore" value="" />

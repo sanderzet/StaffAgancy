@@ -52,7 +52,7 @@ private final String PREF_ALL_PERSON_CHECK_BOX = "allPersonCheckBox";
 private ResourceBundle bundle = ResourceBundle.getBundle("bundles/bundle");
     private final String DOC_CHOICE_BOX_KEY = "choiceBoxDoc";
 private HashMap<String,String> docHashMap;
-
+private PersonOverviewController personOverviewController;
 
 
 //    Constructor
@@ -113,8 +113,8 @@ restoreDataFromDb();
             AnchorPane anchorPane = (AnchorPane) fxmlLoader.load();
             rootLayout.setCenter(anchorPane);
             // Give the controller access to the main app.
-            PersonOverviewController controller = fxmlLoader.getController();
-            controller.setMainApp(this);
+            personOverviewController = fxmlLoader.getController();
+            personOverviewController.setMainApp(this);
         }
         catch (Exception e){
             e.printStackTrace();
@@ -490,6 +490,11 @@ for (Job job : jobData) {
 public String getPREF_ALL_PERSON_CHECK_BOX() {
         return PREF_ALL_PERSON_CHECK_BOX;
     }
+
+    public PersonOverviewController getPersonOverviewController() {
+        return personOverviewController;
+    }
+
 
     public HashMap<String, String> getDocHashMap () {
         return docHashMap;

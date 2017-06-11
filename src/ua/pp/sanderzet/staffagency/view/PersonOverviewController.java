@@ -86,6 +86,31 @@ private TextArea usualNoteTextArea ;
     private Label jobLabel;
     @FXML
     private Label numberOfPersonsLabel;
+
+    public Button getPersonAddButton() {
+        return personAddButton;
+    }
+
+    public Button getPersonEditButton() {
+        return personEditButton;
+    }
+
+    public Button getPersonDelButton() {
+        return personDelButton;
+    }
+
+    public Button getJobAddButton() {
+        return jobAddButton;
+    }
+
+    public Button getJobEditButton() {
+        return jobEditButton;
+    }
+
+    public Button getJobDelButton() {
+        return jobDelButton;
+    }
+
     @FXML
     private Button personAddButton;
     @FXML

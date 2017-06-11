@@ -10,19 +10,32 @@
    <top>
       <MenuBar BorderPane.alignment="CENTER">
         <menus>
-          <Menu mnemonicParsing="true" text="File">
+          <Menu mnemonicParsing="true" text="%menu.file">
             <items>
-              <MenuItem onAction="#handleExit" text="Exit" />
+              <MenuItem fx:id="exitMenuItem" mnemonicParsing="true" onAction="#handleExit" text="%menu.file.exit" />
             </items>
           </Menu>
-          <Menu mnemonicParsing="false" text="Edit">
+          <Menu mnemonicParsing="false" text="%menu.edit">
             <items>
-              <MenuItem mnemonicParsing="false" text="Delete" />
+                  <Menu mnemonicParsing="false" text="%customer">
+                    <items>
+                    <MenuItem fx:id="personAddMenuItem" mnemonicParsing="false" onAction="#handlePersonAdd" text="%add" />
+                      <MenuItem fx:id="personEditMenuItem" mnemonicParsing="false" onAction="#handlePersonEdit" text="%edit" />
+                        <MenuItem fx:id="personDeleteMenuItem" mnemonicParsing="false" onAction="#handlePersonDelete" text="\%delete" />
+                    </items>
+                  </Menu>
+                  <Menu mnemonicParsing="false" text="%job">
+                    <items>
+                      <MenuItem fx:id="jobAddMenuItem" mnemonicParsing="false" onAction="#handleJobAdd" text="%add" />
+                        <MenuItem fx:id="jobEditMenuItem" mnemonicParsing="false" onAction="#handleJobEdit" text="%edit" />
+                        <MenuItem fx:id="jobDeleteMenuItem" mnemonicParsing="false" onAction="#handleJobDelete" text="%delete" />
+                    </items>
+                  </Menu>
             </items>
           </Menu>
-          <Menu mnemonicParsing="false" text="Help">
+          <Menu mnemonicParsing="false" text="%menu.help">
             <items>
-              <MenuItem onAction="#handleAbout" mnemonicParsing="false" text="About" />
+              <MenuItem mnemonicParsing="true" onAction="#handleAbout" text="%menu.help.about" />
             </items>
           </Menu>
         </menus>
