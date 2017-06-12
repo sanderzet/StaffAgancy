@@ -3,14 +3,9 @@ package ua.pp.sanderzet.staffagency.view;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
-import javafx.scene.control.Alert;
-import javafx.scene.control.ButtonType;
-import javafx.scene.control.Label;
-import javafx.scene.control.MenuItem;
+import javafx.scene.control.*;
 import javafx.scene.image.ImageView;
-import javafx.scene.input.KeyCode;
-import javafx.scene.input.KeyCodeCombination;
-import javafx.scene.input.KeyCombination;
+import javafx.scene.input.*;
 import javafx.scene.layout.Region;
 import javafx.util.Builder;
 import ua.pp.sanderzet.staffagency.MainApp;
@@ -50,9 +45,9 @@ public void setMainApp(MainApp mainApp) {
 public void initialize () {
 
     exitMenuItem.setAccelerator(new KeyCodeCombination(KeyCode.Q,KeyCombination.SHORTCUT_DOWN));
-    personAddMenuItem.setAccelerator(new KeyCodeCombination(KeyCode.A, KeyCombination.SHORTCUT_DOWN));
-    personEditMenuItem.setAccelerator(new KeyCodeCombination(KeyCode.E, KeyCombination.SHORTCUT_DOWN));
-    personDeleteMenuItem.setAccelerator(new KeyCodeCombination(KeyCode.D, KeyCombination.SHORTCUT_DOWN));
+    personAddMenuItem.setAccelerator(new KeyCodeCombination(KeyCode.A,KeyCombination.ALT_DOWN, KeyCombination.SHORTCUT_DOWN));
+    personEditMenuItem.setAccelerator(new KeyCodeCombination(KeyCode.E,KeyCombination.ALT_DOWN, KeyCombination.SHORTCUT_DOWN));
+    personDeleteMenuItem.setAccelerator(new KeyCodeCombination(KeyCode.D,  KeyCombination.ALT_DOWN, KeyCombination.SHORTCUT_DOWN));
     jobAddMenuItem.setAccelerator(new KeyCodeCombination(KeyCode.A, KeyCombination.SHIFT_DOWN,KeyCombination.SHORTCUT_DOWN));
     jobEditMenuItem.setAccelerator(new KeyCodeCombination(KeyCode.E, KeyCombination.SHIFT_DOWN,KeyCombination.SHORTCUT_DOWN));
     jobDeleteMenuItem.setAccelerator(new KeyCodeCombination(KeyCode.D, KeyCombination.SHIFT_DOWN,KeyCombination.SHORTCUT_DOWN));
@@ -65,6 +60,21 @@ public void initialize () {
     alert.setTitle(null);
     alert.setHeaderText("You are closing Staff Agency !");
     alert.setContentText("Are you sure ?");
+
+//    If pressed Enter - button must fire (not only Space pressed)
+    javafx.event.EventHandler<KeyEvent> onEnterKeyEventHandler = (keyEvent -> {
+        if (keyEvent.getCode() == KeyCode.ENTER) {
+            if (keyEvent.getSource() instanceof Button) {
+                Button button = (Button) keyEvent.getSource();
+                button.fire();
+            }
+        }
+    });
+
+    DialogPane dialogPane = alert.getDialogPane();
+    dialogPane.getButtonTypes().stream().map(dialogPane::lookupButton).forEach(button ->
+            button.addEventHandler(KeyEvent.KEY_PRESSED,onEnterKeyEventHandler));
+
     Optional<ButtonType> result = alert.showAndWait();
 
     if (result.get() == ButtonType.OK) {

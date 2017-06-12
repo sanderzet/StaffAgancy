@@ -30,7 +30,7 @@
                         <TableColumn fx:id="phoneColumn" maxWidth="150" minWidth="100.0" prefWidth="-1.0" text="%table.phone" />
                         <TableColumn fx:id="dateOfContractColumn" maxWidth="100" minWidth="85.0" prefWidth="-1.0" text="%table.dateOfContract" />
                         <TableColumn fx:id="sanBookColumn" maxWidth="131.0" minWidth="85.0" prefWidth="105.0" text="%table.sanitaryBook" />
-                        <TableColumn fx:id="documentColumn" maxWidth="170" minWidth="150" prefWidth="-1.0" text= "%table.document" />
+                        <TableColumn fx:id="documentColumn" maxWidth="170" minWidth="150" prefWidth="-1.0" text="%table.document" />
                         <TableColumn fx:id="endOfVisaColumn" maxWidth="100" minWidth="85.0" prefWidth="-1.0" text="%table.endOfVisa" />
                         <TableColumn fx:id="fileNumberColumn" maxWidth="-1.0" minWidth="120.0" prefWidth="-1.0" text="%table.numberOfFile" />
                         <TableColumn fx:id="criticalNoteColumn" maxWidth="150" minWidth="120.0" prefWidth="-1.0" text="%table.criticalNote" />
@@ -208,6 +208,21 @@
                   <Label fx:id="numberOfPersonsLabel" text="%customers" textFill="#22d740">
                      <HBox.margin>
                         <Insets left="3.0" right="3.0" top="3.0" />
+                     </HBox.margin>
+                  </Label>
+                  <Separator orientation="VERTICAL">
+                     <HBox.margin>
+                        <Insets left="3.0" />
+                     </HBox.margin>
+                  </Separator>
+                  <Separator orientation="VERTICAL">
+                     <HBox.margin>
+                        <Insets right="3.0" />
+                     </HBox.margin>
+                  </Separator>
+                  <Label fx:id="dateNow" text="Label">
+                     <HBox.margin>
+                        <Insets left="5.0" right="3.0" top="3.0" />
                      </HBox.margin>
                   </Label>
                </children>

@@ -87,6 +87,9 @@ private TextArea usualNoteTextArea ;
     @FXML
     private Label numberOfPersonsLabel;
 
+    @FXML
+    private Label dateNow;
+
     public Button getPersonAddButton() {
         return personAddButton;
     }
@@ -127,6 +130,7 @@ private TextArea usualNoteTextArea ;
     private CheckBox allPersonCheckBox;
 
 
+
 private MainApp mainApp;
 private ObservableList<Person> persons = FXCollections.observableArrayList();
 private FilteredList<Person> filteredPersons;
@@ -151,9 +155,11 @@ private Predicate<Person> personPredicate;
 @Override
 public void initialize (URL url, ResourceBundle bundle) {
     this.bundle = bundle;
+    dateNow.setText(DateUtil.format(LocalDate.now()));
     usualNoteTextArea.setWrapText(true);
 //    Initialize personPredicate
     personPredicate = person -> true;
+
 
 
 //    If pressed Enter - button must fire (not only Space pressed)
@@ -165,6 +171,11 @@ public void initialize (URL url, ResourceBundle bundle) {
             }
         }
     });
+
+
+
+
+
 
 
 // This the same as above only without lambda
@@ -576,13 +587,34 @@ usualNoteTextArea.setText(selectedPerson.getUsualNote());
 
 @FXML
 private void onDelPerson() {
-Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
-alert.initOwner(mainApp.getPrimaryStage());
-alert.setTitle("Are you sure ?");
-alert.setHeaderText("Next entry will be deleted: ");
-alert.setContentText(personTable.getSelectionModel().getSelectedItem().getLastName().toString() + " "
+    //    If pressed Enter - button must fire (not only Space pressed)
+    javafx.event.EventHandler<KeyEvent> onEnterKeyEventHandler = (keyEvent -> {
+        if (keyEvent.getCode() == KeyCode.ENTER) {
+            if (keyEvent.getSource() instanceof Button) {
+                Button button = (Button) keyEvent.getSource();
+                button.fire();
+            }
+        }
+    });
+
+    Alert confirmation = new Alert(Alert.AlertType.CONFIRMATION);
+    confirmation.setTitle("Are you sure ?");
+    confirmation.setHeaderText("Next entry will be deleted: ");
+    confirmation.setContentText(personTable.getSelectionModel().getSelectedItem().getLastName().toString() + " "
         + personTable.getSelectionModel().getSelectedItem().getFirstName().toString());
-Optional<ButtonType> result = alert.showAndWait();
+
+    DialogPane dialogPane = confirmation.getDialogPane();
+    dialogPane.getButtonTypes().stream()
+            .map(dialogPane::lookupButton)
+            .forEach(button ->
+                    button.addEventHandler(
+                            KeyEvent.KEY_PRESSED,
+                            onEnterKeyEventHandler
+                    )
+            );
+
+
+    Optional<ButtonType> result = confirmation.showAndWait();
 if (result.get() == ButtonType.OK) {
 
 //Receive index in table
@@ -637,16 +669,41 @@ boolean okClicked = mainApp.showJobEditDialog(job, personName);
 
 @FXML
 private void onDelJob(){
-    Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
-    alert.initOwner(mainApp.getPrimaryStage());
-    alert.setTitle("Are you sure ?");
-    alert.setHeaderText("For " + personTable.getSelectionModel().getSelectedItem().getLastName().toString() + " " +
+
+    //    If pressed Enter - button must fire (not only Space pressed)
+    javafx.event.EventHandler<KeyEvent> onEnterKeyEventHandler = (keyEvent -> {
+        if (keyEvent.getCode() == KeyCode.ENTER) {
+            if (keyEvent.getSource() instanceof Button) {
+                Button button = (Button) keyEvent.getSource();
+                button.fire();
+            }
+        }
+    });
+
+
+
+    Alert confirmation = new Alert(Alert.AlertType.CONFIRMATION);
+    confirmation.setTitle("Are you sure ?");
+    confirmation.setHeaderText("For " + personTable.getSelectionModel().getSelectedItem().getLastName().toString() + " " +
             personTable.getSelectionModel().getSelectedItem().getFirstName().toString() +
             "\nnext job entry will be deleted: ");
-    alert.setContentText(jobTable.getSelectionModel().getSelectedItem().getFirm().toString() + "\n"
+    confirmation.setContentText(jobTable.getSelectionModel().getSelectedItem().getFirm().toString() + "\n"
             + jobTable.getSelectionModel().getSelectedItem().getPosition().toString());
 
-    Optional<ButtonType> result = alert.showAndWait();
+    DialogPane dialogPane = confirmation.getDialogPane();
+    dialogPane.getButtonTypes().stream()
+            .map(dialogPane::lookupButton)
+            .forEach(button ->
+                    button.addEventHandler(
+                            KeyEvent.KEY_PRESSED,
+                            onEnterKeyEventHandler
+                    )
+            );
+
+
+
+
+    Optional<ButtonType> result = confirmation.showAndWait();
     if (result.get() == ButtonType.OK) {
 //Receive index in table
         int selectedIndex = jobTable.getSelectionModel().getSelectedIndex();
