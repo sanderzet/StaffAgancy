@@ -83,7 +83,7 @@ mainApp.getPersonOverviewController().getPersonEditButton().fire();
 }
 @FXML
 public void handlePersonDelete () {
-mainApp.getPersonOverviewController().getJobDelButton().fire();
+mainApp.getPersonOverviewController().getPersonDelButton().fire();
 }
 @FXML
 public void handleJobAdd () {

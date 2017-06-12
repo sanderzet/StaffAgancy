@@ -257,6 +257,8 @@ public void initialize (URL url, ResourceBundle bundle) {
 //      If expiration date of visa less then after 45 days - text is marked by red color
                         if (item.isBefore(LocalDate.now().plusDays(45)))
                             this.setTextFill(Color.RED);
+                        else if (item.isBefore(LocalDate.now()))
+                            this.setTextFill(Color.POWDERBLUE);
                     }
                 }
             };
@@ -584,11 +586,11 @@ Optional<ButtonType> result = alert.showAndWait();
 if (result.get() == ButtonType.OK) {
 
 //Receive index in table
-    int selectedIndex = personTable.getSelectionModel().getSelectedIndex();
+    Person personForDel = personTable.getSelectionModel().getSelectedItem();
 // Receive   id in db
     int id = (personTable.getSelectionModel().getSelectedItem()).getId();
 //    Remove from tableview and person list
-    mainApp.getPersonData().remove(selectedIndex);
+    mainApp.getPersonData().remove(personForDel);
 //        Remove from db
     mainApp.delPersonDb(id);
 }

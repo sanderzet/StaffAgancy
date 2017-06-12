@@ -21,7 +21,7 @@
                     <items>
                     <MenuItem fx:id="personAddMenuItem" mnemonicParsing="false" onAction="#handlePersonAdd" text="%add" />
                       <MenuItem fx:id="personEditMenuItem" mnemonicParsing="false" onAction="#handlePersonEdit" text="%edit" />
-                        <MenuItem fx:id="personDeleteMenuItem" mnemonicParsing="false" onAction="#handlePersonDelete" text="\%delete" />
+                        <MenuItem fx:id="personDeleteMenuItem" mnemonicParsing="false" onAction="#handlePersonDelete" text="%delete" />
                     </items>
                   </Menu>
                   <Menu mnemonicParsing="false" text="%job">
