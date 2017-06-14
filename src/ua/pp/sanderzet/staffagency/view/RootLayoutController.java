@@ -20,11 +20,10 @@ public class RootLayoutController {
 private MainApp mainApp;
 
 @FXML
+private MenuItem reportMenuItem;
+@FXML
 private MenuItem exitMenuItem;
-
-
-
-    @FXML
+@FXML
 private MenuItem personAddMenuItem;
 @FXML
 private MenuItem personEditMenuItem;
@@ -51,6 +50,10 @@ public void initialize () {
     jobAddMenuItem.setAccelerator(new KeyCodeCombination(KeyCode.A, KeyCombination.SHIFT_DOWN,KeyCombination.SHORTCUT_DOWN));
     jobEditMenuItem.setAccelerator(new KeyCodeCombination(KeyCode.E, KeyCombination.SHIFT_DOWN,KeyCombination.SHORTCUT_DOWN));
     jobDeleteMenuItem.setAccelerator(new KeyCodeCombination(KeyCode.D, KeyCombination.SHIFT_DOWN,KeyCombination.SHORTCUT_DOWN));
+}
+@FXML
+public void handleReport() {
+    mainApp.reportPersonOnFirm();
 }
 
 @FXML

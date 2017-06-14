@@ -3,6 +3,8 @@ package ua.pp.sanderzet.staffagency;
 import javafx.application.Application;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.collections.transformation.FilteredList;
+import javafx.collections.transformation.SortedList;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
 import javafx.scene.control.Alert;
@@ -14,6 +16,7 @@ import javafx.stage.Modality;
 import javafx.stage.Stage;
 import ua.pp.sanderzet.staffagency.model.Job;
 import ua.pp.sanderzet.staffagency.model.Person;
+import ua.pp.sanderzet.staffagency.model.PersonJob;
 import ua.pp.sanderzet.staffagency.util.DateUtil;
 import ua.pp.sanderzet.staffagency.util.ResourceBundleUtil;
 import ua.pp.sanderzet.staffagency.util.dbSqlite;
@@ -26,6 +29,7 @@ import java.io.File;
 import java.io.IOException;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.time.LocalDate;
 import java.util.HashMap;
 import java.util.Locale;
 import java.util.ResourceBundle;
@@ -486,6 +490,44 @@ for (Job job : jobData) {
 }
 
 }
+
+public void reportPersonOnFirm() {
+ObservableList<PersonJob> personJobs = FXCollections.observableArrayList();
+ObservableList<Job> jobData  = FXCollections.observableArrayList();
+PersonJob personJob = new PersonJob();
+
+
+
+    FilteredList<Person> filteredPerson = new FilteredList<Person>(personData, person -> {
+        if (person.getDateQuit() != null && person.getDateQuit().isBefore(LocalDate.now())) {
+
+            return false;
+        }
+        return true;
+    });
+    SortedList<Person> sortedList = new SortedList<Person>(filteredPerson);
+
+
+for (Person person:sortedList){
+    personJob.setName(person.getLastName()+person.getFirstName());
+    personJob.setPhone(person.getPhone());
+    jobData =  getJobData(person);
+//    Seek for job where no data of transition.
+//    Person on default may have only one job so first it founded is enough
+    for (Job job:jobData){
+        if (job.getTransitionJob() == null || DateUtil.format(job.getTransitionJob()).length() == 0 ){
+            personJob.setFirm(job.getFirm());
+            personJob.setPlace(job.getPlace());
+            personJob.setPosition(job.getPosition());
+            break;
+        }
+    }
+
+}
+
+
+}
+
 
 public String getPREF_ALL_PERSON_CHECK_BOX() {
         return PREF_ALL_PERSON_CHECK_BOX;

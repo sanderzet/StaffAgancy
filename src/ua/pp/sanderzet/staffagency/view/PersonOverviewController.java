@@ -90,30 +90,6 @@ private TextArea usualNoteTextArea ;
     @FXML
     private Label dateNow;
 
-    public Button getPersonAddButton() {
-        return personAddButton;
-    }
-
-    public Button getPersonEditButton() {
-        return personEditButton;
-    }
-
-    public Button getPersonDelButton() {
-        return personDelButton;
-    }
-
-    public Button getJobAddButton() {
-        return jobAddButton;
-    }
-
-    public Button getJobEditButton() {
-        return jobEditButton;
-    }
-
-    public Button getJobDelButton() {
-        return jobDelButton;
-    }
-
     @FXML
     private Button personAddButton;
     @FXML
@@ -715,6 +691,30 @@ private void onDelJob(){
         mainApp.delJobDb(id);
     }
 }
+
+    public Button getPersonAddButton() {
+        return personAddButton;
+    }
+
+    public Button getPersonEditButton() {
+        return personEditButton;
+    }
+
+    public Button getPersonDelButton() {
+        return personDelButton;
+    }
+
+    public Button getJobAddButton() {
+        return jobAddButton;
+    }
+
+    public Button getJobEditButton() {
+        return jobEditButton;
+    }
+
+    public Button getJobDelButton() {
+        return jobDelButton;
+    }
 
 
 private void showJob(Person person){

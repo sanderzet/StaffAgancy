@@ -12,6 +12,7 @@
         <menus>
           <Menu mnemonicParsing="true" text="%menu.file">
             <items>
+                  <MenuItem mnemonicParsing="false" onAction="#handleReport" text="%menu.report" />
               <MenuItem fx:id="exitMenuItem" mnemonicParsing="true" onAction="#handleExit" text="%menu.file.exit" />
             </items>
           </Menu>
