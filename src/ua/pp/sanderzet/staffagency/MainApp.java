@@ -6,11 +6,14 @@ import javafx.collections.ObservableList;
 import javafx.collections.transformation.FilteredList;
 import javafx.collections.transformation.SortedList;
 import javafx.fxml.FXMLLoader;
+import javafx.print.*;
 import javafx.scene.Scene;
 import javafx.scene.control.Alert;
+import javafx.scene.control.ChoiceDialog;
 import javafx.scene.image.Image;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.BorderPane;
+import javafx.scene.transform.Scale;
 import javafx.stage.FileChooser;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
@@ -25,6 +28,7 @@ import ua.pp.sanderzet.staffagency.view.PersonEditDialogController;
 import ua.pp.sanderzet.staffagency.view.PersonOverviewController;
 import ua.pp.sanderzet.staffagency.view.RootLayoutController;
 
+import javax.print.PrintService;
 import java.io.File;
 import java.io.IOException;
 import java.sql.ResultSet;
@@ -32,6 +36,7 @@ import java.sql.SQLException;
 import java.time.LocalDate;
 import java.util.HashMap;
 import java.util.Locale;
+import java.util.Optional;
 import java.util.ResourceBundle;
 
 public class MainApp extends Application {
@@ -494,7 +499,6 @@ for (Job job : jobData) {
 public void reportPersonOnFirm() {
 ObservableList<PersonJob> personJobs = FXCollections.observableArrayList();
 ObservableList<Job> jobData  = FXCollections.observableArrayList();
-PersonJob personJob = new PersonJob();
 
 
 
@@ -509,22 +513,53 @@ PersonJob personJob = new PersonJob();
 
 
 for (Person person:sortedList){
-    personJob.setName(person.getLastName()+person.getFirstName());
+    PersonJob personJob = new PersonJob();
+    personJob.setName(person.getLastName()+" "+person.getFirstName());
     personJob.setPhone(person.getPhone());
     jobData =  getJobData(person);
 //    Seek for job where no data of transition.
-//    Person on default may have only one job so first it founded is enough
+//    Person on default may have only one job so last it founded will be taken.
     for (Job job:jobData){
         if (job.getTransitionJob() == null || DateUtil.format(job.getTransitionJob()).length() == 0 ){
             personJob.setFirm(job.getFirm());
             personJob.setPlace(job.getPlace());
             personJob.setPosition(job.getPosition());
-            break;
-        }
+                    }
     }
 
 }
 
+//create node
+FXMLLoader reportPersonOnFirmFxmlLoader = new FXMLLoader();
+    reportPersonOnFirmFxmlLoader.setLocation(MainApp.class.getResource("view/ReportOnFirm.fxml"));
+    try {
+        AnchorPane node = reportPersonOnFirmFxmlLoader.load();
+
+
+    ChoiceDialog choiceDialog = new ChoiceDialog(Printer.getDefaultPrinter(), Printer.getAllPrinters());
+    choiceDialog.setHeaderText("Choose the printer!");
+    choiceDialog.setContentText("Choose a printer from available printers");
+    choiceDialog.setTitle("Printer Choice");
+    Optional<Printer> opt = choiceDialog.showAndWait();
+    if (opt.isPresent()) {
+        Printer printer = opt.get();
+        PageLayout pageLayout = printer.createPageLayout(Paper.A4, PageOrientation.PORTRAIT, Printer.MarginType.DEFAULT);
+
+        double scaleX = pageLayout.getPrintableWidth() / node.getBoundsInParent().getWidth();
+        double scaleY = pageLayout.getPrintableHeight() / node.getBoundsInParent().getHeight();
+                node.getTransforms().add(new Scale(scaleX, scaleY));
+        PrinterJob job = PrinterJob.createPrinterJob();
+        if (job != null) {
+            boolean success = job.printPage(node);
+            if (success) {
+                job.endJob();
+            }
+        }
+
+    }
+    } catch (IOException e) {
+        e.printStackTrace();
+    }
 
 }
 

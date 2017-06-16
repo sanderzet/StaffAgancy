@@ -6,11 +6,11 @@ import javafx.beans.property.StringProperty;
  * Created by alzet on 14.06.17.
  */
 public class PersonJob {
-    private StringProperty name;
-    private StringProperty phone;
-    private StringProperty firm;
-    private StringProperty place;
-    private StringProperty position;
+    private final StringProperty name;
+    private final StringProperty phone;
+    private final StringProperty firm;
+    private final StringProperty place;
+    private final StringProperty position;
 
 //    Full constructor
 

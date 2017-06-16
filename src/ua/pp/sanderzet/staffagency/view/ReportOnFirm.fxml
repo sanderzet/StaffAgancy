@@ -1,26 +1,44 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Label?>
 <?import javafx.scene.control.TableColumn?>
 <?import javafx.scene.control.TableView?>
 <?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.VBox?>
 
-
-<AnchorPane prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/8.0.112" xmlns:fx="http://javafx.com/fxml/1" fx:controller="ua.pp.sanderzet.staffagency.view.ReportOnFirmController">
+<AnchorPane prefHeight="400.0" prefWidth="800.0" xmlns="http://javafx.com/javafx/8.0.111" xmlns:fx="http://javafx.com/fxml/1" fx:controller="ua.pp.sanderzet.staffagency.view.ReportOnFirmController">
    <children>
-      <TableView prefHeight="200.0" prefWidth="200.0">
-        <columns>
-          <TableColumn prefWidth="75.0" text="C1" />
-          <TableColumn prefWidth="75.0" text="C2">
-               <graphic>
-                  <TableView prefHeight="200.0" prefWidth="200.0">
-                    <columns>
-                      <TableColumn prefWidth="75.0" text="C1" />
-                      <TableColumn prefWidth="75.0" text="C2" />
-                    </columns>
-                  </TableView>
-               </graphic>
-            </TableColumn>
-        </columns>
-      </TableView>
+      <VBox AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+         <children>
+            <TableView maxHeight="1.7976931348623157E308">
+              <columns>
+                <TableColumn fx:id="nameColumn" prefWidth="220.0" text="%table.name" />
+                <TableColumn fx:id="phoneColumn" prefWidth="92.0" text="%table.phone" />
+                  <TableColumn fx:id="firmColumn" prefWidth="143.0" text="%table.firm" />
+                  <TableColumn fx:id="placeColumn" prefWidth="156.0" text="%table.placeOfJob" />
+                  <TableColumn fx:id="positionColumn" prefWidth="188.0" text="%table.position" />
+              </columns>
+            </TableView>
+            <HBox>
+               <VBox.margin>
+                  <Insets top="5.0" />
+               </VBox.margin>
+               <children>
+                  <Label fx:id="accountLabel" text="%numberOfCustomers">
+                     <padding>
+                        <Insets top="5.0" />
+                     </padding>
+                  </Label>
+                  <Label fx:id="accountNumberLabel" text="Label">
+                     <padding>
+                        <Insets left="5.0" top="5.0" />
+                     </padding>
+                  </Label>
+               </children>
+            </HBox>
+         </children>
+      </VBox>
    </children>
 </AnchorPane>
