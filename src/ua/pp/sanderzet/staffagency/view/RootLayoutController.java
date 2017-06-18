@@ -19,6 +19,9 @@ import java.util.Optional;
 public class RootLayoutController {
 private MainApp mainApp;
 
+
+@FXML
+private MenuItem openMenuItem;
 @FXML
 private MenuItem reportMenuItem;
 @FXML
@@ -55,6 +58,11 @@ public void initialize () {
 public void handleReport() {
     mainApp.reportPersonOnFirm();
 }
+
+    @FXML
+    public void handleOpenFile() {
+
+    }
 
 @FXML
     public void handleExit() {

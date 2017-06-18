@@ -1,5 +1,6 @@
 package ua.pp.sanderzet.staffagency.view;
 
+import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.collections.transformation.SortedList;
 import javafx.fxml.FXML;
@@ -45,25 +46,27 @@ public class ReportOnFirmController  {
     private MainApp mainApp;
 
 
-    private ObservableList<PersonJob> personJobs;
 
-    public ReportOnFirmController(ObservableList<PersonJob> personJobs) {
-        this.personJobs = personJobs;
+    public ReportOnFirmController() {
     }
 
     public void initialize() {
 
-//        Sorting on name
-        SortedList<PersonJob> personJobSortedList = personJobs.sorted((personJob, t1) -> {
-            return personJob.getName().compareTo(t1.getName());
-        });
+//personJobs = FXCollections.observableArrayList();
         nameColumn.setCellValueFactory(cellData -> cellData.getValue().nameProperty());
         phoneColumn.setCellValueFactory(cellData -> cellData.getValue().phoneProperty());
         firmColumn.setCellValueFactory(cellData -> cellData.getValue().firmProperty());
         placeColumn.setCellValueFactory(cellData -> cellData.getValue().placeProperty());
         positionColumn.setCellValueFactory(cellData -> cellData.getValue().positionProperty());
-        reportOnFirmTable.setItems(personJobSortedList);
 
-        accountLabel.setText(Integer.toString(reportOnFirmTable.getItems().size()));
+    }
+
+    public void setMainApp (ObservableList<PersonJob> personJobs) {
+
+       reportOnFirmTable.setItems(personJobs);
+       accountNumberLabel.setText(Integer.toString(reportOnFirmTable.getItems().size()));
+
+
     }
 }
+

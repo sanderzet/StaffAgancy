@@ -246,6 +246,7 @@ public void initialize (URL url, ResourceBundle bundle) {
                             this.setTextFill(Color.RED);
                         else if (item.isBefore(LocalDate.now()))
                             this.setTextFill(Color.POWDERBLUE);
+                        else setTextFill(Color.BLACK);
                     }
                 }
             };

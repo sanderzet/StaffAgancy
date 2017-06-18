@@ -23,10 +23,7 @@ import ua.pp.sanderzet.staffagency.model.PersonJob;
 import ua.pp.sanderzet.staffagency.util.DateUtil;
 import ua.pp.sanderzet.staffagency.util.ResourceBundleUtil;
 import ua.pp.sanderzet.staffagency.util.dbSqlite;
-import ua.pp.sanderzet.staffagency.view.JobEditDialogController;
-import ua.pp.sanderzet.staffagency.view.PersonEditDialogController;
-import ua.pp.sanderzet.staffagency.view.PersonOverviewController;
-import ua.pp.sanderzet.staffagency.view.RootLayoutController;
+import ua.pp.sanderzet.staffagency.view.*;
 
 import javax.print.PrintService;
 import java.io.File;
@@ -499,9 +496,12 @@ for (Job job : jobData) {
 public void reportPersonOnFirm() {
 ObservableList<PersonJob> personJobs = FXCollections.observableArrayList();
 ObservableList<Job> jobData  = FXCollections.observableArrayList();
-
-
-
+    FXMLLoader reportPersonOnFirmFxmlLoader = new FXMLLoader();
+    reportPersonOnFirmFxmlLoader.setLocation(MainApp.class.getResource("view/ReportOnFirm.fxml"));
+    reportPersonOnFirmFxmlLoader.setResources(bundle);
+    try {
+//create node
+        AnchorPane node = (AnchorPane) reportPersonOnFirmFxmlLoader.load();
     FilteredList<Person> filteredPerson = new FilteredList<Person>(personData, person -> {
         if (person.getDateQuit() != null && person.getDateQuit().isBefore(LocalDate.now())) {
 
@@ -509,8 +509,9 @@ ObservableList<Job> jobData  = FXCollections.observableArrayList();
         }
         return true;
     });
-    SortedList<Person> sortedList = new SortedList<Person>(filteredPerson);
+    SortedList<Person> sortedList = new SortedList<>(filteredPerson);
 
+//sortedList.comparatorProperty().bind()
 
 for (Person person:sortedList){
     PersonJob personJob = new PersonJob();
@@ -526,37 +527,36 @@ for (Person person:sortedList){
             personJob.setPosition(job.getPosition());
                     }
     }
-
+personJobs.add(personJob);
 }
 
-//create node
-FXMLLoader reportPersonOnFirmFxmlLoader = new FXMLLoader();
-    reportPersonOnFirmFxmlLoader.setLocation(MainApp.class.getResource("view/ReportOnFirm.fxml"));
-    try {
-        AnchorPane node = reportPersonOnFirmFxmlLoader.load();
+ReportOnFirmController reportOnFirmController = reportPersonOnFirmFxmlLoader.getController();
+reportOnFirmController.setMainApp(personJobs);
 
 
-    ChoiceDialog choiceDialog = new ChoiceDialog(Printer.getDefaultPrinter(), Printer.getAllPrinters());
-    choiceDialog.setHeaderText("Choose the printer!");
-    choiceDialog.setContentText("Choose a printer from available printers");
-    choiceDialog.setTitle("Printer Choice");
-    Optional<Printer> opt = choiceDialog.showAndWait();
-    if (opt.isPresent()) {
-        Printer printer = opt.get();
-        PageLayout pageLayout = printer.createPageLayout(Paper.A4, PageOrientation.PORTRAIT, Printer.MarginType.DEFAULT);
 
-        double scaleX = pageLayout.getPrintableWidth() / node.getBoundsInParent().getWidth();
-        double scaleY = pageLayout.getPrintableHeight() / node.getBoundsInParent().getHeight();
-                node.getTransforms().add(new Scale(scaleX, scaleY));
+
+
+//        double scaleX = pageLayout.getPrintableWidth() / node.getBoundsInParent().getWidth();
+//        double scaleY = pageLayout.getPrintableHeight() / node.getBoundsInParent().getHeight();
+//                node.getTransforms().add(new Scale(scaleX, scaleY));
         PrinterJob job = PrinterJob.createPrinterJob();
-        if (job != null) {
-            boolean success = job.printPage(node);
-            if (success) {
-                job.endJob();
-            }
-        }
+            if (job != null) {
+                boolean proceed = job.showPrintDialog(primaryStage);
+                if (proceed) {
+                    PageLayout pageLayout = job.getJobSettings().getPageLayout();
+                    double scaleX =  pageLayout.getPrintableWidth() / node.getPrefWidth();
+                    double scaleY = pageLayout.getPrintableHeight() / node.getPrefHeight();
+                    node.getTransforms().add(new Scale(scaleX, scaleY));
+                    boolean success = job.printPage(node);
 
-    }
+                    if (success) {
+
+                        job.endJob();
+                    }
+                }
+            }
+
     } catch (IOException e) {
         e.printStackTrace();
     }

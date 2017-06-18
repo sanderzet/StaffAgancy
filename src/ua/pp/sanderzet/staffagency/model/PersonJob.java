@@ -1,5 +1,6 @@
 package ua.pp.sanderzet.staffagency.model;
 
+import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
 
 /**
@@ -14,12 +15,12 @@ public class PersonJob {
 
 //    Full constructor
 
-    public PersonJob(StringProperty name, StringProperty phone, StringProperty firm, StringProperty place, StringProperty position) {
-        this.name = name;
-        this.phone = phone;
-        this.firm = firm;
-        this.place = place;
-        this.position = position;
+    public PersonJob(String name, String phone, String firm, String place, String position) {
+        this.name = new SimpleStringProperty(name);
+        this.phone = new SimpleStringProperty(phone);
+        this.firm = new SimpleStringProperty(firm);
+        this.place = new SimpleStringProperty(place);
+        this.position = new SimpleStringProperty(position);
     }
 // Empty constructor
     public PersonJob() {
