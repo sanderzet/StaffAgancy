@@ -47,8 +47,8 @@ public class MainApp extends Application {
 private final String DIR_DB = "db"; // dir for db in DIR_SA
 private final String NAME_DB = "sa1_2.db";
 String fileSeparator = System.getProperty("file.separator");
-
 private String fullPathToDb;
+private String fileDB;
 private final String PREF_ALL_PERSON_CHECK_BOX = "allPersonCheckBox";
 private final String PREF_FULL_PATH_TO_DB = "fullPathToDB";
 // Result of querying to db
@@ -322,20 +322,21 @@ private void restoreDataFromDb() {
         personData.clear();
         Preferences preferences = Preferences.userNodeForPackage(this.getClass());
         fullPathToDb = preferences.get(PREF_FULL_PATH_TO_DB,"");
-    if (fullPathToDb.length() == 0) {
+        File file  = new File(fullPathToDb+fileSeparator+NAME_DB);
+    if (fullPathToDb.length() == 0 || !file.isFile()) {
         Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
         alert.setTitle(null);
         alert.setHeaderText("No database file !");
         alert.setContentText("Please, select :");
-        ButtonType buttonTypeCreateNewDB = new ButtonType("Create new db file");
+        ButtonType buttonTypeCreateNewDB = new ButtonType("New");
         ButtonType buttonTypeSelectDb = new ButtonType("Select db");
         ButtonType buttonTypeCancel = new ButtonType("Cancel", ButtonBar.ButtonData.CANCEL_CLOSE);
         alert.getButtonTypes().setAll(buttonTypeCreateNewDB,buttonTypeSelectDb, buttonTypeCancel);
         Optional<ButtonType> result = alert.showAndWait();
         if (result.get() == buttonTypeCreateNewDB) {
-createFileDB();
+if(!createFileDB()) System.exit(100);
         } else if (result.get() == buttonTypeSelectDb) {
-            selectFileDB();
+            if(!selectFileDB()) System.exit(100);
         }
         else if (result.get() == buttonTypeCancel) System.exit(100);
 
@@ -415,6 +416,7 @@ person.setCriticalNote(resultSet.getString("criticalNote"));
         } else {
             Preferences preferences = Preferences.userNodeForPackage(MainApp.class);
             preferences.put(PREF_FULL_PATH_TO_DB,fileDB.getParent());
+            fullPathToDb = fileDB.getParent();
         }
         return result;
     }
@@ -613,21 +615,22 @@ public boolean createFileDB() {
     File pathToDb = new File(System.getProperty("user.home"));
     directoryChooser.setInitialDirectory(pathToDb);
     pathToDb = directoryChooser.showDialog(primaryStage);
-    File fullPathToDb = new File(pathToDb.getAbsolutePath()+fileSeparator+DIR_SA);
-    if (!fullPathToDb.isDirectory()){
-        dirCreateOK = fullPathToDb.mkdir();
+    File pathToSaDb = new File(pathToDb.getAbsolutePath()+fileSeparator+DIR_SA);
+    if (!pathToSaDb.isDirectory()){
+        dirCreateOK = pathToSaDb.mkdir();
     }
     if (!dirCreateOK) {
         Alert alert = new Alert(Alert.AlertType.ERROR);
         alert.initOwner(primaryStage);
-        alert.setContentText("Can`t create dir:\n" + fullPathToDb.getAbsolutePath());
+        alert.setContentText("Can`t create dir:\n" + pathToSaDb.getAbsolutePath());
         alert.showAndWait();
         result = false;
     } else {
-        dbSqlite.connect("jdbc:sqlite:" + fullPathToDb + fileSeparator+NAME_DB);
+        dbSqlite.connect("jdbc:sqlite:" + pathToSaDb + fileSeparator+NAME_DB);
        dbSqlite.createDB();
             Preferences preferences = Preferences.userNodeForPackage(this.getClass());
-            preferences.put(PREF_FULL_PATH_TO_DB, fullPathToDb.getAbsolutePath());
+            preferences.put(PREF_FULL_PATH_TO_DB, pathToSaDb.getAbsolutePath());
+            fullPathToDb = pathToSaDb.getAbsolutePath();
             dbSqlite.closeDB();
 
     }

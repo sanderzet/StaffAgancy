@@ -64,7 +64,9 @@ public void handleReport() {
 
     @FXML
     public void handleOpenFile() {
-    mainApp.selectFileDB();
+        if (mainApp.selectFileDB()) {
+            mainApp.showPersonOverview();
+        }
     }
 
 @FXML
