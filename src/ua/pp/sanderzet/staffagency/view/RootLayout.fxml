@@ -10,9 +10,9 @@
    <top>
       <MenuBar BorderPane.alignment="CENTER">
         <menus>
-          <Menu mnemonicParsing="true" onAction="#handleOpenFile" text="%menu.file">
+          <Menu mnemonicParsing="true"  text="%menu.file">
             <items>
-                  <MenuItem fx:id="openMenuItem" mnemonicParsing="false" text="%menu.file.open" />
+                  <MenuItem fx:id="openMenuItem" mnemonicParsing="false" onAction="#handleOpenFile" text="%menu.file.open" />
                   <MenuItem fx:id="reportMenuItem" mnemonicParsing="false" onAction="#handleReport" text="%menu.report" />
               <MenuItem fx:id="exitMenuItem" mnemonicParsing="true" onAction="#handleExit" text="%menu.file.exit" />
             </items>

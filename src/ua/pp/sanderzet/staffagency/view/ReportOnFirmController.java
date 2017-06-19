@@ -64,6 +64,7 @@ public class ReportOnFirmController  {
     public void setMainApp (ObservableList<PersonJob> personJobs) {
 
        reportOnFirmTable.setItems(personJobs);
+       reportOnFirmTable.getSortOrder().addAll(firmColumn, nameColumn);
        accountNumberLabel.setText(Integer.toString(reportOnFirmTable.getItems().size()));
 
 

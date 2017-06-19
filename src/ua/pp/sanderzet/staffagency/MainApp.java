@@ -8,12 +8,12 @@ import javafx.collections.transformation.SortedList;
 import javafx.fxml.FXMLLoader;
 import javafx.print.*;
 import javafx.scene.Scene;
-import javafx.scene.control.Alert;
-import javafx.scene.control.ChoiceDialog;
+import javafx.scene.control.*;
 import javafx.scene.image.Image;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.transform.Scale;
+import javafx.stage.DirectoryChooser;
 import javafx.stage.FileChooser;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
@@ -25,7 +25,6 @@ import ua.pp.sanderzet.staffagency.util.ResourceBundleUtil;
 import ua.pp.sanderzet.staffagency.util.dbSqlite;
 import ua.pp.sanderzet.staffagency.view.*;
 
-import javax.print.PrintService;
 import java.io.File;
 import java.io.IOException;
 import java.sql.ResultSet;
@@ -35,6 +34,7 @@ import java.util.HashMap;
 import java.util.Locale;
 import java.util.Optional;
 import java.util.ResourceBundle;
+import java.util.prefs.Preferences;
 
 public class MainApp extends Application {
 
@@ -46,7 +46,11 @@ public class MainApp extends Application {
     private final String DIR_SA = "StaffAgencyData";//dir for StaffAgency where all data will be
 private final String DIR_DB = "db"; // dir for db in DIR_SA
 private final String NAME_DB = "sa1_2.db";
+String fileSeparator = System.getProperty("file.separator");
+
+private String fullPathToDb;
 private final String PREF_ALL_PERSON_CHECK_BOX = "allPersonCheckBox";
+private final String PREF_FULL_PATH_TO_DB = "fullPathToDB";
 // Result of querying to db
     private ResultSet resultSet;
 ////Current person for selecting job list for this person
@@ -79,8 +83,6 @@ private PersonOverviewController personOverviewController;
         primaryStage.getIcons().add(new Image("file:resources/images/StaffAgency.png"));
         primaryStage.setMaximized(true);
         initRootLayout();
-
-restoreDataFromDb();
         showPersonOverview();
 
     }
@@ -109,6 +111,7 @@ restoreDataFromDb();
 // List of persons
     public void showPersonOverview (){
         try {
+            restoreDataFromDb();
             // Load person overview.
             FXMLLoader fxmlLoader = new FXMLLoader();
             fxmlLoader.setLocation(MainApp.class.getResource("view/PersonOverview.fxml"));
@@ -315,26 +318,46 @@ public void closeDb() {
 
 // Restore Data from Db
 private void restoreDataFromDb() {
-String homeDir = System.getProperty("user.home");
-String fileSeparator = System.getProperty("file.separator");
-    boolean dirCreateOk = true;
-    //        Preparing db in DIR_DB
-    File dirDB = new File(homeDir +fileSeparator+ DIR_SA + fileSeparator + DIR_DB);
-    if (!dirDB.isDirectory()) {
-        dirCreateOk = dirDB.mkdirs();
-    }
-//        If dir not exist but haven`t been created successfully - end
-    if (!dirCreateOk) {
-        System.exit(100);
+
+        personData.clear();
+        Preferences preferences = Preferences.userNodeForPackage(this.getClass());
+        fullPathToDb = preferences.get(PREF_FULL_PATH_TO_DB,"");
+    if (fullPathToDb.length() == 0) {
+        Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
+        alert.setTitle(null);
+        alert.setHeaderText("No database file !");
+        alert.setContentText("Please, select :");
+        ButtonType buttonTypeCreateNewDB = new ButtonType("Create new db file");
+        ButtonType buttonTypeSelectDb = new ButtonType("Select db");
+        ButtonType buttonTypeCancel = new ButtonType("Cancel", ButtonBar.ButtonData.CANCEL_CLOSE);
+        alert.getButtonTypes().setAll(buttonTypeCreateNewDB,buttonTypeSelectDb, buttonTypeCancel);
+        Optional<ButtonType> result = alert.showAndWait();
+        if (result.get() == buttonTypeCreateNewDB) {
+createFileDB();
+        } else if (result.get() == buttonTypeSelectDb) {
+            selectFileDB();
+        }
+        else if (result.get() == buttonTypeCancel) System.exit(100);
+
+
 
     }
+//String homeDir = System.getProperty("user.home");
+//String fileSeparator = System.getProperty("file.separator");
+//    boolean dirCreateOk = true;
+//    //        Preparing db in DIR_DB
+//    File dirDB = new File(homeDir +fileSeparator+ DIR_SA + fileSeparator + DIR_DB);
+//    if (!dirDB.isDirectory()) {
+//        dirCreateOk = dirDB.mkdirs();
+//    }
+////        If dir not exist but haven`t been created successfully - end
+//    if (!dirCreateOk) {
+//        System.exit(100);
+//
+//    }
 
 //        Connecting to db
-    dbSqlite.connect("jdbc:sqlite:" + homeDir + fileSeparator+
-            DIR_SA + fileSeparator +
-            DIR_DB + fileSeparator + NAME_DB);
-//If db not exist - create
-    dbSqlite.createDB();
+    dbSqlite.connect("jdbc:sqlite:" + fullPathToDb + fileSeparator+NAME_DB);
 
 //        Make query to db
     String query = "SELECT id, firstName, lastName, passport, phone, dateOfContract, sanBook, endOfVisa, fileNumber," +
@@ -378,8 +401,27 @@ person.setCriticalNote(resultSet.getString("criticalNote"));
     }
 }
 
+    public boolean selectFileDB() {
+        boolean result = true;
+        File initialDir = new File(System.getProperty("user.home"));
+        FileChooser fileChooser = new FileChooser();
+        fileChooser.setInitialDirectory(initialDir);
+        FileChooser.ExtensionFilter extensionFilter = new FileChooser.ExtensionFilter("Staff Agency db file", NAME_DB);
+        fileChooser.getExtensionFilters().add(extensionFilter);
+        fileChooser.setTitle("Choose file.");
+        File fileDB = fileChooser.showOpenDialog(primaryStage);
+        if (fileDB == null || !fileDB.isFile()) {
+            result = false;
+        } else {
+            Preferences preferences = Preferences.userNodeForPackage(MainApp.class);
+            preferences.put(PREF_FULL_PATH_TO_DB,fileDB.getParent());
+        }
+        return result;
+    }
 
-private void restoreDataFromOldDb() {
+
+
+    private void restoreDataFromOldDb() {
 ResultSet resultSet;
         boolean dirCreateOk = true;
         //        Preparing db in DIR_DB
@@ -563,11 +605,45 @@ reportOnFirmController.setMainApp(personJobs);
 
 }
 
+public boolean createFileDB() {
+        boolean result = true;
+    String fileSeparator = System.getProperty("file.separator");
+        DirectoryChooser directoryChooser = new DirectoryChooser();
+        boolean dirCreateOK = true;
+    File pathToDb = new File(System.getProperty("user.home"));
+    directoryChooser.setInitialDirectory(pathToDb);
+    pathToDb = directoryChooser.showDialog(primaryStage);
+    File fullPathToDb = new File(pathToDb.getAbsolutePath()+fileSeparator+DIR_SA);
+    if (!fullPathToDb.isDirectory()){
+        dirCreateOK = fullPathToDb.mkdir();
+    }
+    if (!dirCreateOK) {
+        Alert alert = new Alert(Alert.AlertType.ERROR);
+        alert.initOwner(primaryStage);
+        alert.setContentText("Can`t create dir:\n" + fullPathToDb.getAbsolutePath());
+        alert.showAndWait();
+        result = false;
+    } else {
+        dbSqlite.connect("jdbc:sqlite:" + fullPathToDb + fileSeparator+NAME_DB);
+       dbSqlite.createDB();
+            Preferences preferences = Preferences.userNodeForPackage(this.getClass());
+            preferences.put(PREF_FULL_PATH_TO_DB, fullPathToDb.getAbsolutePath());
+            dbSqlite.closeDB();
+
+    }
+return result;
+
+}
 
 public String getPREF_ALL_PERSON_CHECK_BOX() {
         return PREF_ALL_PERSON_CHECK_BOX;
     }
-
+    public String getPREF_FULL_PATH_TO_DB () {
+        return PREF_FULL_PATH_TO_DB;
+    }
+public String getNAME_DB() {
+        return NAME_DB;
+}
     public PersonOverviewController getPersonOverviewController() {
         return personOverviewController;
     }

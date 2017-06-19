@@ -7,11 +7,14 @@ import javafx.scene.control.*;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.*;
 import javafx.scene.layout.Region;
+import javafx.stage.FileChooser;
 import javafx.util.Builder;
 import ua.pp.sanderzet.staffagency.MainApp;
 
+import java.io.File;
 import java.util.Locale;
 import java.util.Optional;
+import java.util.prefs.Preferences;
 
 /**
  * Created by sander on 26.04.17.
@@ -61,7 +64,7 @@ public void handleReport() {
 
     @FXML
     public void handleOpenFile() {
-
+    mainApp.selectFileDB();
     }
 
 @FXML
