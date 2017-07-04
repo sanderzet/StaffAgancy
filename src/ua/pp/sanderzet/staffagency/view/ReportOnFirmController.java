@@ -8,6 +8,7 @@ import javafx.fxml.Initializable;
 import javafx.scene.control.Label;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
+import javafx.scene.text.Font;
 import ua.pp.sanderzet.staffagency.MainApp;
 import ua.pp.sanderzet.staffagency.model.PersonJob;
 
@@ -65,9 +66,14 @@ public class ReportOnFirmController  {
 
        reportOnFirmTable.setItems(personJobs);
        reportOnFirmTable.getSortOrder().addAll(firmColumn, nameColumn);
-       accountNumberLabel.setText(Integer.toString(reportOnFirmTable.getItems().size()));
+       int rowCount = reportOnFirmTable.getItems().size();
+       accountNumberLabel.setText(Integer.toString(rowCount));
+       reportOnFirmTable.setPrefHeight(rowCount*18+18);
 
+    }
 
+    public TableView getReportTable() {
+        return reportOnFirmTable;
     }
 }
 

@@ -575,6 +575,7 @@ personJobs.add(personJob);
 }
 
 ReportOnFirmController reportOnFirmController = reportPersonOnFirmFxmlLoader.getController();
+        node.setStyle("-fx-font-size: 12"); // Font set to fixed size for computing TableView length
 reportOnFirmController.setMainApp(personJobs);
 
 
@@ -591,7 +592,7 @@ reportOnFirmController.setMainApp(personJobs);
                     PageLayout pageLayout = job.getJobSettings().getPageLayout();
                     double scaleX =  pageLayout.getPrintableWidth() / node.getPrefWidth();
                     double scaleY = pageLayout.getPrintableHeight() / node.getPrefHeight();
-                    node.getTransforms().add(new Scale(scaleX, scaleY));
+                    node.getTransforms().add(new Scale(scaleX, 1));
                     boolean success = job.printPage(node);
 
                     if (success) {

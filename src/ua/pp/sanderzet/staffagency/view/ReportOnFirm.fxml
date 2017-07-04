@@ -8,11 +8,11 @@
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.VBox?>
 
-<AnchorPane prefHeight="1131.0" prefWidth="800"  xmlns="http://javafx.com/javafx/8.0.112" xmlns:fx="http://javafx.com/fxml/1" fx:controller="ua.pp.sanderzet.staffagency.view.ReportOnFirmController">
+<AnchorPane maxHeight="1.7976931348623157E308" prefWidth="820" xmlns="http://javafx.com/javafx/8.0.111" xmlns:fx="http://javafx.com/fxml/1" fx:controller="ua.pp.sanderzet.staffagency.view.ReportOnFirmController">
    <children>
       <VBox AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
          <children>
-            <TableView fx:id="reportOnFirmTable" maxHeight="1.7976931348623157E308" >
+            <TableView fx:id="reportOnFirmTable" maxHeight="1.7976931348623157E308">
               <columns>
                 <TableColumn fx:id="nameColumn" prefWidth="220.0" text="%table.name" />
                 <TableColumn fx:id="phoneColumn" prefWidth="92.0" text="%table.phone" />
