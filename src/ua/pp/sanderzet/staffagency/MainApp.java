@@ -1,6 +1,8 @@
 package ua.pp.sanderzet.staffagency;
 
 import javafx.application.Application;
+import javafx.beans.binding.Binding;
+import javafx.beans.binding.Bindings;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.collections.transformation.FilteredList;
@@ -13,6 +15,7 @@ import javafx.scene.image.Image;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.transform.Scale;
+import javafx.scene.transform.Translate;
 import javafx.stage.DirectoryChooser;
 import javafx.stage.FileChooser;
 import javafx.stage.Modality;
@@ -575,9 +578,10 @@ personJobs.add(personJob);
 }
 
 ReportOnFirmController reportOnFirmController = reportPersonOnFirmFxmlLoader.getController();
-        node.setStyle("-fx-font-size: 12"); // Font set to fixed size for computing TableView length
+        node.setStyle("-fx-font-size: 10"); // Font set to fixed size for computing TableView length
 reportOnFirmController.setMainApp(personJobs);
-
+TableView<PersonJob> reportPersonJobTableView = reportOnFirmController.getReportTable();
+reportPersonJobTableView.prefHeightProperty().bind(Bindings.size(reportPersonJobTableView.getItems()).multiply(25).add(25));
 
 
 
@@ -591,14 +595,24 @@ reportOnFirmController.setMainApp(personJobs);
                 if (proceed) {
                     PageLayout pageLayout = job.getJobSettings().getPageLayout();
                     double scaleX =  pageLayout.getPrintableWidth() / node.getPrefWidth();
-                    double scaleY = pageLayout.getPrintableHeight() / node.getPrefHeight();
-                    node.getTransforms().add(new Scale(scaleX, 1));
-                    boolean success = job.printPage(node);
+                    double scaleY = scaleX;
+                    double numberOfPages = (reportPersonJobTableView.getPrefHeight()+25) * scaleY / pageLayout.getPrintableHeight();
 
-                    if (success) {
-
-                        job.endJob();
+                    node.getTransforms().add(new Scale(scaleX, scaleY));
+                    node.getTransforms().add(new Translate(0,0));
+                    Translate gridTransform = new Translate();
+                    node.getTransforms().add(gridTransform);
+                    //now we loop though the image that needs to be printed and we only print a subimage of the full image.
+                    //for example: In the first loop we only pint the printable image from the top down to the height of a standard piece of paper. Then we print starting from were the last printed page ended down to the height of the next page. This happens until all of the pages are printed.
+                    // first page prints from 0 height to -11 inches height, Second page prints from -11 inches height to -22 inches height, etc.
+                    for(int i = 0; i < numberOfPages; i++)
+                    {
+                        gridTransform.setY(-i * (pageLayout.getPrintableHeight() / scaleX));
+                        job.printPage(pageLayout, node);
                     }
+
+                    job.endJob();//finally end the printing job.
+
                 }
             }
 

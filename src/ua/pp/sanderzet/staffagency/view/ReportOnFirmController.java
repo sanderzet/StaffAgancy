@@ -68,7 +68,7 @@ public class ReportOnFirmController  {
        reportOnFirmTable.getSortOrder().addAll(firmColumn, nameColumn);
        int rowCount = reportOnFirmTable.getItems().size();
        accountNumberLabel.setText(Integer.toString(rowCount));
-       reportOnFirmTable.setPrefHeight(rowCount*18+18);
+//       reportOnFirmTable.setPrefHeight(rowCount*25+20);
 
     }
 
