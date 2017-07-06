@@ -581,6 +581,9 @@ ReportOnFirmController reportOnFirmController = reportPersonOnFirmFxmlLoader.get
         node.setStyle("-fx-font-size: 10"); // Font set to fixed size for computing TableView length
 reportOnFirmController.setMainApp(personJobs);
 TableView<PersonJob> reportPersonJobTableView = reportOnFirmController.getReportTable();
+
+//При розмірі шрифта 10 на ячейку припадає приблизно 25 плюс 25 на шапку
+
 reportPersonJobTableView.prefHeightProperty().bind(Bindings.size(reportPersonJobTableView.getItems()).multiply(25).add(25));
 
 
@@ -596,6 +599,7 @@ reportPersonJobTableView.prefHeightProperty().bind(Bindings.size(reportPersonJob
                     PageLayout pageLayout = job.getJobSettings().getPageLayout();
                     double scaleX =  pageLayout.getPrintableWidth() / node.getPrefWidth();
                     double scaleY = scaleX;
+//                    Висота таблиці плюс 25 на Label Загальна кількість
                     double numberOfPages = (reportPersonJobTableView.getPrefHeight()+25) * scaleY / pageLayout.getPrintableHeight();
 
                     node.getTransforms().add(new Scale(scaleX, scaleY));

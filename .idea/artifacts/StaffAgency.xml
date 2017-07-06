@@ -16,6 +16,7 @@
           </JavaFxApplicationIcons>
         </option>
         <option name="keystore" value="" />
+        <option name="nativeBundle" value="all" />
         <option name="title" value="StaffAgency" />
         <option name="vendor" value="SanderZet" />
         <option name="version" value="1.2" />
